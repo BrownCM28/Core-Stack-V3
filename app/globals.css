@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F5F2EE;
+  --surface: #FFFFFF;
+  --accent: #3ECF8E;
+  --accent-hover: #34C47E;
+  --border: #000000;
+  --border-muted: #E2DDD8;
+  --border-input: #1E2128;
+  --text-primary: #0D0F12;
+  --text-muted: #6B6560;
+}
+
+@layer base {
+  * {
+    border-color: var(--border-muted);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-family: var(--font-inter), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  }
+}
+
+@layer components {
+  /* Wire border button base */
+  .btn-wire {
+    @apply border border-[#000000] bg-transparent text-text-primary rounded-[6px] transition-all duration-150 cursor-pointer inline-flex items-center justify-center font-mono text-sm font-medium;
+  }
+
+  .btn-wire:hover {
+    border-color: #3ECF8E;
+    color: #3ECF8E;
+    box-shadow: 0 0 0 1px #3ECF8E, 0 0 12px rgba(62, 207, 142, 0.15);
+  }
+
+  /* Primary filled button */
+  .btn-primary {
+    @apply border border-[#000000] bg-accent text-text-primary rounded-[6px] transition-all duration-150 cursor-pointer inline-flex items-center justify-center font-mono text-sm font-medium;
+  }
+
+  .btn-primary:hover {
+    background-color: #34C47E;
+    box-shadow: 0 0 16px rgba(62, 207, 142, 0.25);
+  }
+
+  /* Input with dark border + focus glow */
+  .input-base {
+    @apply w-full border-[1.5px] border-border-input bg-surface text-text-primary rounded-[6px] px-3 py-2 text-sm font-sans transition-all duration-150 outline-none placeholder:text-text-muted;
+  }
+
+  .input-base:focus {
+    border-color: #3ECF8E;
+    box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.15);
+  }
+
+  /* Card hover */
+  .card-hover {
+    @apply transition-all duration-150;
+    border: 1.5px solid var(--border-muted);
+  }
+
+  .card-hover:hover {
+    border-color: rgba(62, 207, 142, 0.4);
+    transform: translateY(-2px);
+  }
+}
