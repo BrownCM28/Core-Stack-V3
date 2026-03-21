@@ -1,0 +1,203 @@
+// CoreStack — Prisma schema
+// Phase 6: full data model, no API routes yet
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  CANDIDATE
+  EMPLOYER
+  ADMIN
+}
+
+enum JobType {
+  FULL_TIME
+  CONTRACT
+  BOTH
+}
+
+enum ExperienceLevel {
+  ENTRY
+  MID
+  SENIOR
+  LEAD
+  PRINCIPAL
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  VIEWED
+  SHORTLISTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum ActivityEventType {
+  APPLICATION_SUBMITTED
+  APPLICATION_VIEWED
+  APPLICATION_SHORTLISTED
+  APPLICATION_REJECTED
+  PROFILE_VIEWED
+  JOB_SAVED
+  ALERT_MATCH
+  CERT_ADDED
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String
+  role            UserRole @default(CANDIDATE)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Candidate-only fields
+  username        String?  @unique
+  displayName     String?
+  title           String?  // e.g. "Senior Infrastructure Engineer"
+  bio             String?
+  location        String?
+  openToWork      Boolean  @default(false)
+  openToTypes     JobType[]
+  skills          String[] // e.g. ["Python", "Terraform", "Kubernetes"]
+  yearsExperience Int?
+
+  // Employer-only fields
+  companyName     String?
+  companyWebsite  String?
+  companySize     String?  // e.g. "51-200"
+
+  // Relations
+  profile         GitHubProfile?
+  certifications  Certification[]
+  applications    Application[]
+  savedSearches   SavedSearch[]
+  activityEvents  ActivityEvent[]
+  postedJobs      Job[]           @relation("EmployerJobs")
+}
+
+model Job {
+  id              String          @id @default(cuid())
+  title           String
+  company         String
+  companyLogo     String?
+  location        String
+  remote          Boolean         @default(false)
+  type            JobType
+  level           ExperienceLevel
+  salary          String?         // e.g. "$140k – $180k"
+  description     String
+  responsibilities String[]
+  requirements    String[]
+  tags            String[]        // e.g. ["Kubernetes", "AWS", "Python"]
+  category        String          // e.g. "Data Center Ops", "Cloud Infra"
+  source          String          @default("direct") // "direct" | "scraped"
+  isActive        Boolean         @default(true)
+  featured        Boolean         @default(false)
+  postedAt        DateTime        @default(now())
+  expiresAt       DateTime?
+  updatedAt       DateTime        @updatedAt
+
+  employerId      String?
+  employer        User?           @relation("EmployerJobs", fields: [employerId], references: [id])
+
+  applications    Application[]
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  status      ApplicationStatus @default(SUBMITTED)
+  coverLetter String?
+  resumeUrl   String?
+  appliedAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+
+  jobId       String
+  job         Job               @relation(fields: [jobId], references: [id])
+
+  @@unique([userId, jobId])
+}
+
+model GitHubProfile {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  displayName  String?
+  avatarUrl    String?
+  bio          String?
+  company      String?
+  followers    Int      @default(0)
+  following    Int      @default(0)
+  publicRepos  Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+
+  repos        GitHubRepo[]
+}
+
+model GitHubRepo {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  language    String?
+  stars       Int      @default(0)
+  forks       Int      @default(0)
+  url         String
+  updatedAt   DateTime @updatedAt
+
+  profileId   String
+  profile     GitHubProfile @relation(fields: [profileId], references: [id])
+}
+
+model Certification {
+  id          String   @id @default(cuid())
+  name        String   // e.g. "AWS Solutions Architect"
+  issuer      String   // e.g. "Amazon Web Services"
+  issuedAt    String   // "Mar 2024" — stored as display string
+  expiresAt   String?  // "Mar 2026" — nullable for no-expiry certs
+  credentialId String?
+  credentialUrl String?
+  createdAt   DateTime @default(now())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model SavedSearch {
+  id          String   @id @default(cuid())
+  name        String
+  query       String?
+  filters     Json     // { location, types, levels, tags, remote }
+  alertFreq   String   @default("weekly") // "instant" | "daily" | "weekly"
+  enabled     Boolean  @default(true)
+  lastRunAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model ActivityEvent {
+  id          String            @id @default(cuid())
+  type        ActivityEventType
+  payload     Json?             // { jobTitle, company, jobId, etc. }
+  createdAt   DateTime          @default(now())
+
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+}
