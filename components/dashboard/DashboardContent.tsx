@@ -137,7 +137,7 @@ function AddAlertModal({ open, onClose }: { open: boolean; onClose: () => void }
       <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div
-          className="relative w-full max-w-[400px] bg-surface border-[1.5px] border-black rounded-[8px] shadow-2xl pointer-events-auto"
+          className="relative w-full max-w-[400px] bg-surface border-[1.5px] border-black rounded-[8px] shadow-2xl pointer-events-auto animate-modal-in"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between px-6 py-5 border-b border-[#E2DDD8]">
@@ -204,6 +204,25 @@ function ApplicationsTab() {
         title="Your Applications"
         count={`${MOCK_APPLICATIONS.length} applications`}
       />
+      {MOCK_APPLICATIONS.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-14 text-center">
+          <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center mb-4">
+            <FileText size={20} className="text-text-muted" />
+          </div>
+          <p className="font-mono font-semibold text-sm text-text-primary mb-1">
+            No applications yet
+          </p>
+          <p className="font-sans text-sm text-text-muted mb-5 max-w-xs">
+            Browse open roles and start applying — your applications will appear here.
+          </p>
+          <a
+            href="/jobs"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-xs rounded-[6px] hover:bg-[#34C47E] transition-all duration-150"
+          >
+            Browse open roles
+          </a>
+        </div>
+      ) : (
       <div className="flex flex-col divide-y divide-[#E2DDD8]">
         {MOCK_APPLICATIONS.map((app) => (
           <div
@@ -240,6 +259,7 @@ function ApplicationsTab() {
           </div>
         ))}
       </div>
+      )}
     </SectionCard>
   );
 }

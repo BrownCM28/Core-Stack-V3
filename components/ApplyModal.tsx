@@ -40,7 +40,7 @@ export function ApplyModal({ open, onClose, job }: ApplyModalProps) {
       />
 
       {/* Panel */}
-      <div className="relative z-10 w-full max-w-md bg-surface border-[1.5px] border-black rounded-[8px] shadow-[0_8px_40px_rgba(0,0,0,0.35)]">
+      <div className="relative z-10 w-full max-w-md bg-surface border-[1.5px] border-black rounded-[8px] shadow-[0_8px_40px_rgba(0,0,0,0.35)] animate-modal-in">
         {/* Close */}
         <button
           onClick={onClose}

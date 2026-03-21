@@ -52,7 +52,7 @@ export function AddCertificationModal({ open, onClose }: AddCertificationModalPr
       />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div
-          className="relative w-full max-w-[500px] bg-surface border-[1.5px] border-black rounded-[8px] shadow-2xl max-h-[90vh] overflow-y-auto pointer-events-auto"
+          className="relative w-full max-w-[500px] bg-surface border-[1.5px] border-black rounded-[8px] shadow-2xl max-h-[90vh] overflow-y-auto pointer-events-auto animate-modal-in"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}

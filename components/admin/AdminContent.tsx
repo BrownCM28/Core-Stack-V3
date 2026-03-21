@@ -141,6 +141,16 @@ export function AdminContent() {
                 </tr>
               </thead>
               <tbody>
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="px-5 py-12 text-center">
+                      <p className="font-mono text-sm text-text-muted">No listings yet</p>
+                      <p className="font-sans text-xs text-text-muted mt-1">
+                        {search ? `No results for "${search}"` : "Add the first job listing to get started."}
+                      </p>
+                    </td>
+                  </tr>
+                )}
                 {filtered.map((job) => (
                   <tr
                     key={job.id}

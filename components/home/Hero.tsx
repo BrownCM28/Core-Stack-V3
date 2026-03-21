@@ -26,7 +26,7 @@ export function Hero() {
         </div>
 
         {/* Headline */}
-        <h1 className="font-mono font-semibold text-4xl sm:text-5xl lg:text-[3.25rem] text-white leading-[1.15] tracking-tight mb-6">
+        <h1 className="font-mono font-semibold text-4xl sm:text-5xl lg:text-[3.25rem] text-white leading-[1.15] tracking-tight mb-6 text-balance">
           Infrastructure jobs for the people who{" "}
           <span className="text-accent">keep the world running.</span>
         </h1>

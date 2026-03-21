@@ -17,16 +17,45 @@ function getIssuerStyle(issuer: string) {
   return ISSUER_STYLES[issuer] ?? { bg: "bg-[#E2DDD8]", text: "text-text-muted" };
 }
 
+// Parses "Mar 2026" → Date representing the last day of that month
+function parseMonthYear(s: string): Date | null {
+  const MONTHS: Record<string, number> = {
+    Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+    Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+  };
+  const parts = s.trim().split(" ");
+  if (parts.length !== 2) return null;
+  const month = MONTHS[parts[0]];
+  const year = parseInt(parts[1], 10);
+  if (month === undefined || isNaN(year)) return null;
+  // Last day of that month
+  return new Date(year, month + 1, 0, 23, 59, 59);
+}
+
+type ExpiryState = "expired" | "expiring-soon" | "valid" | "none";
+
+function getExpiryState(expiryDate: string | undefined): ExpiryState {
+  if (!expiryDate) return "none";
+  const expiry = parseMonthYear(expiryDate);
+  if (!expiry) return "none";
+  const now = new Date();
+  if (expiry < now) return "expired";
+  const msUntilExpiry = expiry.getTime() - now.getTime();
+  const daysUntilExpiry = msUntilExpiry / (1000 * 60 * 60 * 24);
+  if (daysUntilExpiry <= 90) return "expiring-soon";
+  return "valid";
+}
+
 interface CertificationBadgeProps {
   cert: Certification;
 }
 
 export function CertificationBadge({ cert }: CertificationBadgeProps) {
   const { bg, text } = getIssuerStyle(cert.issuer);
-  const isExpiring = !!cert.expiryDate;
+  const expiryState = getExpiryState(cert.expiryDate);
 
   return (
-    <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-4 hover:border-accent/40 transition-all duration-150">
+    <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-4 hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-150">
       {/* Issuer pill */}
       <div className="mb-3">
         <span
@@ -44,12 +73,26 @@ export function CertificationBadge({ cert }: CertificationBadgeProps) {
         {cert.name}
       </p>
 
-      <p className="font-sans text-xs text-text-muted mb-1">
+      <p className="font-sans text-xs text-text-muted mb-1.5">
         Issued {cert.issuedDate}
       </p>
 
-      {isExpiring && (
-        <p className="font-mono text-[11px] text-amber-600 font-medium">
+      {expiryState === "expired" && (
+        <p className="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-red-600 bg-red-50 rounded-[3px] px-1.5 py-0.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+          Expired {cert.expiryDate}
+        </p>
+      )}
+
+      {expiryState === "expiring-soon" && (
+        <p className="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-amber-600 bg-amber-50 rounded-[3px] px-1.5 py-0.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
+          Expires {cert.expiryDate}
+        </p>
+      )}
+
+      {expiryState === "valid" && cert.expiryDate && (
+        <p className="font-sans text-xs text-text-muted">
           Expires {cert.expiryDate}
         </p>
       )}
@@ -57,7 +100,7 @@ export function CertificationBadge({ cert }: CertificationBadgeProps) {
       {cert.credentialUrl && (
         <a
           href={cert.credentialUrl}
-          className="inline-flex items-center gap-1 mt-2 font-mono text-[11px] text-text-muted hover:text-accent transition-colors duration-150"
+          className="inline-flex items-center gap-1 mt-2.5 font-mono text-[11px] text-text-muted hover:text-accent transition-colors duration-150"
         >
           View credential <ExternalLink size={10} />
         </a>

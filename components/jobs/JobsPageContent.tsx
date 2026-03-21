@@ -109,15 +109,32 @@ export function JobsPageContent({ jobs }: JobsPageContentProps) {
             </div>
 
             {/* Job cards */}
-            <div className="flex flex-col gap-4 mb-10">
-              {jobs.map((job) => (
-                <JobListingCard
-                  key={job.id}
-                  job={job}
-                  onApply={(j) => setApplyJob(j)}
-                />
-              ))}
-            </div>
+            {jobs.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center mb-4">
+                  <SlidersHorizontal size={20} className="text-text-muted" />
+                </div>
+                <p className="font-mono font-semibold text-sm text-text-primary mb-1">
+                  No roles match your filters
+                </p>
+                <p className="font-sans text-sm text-text-muted mb-5">
+                  Try adjusting or clearing your active filters.
+                </p>
+                <button className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150">
+                  Clear all filters
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-4 mb-10">
+                {jobs.map((job) => (
+                  <JobListingCard
+                    key={job.id}
+                    job={job}
+                    onApply={(j) => setApplyJob(j)}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Pagination */}
             <nav

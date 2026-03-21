@@ -212,11 +212,31 @@ export function TalentPageContent({ talent }: TalentPageContentProps) {
 
         {/* Talent grid */}
         <main className="flex-1 min-w-0 px-5 lg:px-8 py-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {talent.map((profile) => (
-              <TalentCard key={profile.username} profile={profile} />
-            ))}
-          </div>
+          {talent.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center mb-4">
+                <SlidersHorizontal size={20} className="text-text-muted" />
+              </div>
+              <p className="font-mono font-semibold text-sm text-text-primary mb-1">
+                No candidates match your filters
+              </p>
+              <p className="font-sans text-sm text-text-muted mb-5">
+                Try broadening your search or clearing filters.
+              </p>
+              <button
+                onClick={clearAll}
+                className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
+              >
+                Clear all filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              {talent.map((profile) => (
+                <TalentCard key={profile.username} profile={profile} />
+              ))}
+            </div>
+          )}
         </main>
       </div>
     </div>

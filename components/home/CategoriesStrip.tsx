@@ -46,7 +46,7 @@ export function CategoriesStrip() {
               <a
                 key={cat.slug}
                 href="#"
-                className="group flex flex-col items-center gap-2.5 p-4 bg-white border-[1.5px] border-[#E2DDD8] rounded-[8px] text-center transition-all duration-150 hover:border-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)] hover:-translate-y-0.5"
+                className="group flex flex-col items-center gap-2.5 p-4 bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] text-center transition-all duration-150 hover:border-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)] hover:-translate-y-0.5"
               >
                 <Icon
                   size={18}
