@@ -1,5 +1,5 @@
 // CoreStack — Prisma schema
-// Phase 6: full data model, no API routes yet
+// Phase 7: Better Auth tables added (Session, Account, Verification)
 
 generator client {
   provider = "prisma-client-js"
@@ -50,33 +50,38 @@ enum ActivityEventType {
   CERT_ADDED
 }
 
-// ─── Models ───────────────────────────────────────────────────────────────────
+// ─── Better Auth models ────────────────────────────────────────────────────────
 
 model User {
-  id              String   @id @default(cuid())
+  id              String   @id
+  // Better Auth required fields
+  name            String
   email           String   @unique
-  passwordHash    String
-  role            UserRole @default(CANDIDATE)
+  emailVerified   Boolean  @default(false)
+  image           String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  // Candidate-only fields
+  // CoreStack fields
+  role            UserRole @default(CANDIDATE)
   username        String?  @unique
   displayName     String?
-  title           String?  // e.g. "Senior Infrastructure Engineer"
+  title           String?
   bio             String?
   location        String?
   openToWork      Boolean  @default(false)
   openToTypes     JobType[]
-  skills          String[] // e.g. ["Python", "Terraform", "Kubernetes"]
+  skills          String[]
   yearsExperience Int?
-
-  // Employer-only fields
   companyName     String?
   companyWebsite  String?
-  companySize     String?  // e.g. "51-200"
+  companySize     String?
 
-  // Relations
+  // Better Auth relations
+  sessions        Session[]
+  accounts        Account[]
+
+  // CoreStack relations
   profile         GitHubProfile?
   certifications  Certification[]
   applications    Application[]
@@ -84,6 +89,51 @@ model User {
   activityEvents  ActivityEvent[]
   postedJobs      Job[]           @relation("EmployerJobs")
 }
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([identifier, value])
+}
+
+// ─── Job / Application models ─────────────────────────────────────────────────
 
 model Job {
   id              String          @id @default(cuid())
@@ -94,13 +144,13 @@ model Job {
   remote          Boolean         @default(false)
   type            JobType
   level           ExperienceLevel
-  salary          String?         // e.g. "$140k – $180k"
+  salary          String?
   description     String
   responsibilities String[]
   requirements    String[]
-  tags            String[]        // e.g. ["Kubernetes", "AWS", "Python"]
-  category        String          // e.g. "Data Center Ops", "Cloud Infra"
-  source          String          @default("direct") // "direct" | "scraped"
+  tags            String[]
+  category        String
+  source          String          @default("direct")
   isActive        Boolean         @default(true)
   featured        Boolean         @default(false)
   postedAt        DateTime        @default(now())
@@ -164,38 +214,38 @@ model GitHubRepo {
 }
 
 model Certification {
-  id          String   @id @default(cuid())
-  name        String   // e.g. "AWS Solutions Architect"
-  issuer      String   // e.g. "Amazon Web Services"
-  issuedAt    String   // "Mar 2024" — stored as display string
-  expiresAt   String?  // "Mar 2026" — nullable for no-expiry certs
-  credentialId String?
+  id            String   @id @default(cuid())
+  name          String
+  issuer        String
+  issuedAt      String
+  expiresAt     String?
+  credentialId  String?
   credentialUrl String?
-  createdAt   DateTime @default(now())
+  createdAt     DateTime @default(now())
 
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 model SavedSearch {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   query       String?
-  filters     Json     // { location, types, levels, tags, remote }
-  alertFreq   String   @default("weekly") // "instant" | "daily" | "weekly"
-  enabled     Boolean  @default(true)
+  filters     Json
+  alertFreq   String    @default("weekly")
+  enabled     Boolean   @default(true)
   lastRunAt   DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
 }
 
 model ActivityEvent {
   id          String            @id @default(cuid())
   type        ActivityEventType
-  payload     Json?             // { jobTitle, company, jobId, etc. }
+  payload     Json?
   createdAt   DateTime          @default(now())
 
   userId      String
