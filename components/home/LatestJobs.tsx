@@ -1,11 +1,11 @@
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { JobCard } from "@/components/home/JobCard";
-import type { Job } from "@/lib/mock-data";
+import type { ApiJob } from "@/lib/types";
 
-export function LatestJobs({ jobs }: { jobs: Job[] }) {
+export function LatestJobs({ jobs }: { jobs: ApiJob[] }) {
   return (
     <div>
-      {/* Section header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <span className="font-mono text-[11px] text-text-muted tracking-[0.12em] uppercase">
@@ -13,16 +13,15 @@ export function LatestJobs({ jobs }: { jobs: Job[] }) {
           </span>
           <div className="h-px w-10 bg-[#E2DDD8]" />
         </div>
-        <a
-          href="#"
+        <Link
+          href="/jobs"
           className="flex items-center gap-1 font-mono text-xs text-text-muted hover:text-accent transition-colors duration-150"
         >
           View all jobs
           <ArrowRight size={12} />
-        </a>
+        </Link>
       </div>
 
-      {/* Job grid — 2 cols */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {jobs.map((job) => (
           <JobCard key={job.id} job={job} />

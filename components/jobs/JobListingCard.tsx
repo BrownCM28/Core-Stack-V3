@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { MapPin, Clock, Briefcase, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
-import type { Job } from "@/lib/mock-data";
+import { timeAgoFromISO, formatSalary } from "@/lib/types";
+import type { ApiJob } from "@/lib/types";
 
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   "Data Center Ops":
@@ -21,29 +22,25 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
     "Design, deploy, and maintain network infrastructure including routing, switching, and fiber plant across hyperscale and colocation data center environments.",
   "Project Management":
     "Lead cross-functional teams delivering mission-critical infrastructure projects on schedule and within budget. Interface with engineers, contractors, and executive stakeholders.",
+  "Cloud Infra":
+    "Design and operate cloud infrastructure platforms at scale. Build Terraform modules, manage Kubernetes clusters, and own CI/CD pipelines for global deployments.",
+  SRE: "Build and maintain reliability systems, define SLOs, run blameless post-incident reviews, and develop observability tooling in hyperscale environments.",
+  "Platform Eng":
+    "Build internal developer platforms, Kubernetes operators, and golden-path templates that accelerate engineering velocity across the organization.",
+  DevOps:
+    "Automate provisioning and configuration pipelines, maintain GitOps workflows, and eliminate toil across global infrastructure.",
+  Facilities:
+    "Oversee critical power and cooling systems, maintain UPS and generator infrastructure, and coordinate capital projects for Tier IV data center facilities.",
 };
 
-function formatSalary(min: number, max: number): string {
-  return `$${min}k–$${max}k`;
-}
-
-function formatTimeAgo(hours: number): string {
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "1 day ago";
-  if (days < 7) return `${days} days ago`;
-  const weeks = Math.floor(days / 7);
-  return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
-}
-
 interface JobListingCardProps {
-  job: Job;
-  onApply: (job: Job) => void;
+  job: ApiJob;
+  onApply: (job: ApiJob) => void;
 }
 
 export function JobListingCard({ job, onApply }: JobListingCardProps) {
   const router = useRouter();
-  const isNew = job.postedHoursAgo < 48;
+  const isNew = Date.now() - new Date(job.postedAt).getTime() < 48 * 60 * 60 * 1000;
   const description = CATEGORY_DESCRIPTIONS[job.category] ?? "";
 
   return (
@@ -67,7 +64,7 @@ export function JobListingCard({ job, onApply }: JobListingCardProps) {
           {job.type === "Contract" && (
             <Badge variant="expiring">Contract</Badge>
           )}
-          {job.location === "Remote" && (
+          {job.remote && (
             <Badge variant="muted">Remote</Badge>
           )}
         </div>
@@ -95,7 +92,7 @@ export function JobListingCard({ job, onApply }: JobListingCardProps) {
 
       {/* Salary */}
       <p className="font-mono text-sm font-semibold text-text-primary mb-3">
-        {formatSalary(job.salaryMin, job.salaryMax)}
+        {formatSalary(job.salaryMin, job.salaryMax, job.salary)}
       </p>
 
       {/* Description excerpt */}
@@ -107,7 +104,7 @@ export function JobListingCard({ job, onApply }: JobListingCardProps) {
       <div className="flex items-center justify-between pt-4 border-t border-[#E2DDD8]">
         <span className="flex items-center gap-1.5 text-xs font-mono text-text-muted">
           <Clock size={11} />
-          {formatTimeAgo(job.postedHoursAgo)}
+          {timeAgoFromISO(job.postedAt)}
         </span>
         <button
           onClick={(e) => {

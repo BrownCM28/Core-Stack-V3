@@ -1,70 +1,85 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const CATEGORIES = [
+  "Cloud Infra",
   "Data Center Ops",
+  "SRE",
+  "Platform Eng",
+  "DevOps",
+  "Networking",
+  "Facilities",
   "Construction",
   "Electrical",
   "Cooling/HVAC",
-  "AI Infrastructure",
-  "Networking",
   "Project Management",
 ];
 
-const JOB_TYPES = ["Full-time", "Contract", "Part-time"];
-
-interface FilterState {
-  categories: string[];
-  jobTypes: string[];
-  remote: boolean;
-  salaryMin: string;
-  salaryMax: string;
-  location: string;
-}
-
-const DEFAULT_FILTERS: FilterState = {
-  categories: [],
-  jobTypes: [],
-  remote: false,
-  salaryMin: "",
-  salaryMax: "",
-  location: "",
-};
+const JOB_TYPES = ["Full-time", "Contract"];
 
 export function JobFilters() {
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [saveSearchOpen, setSaveSearchOpen] = useState(false);
   const [alertName, setAlertName] = useState("");
   const [frequency, setFrequency] = useState("daily");
 
-  const toggleCategory = (cat: string) =>
-    setFilters((prev) => ({
-      ...prev,
-      categories: prev.categories.includes(cat)
-        ? prev.categories.filter((c) => c !== cat)
-        : [...prev.categories, cat],
-    }));
+  const selectedCategories = searchParams.getAll("category");
+  const selectedJobTypes = searchParams.getAll("jobType");
+  const remote = searchParams.get("remote") === "true";
+  const salaryMin = searchParams.get("salaryMin") ?? "";
+  const salaryMax = searchParams.get("salaryMax") ?? "";
+  const location = searchParams.get("location") ?? "";
 
-  const toggleJobType = (type: string) =>
-    setFilters((prev) => ({
-      ...prev,
-      jobTypes: prev.jobTypes.includes(type)
-        ? prev.jobTypes.filter((t) => t !== type)
-        : [...prev.jobTypes, type],
-    }));
+  const push = useCallback(
+    (params: URLSearchParams) => {
+      params.delete("page");
+      router.replace(`${pathname}?${params.toString()}`);
+    },
+    [router, pathname]
+  );
+
+  function toggleMulti(key: string, value: string) {
+    const current = searchParams.getAll(key);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete(key);
+    if (current.includes(value)) {
+      current.filter((v) => v !== value).forEach((v) => params.append(key, v));
+    } else {
+      [...current, value].forEach((v) => params.append(key, v));
+    }
+    push(params);
+  }
+
+  function setParam(key: string, value: string | null) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === null || value === "") {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+    push(params);
+  }
+
+  function clearAll() {
+    router.replace(pathname);
+  }
 
   const hasActive =
-    filters.categories.length > 0 ||
-    filters.jobTypes.length > 0 ||
-    filters.remote ||
-    !!filters.salaryMin ||
-    !!filters.salaryMax ||
-    !!filters.location;
+    selectedCategories.length > 0 ||
+    selectedJobTypes.length > 0 ||
+    remote ||
+    !!salaryMin ||
+    !!salaryMax ||
+    !!location;
 
   return (
     <>
@@ -76,8 +91,8 @@ export function JobFilters() {
             <FilterCheckbox
               key={cat}
               label={cat}
-              checked={filters.categories.includes(cat)}
-              onChange={() => toggleCategory(cat)}
+              checked={selectedCategories.includes(cat)}
+              onChange={() => toggleMulti("category", cat)}
             />
           ))}
         </FilterSection>
@@ -88,8 +103,8 @@ export function JobFilters() {
             <FilterCheckbox
               key={type}
               label={type}
-              checked={filters.jobTypes.includes(type)}
-              onChange={() => toggleJobType(type)}
+              checked={selectedJobTypes.includes(type)}
+              onChange={() => toggleMulti("jobType", type)}
             />
           ))}
         </FilterSection>
@@ -100,19 +115,17 @@ export function JobFilters() {
             <span className="font-sans text-sm text-text-primary">Remote-friendly only</span>
             <button
               role="switch"
-              aria-checked={filters.remote}
-              onClick={() =>
-                setFilters((prev) => ({ ...prev, remote: !prev.remote }))
-              }
+              aria-checked={remote}
+              onClick={() => setParam("remote", remote ? null : "true")}
               className={cn(
                 "relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors duration-200",
-                filters.remote ? "bg-accent" : "bg-[#E2DDD8]"
+                remote ? "bg-accent" : "bg-[#E2DDD8]"
               )}
             >
               <span
                 className={cn(
                   "inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-sm transition-transform duration-200",
-                  filters.remote ? "translate-x-[18px]" : "translate-x-[3px]"
+                  remote ? "translate-x-[18px]" : "translate-x-[3px]"
                 )}
               />
             </button>
@@ -120,15 +133,14 @@ export function JobFilters() {
         </FilterSection>
 
         {/* SALARY RANGE */}
-        <FilterSection label="Salary Range">
+        <FilterSection label="Salary Range (k)">
           <div className="flex items-center gap-2">
             <div className="flex-1">
               <Input
-                placeholder="Min $"
-                value={filters.salaryMin}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, salaryMin: e.target.value }))
-                }
+                placeholder="Min"
+                value={salaryMin}
+                onChange={(e) => setParam("salaryMin", e.target.value)}
+                onBlur={(e) => setParam("salaryMin", e.target.value)}
                 type="number"
                 className="text-xs py-1.5"
               />
@@ -136,11 +148,10 @@ export function JobFilters() {
             <span className="font-mono text-xs text-text-muted">–</span>
             <div className="flex-1">
               <Input
-                placeholder="Max $"
-                value={filters.salaryMax}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, salaryMax: e.target.value }))
-                }
+                placeholder="Max"
+                value={salaryMax}
+                onChange={(e) => setParam("salaryMax", e.target.value)}
+                onBlur={(e) => setParam("salaryMax", e.target.value)}
                 type="number"
                 className="text-xs py-1.5"
               />
@@ -152,10 +163,8 @@ export function JobFilters() {
         <FilterSection label="Location">
           <Input
             placeholder="City, state, or zip..."
-            value={filters.location}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, location: e.target.value }))
-            }
+            value={location}
+            onChange={(e) => setParam("location", e.target.value)}
           />
         </FilterSection>
 
@@ -163,7 +172,7 @@ export function JobFilters() {
         <div className="flex flex-col gap-2.5 pt-2 border-t border-[#E2DDD8]">
           {hasActive && (
             <button
-              onClick={() => setFilters(DEFAULT_FILTERS)}
+              onClick={clearAll}
               className="font-mono text-xs text-text-muted hover:text-accent transition-colors duration-150 text-left"
             >
               Clear all filters
@@ -189,7 +198,7 @@ export function JobFilters() {
         <div className="flex flex-col gap-4">
           <Input
             label="Alert name"
-            placeholder="e.g. Data Center Ops in Dallas"
+            placeholder="e.g. Cloud Infra — Remote"
             value={alertName}
             onChange={(e) => setAlertName(e.target.value)}
           />

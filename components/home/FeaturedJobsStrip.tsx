@@ -1,15 +1,13 @@
+import Link from "next/link";
 import { MapPin, Briefcase, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
-import type { Job } from "@/lib/mock-data";
+import { formatSalary } from "@/lib/types";
+import type { ApiJob } from "@/lib/types";
 
-function formatSalary(min: number, max: number): string {
-  return `$${min}k–$${max}k`;
-}
-
-function FeaturedJobCard({ job }: { job: Job }) {
+function FeaturedJobCard({ job }: { job: ApiJob }) {
   return (
-    <a
-      href="#"
+    <Link
+      href={`/jobs/${job.id}`}
       className="group flex-shrink-0 w-[300px] rounded-[8px] overflow-hidden border-[1.5px] border-black transition-all duration-150 hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)] hover:-translate-y-0.5"
     >
       <div className="flex">
@@ -46,20 +44,21 @@ function FeaturedJobCard({ job }: { job: Job }) {
 
           <div className="pt-3 border-t border-[#E2DDD8]">
             <span className="font-mono text-sm font-semibold text-text-primary">
-              {formatSalary(job.salaryMin, job.salaryMax)}
+              {formatSalary(job.salaryMin, job.salaryMax, job.salary)}
             </span>
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
-export function FeaturedJobsStrip({ jobs }: { jobs: Job[] }) {
+export function FeaturedJobsStrip({ jobs }: { jobs: ApiJob[] }) {
+  if (jobs.length === 0) return null;
+
   return (
     <section className="bg-background border-b border-[#E2DDD8] py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
         <div className="flex items-center gap-3 mb-6">
           <span className="font-mono text-[11px] text-text-muted tracking-[0.12em] uppercase whitespace-nowrap">
             Featured Roles
@@ -67,14 +66,10 @@ export function FeaturedJobsStrip({ jobs }: { jobs: Job[] }) {
           <div className="flex-1 h-px bg-[#E2DDD8]" />
         </div>
 
-        {/* Horizontal scroll strip */}
-        <div
-          className="scrollbar-hide flex gap-4 overflow-x-auto pb-2"
-        >
+        <div className="scrollbar-hide flex gap-4 overflow-x-auto pb-2">
           {jobs.map((job) => (
             <FeaturedJobCard key={job.id} job={job} />
           ))}
-          {/* Fade hint — rightmost edge */}
           <div className="flex-shrink-0 w-4" aria-hidden="true" />
         </div>
       </div>

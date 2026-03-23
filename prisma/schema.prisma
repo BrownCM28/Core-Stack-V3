@@ -145,6 +145,8 @@ model Job {
   type            JobType
   level           ExperienceLevel
   salary          String?
+  salaryMin       Int?
+  salaryMax       Int?
   description     String
   responsibilities String[]
   requirements    String[]

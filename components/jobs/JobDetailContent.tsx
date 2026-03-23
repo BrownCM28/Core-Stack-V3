@@ -13,29 +13,19 @@ import { Badge } from "@/components/ui/Badge";
 import { ApplyModal } from "@/components/ApplyModal";
 import { JobCard } from "@/components/home/JobCard";
 import { cn } from "@/lib/utils";
-import type { Job } from "@/lib/mock-data";
-
-function formatSalary(min: number, max: number) {
-  return `$${min}k–$${max}k`;
-}
-
-function formatTimeAgo(hours: number): string {
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "1 day ago";
-  if (days < 7) return `${days} days ago`;
-  const weeks = Math.floor(days / 7);
-  return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
-}
+import { timeAgoFromISO, formatSalary } from "@/lib/types";
+import type { ApiJob } from "@/lib/types";
 
 interface JobDetailContentProps {
-  job: Job;
-  similarJobs: Job[];
+  job: ApiJob;
+  similarJobs: ApiJob[];
 }
 
 export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
   const [applyOpen, setApplyOpen] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const isNew = Date.now() - new Date(job.postedAt).getTime() < 48 * 60 * 60 * 1000;
 
   return (
     <>
@@ -47,11 +37,14 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
             className="flex items-center gap-1.5 text-xs font-mono text-text-muted mb-8"
             aria-label="Breadcrumb"
           >
-            <a href="#" className="hover:text-accent transition-colors duration-150">
+            <a href="/jobs" className="hover:text-accent transition-colors duration-150">
               Jobs
             </a>
             <ChevronRight size={12} className="flex-shrink-0" />
-            <a href="#" className="hover:text-accent transition-colors duration-150">
+            <a
+              href={`/jobs?category=${encodeURIComponent(job.category)}`}
+              className="hover:text-accent transition-colors duration-150"
+            >
               {job.category}
             </a>
             <ChevronRight size={12} className="flex-shrink-0" />
@@ -78,12 +71,9 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
                     <h1 className="font-mono font-bold text-2xl text-text-primary leading-tight mb-1">
                       {job.title}
                     </h1>
-                    <a
-                      href="#"
-                      className="font-sans text-sm text-text-muted hover:text-accent transition-colors duration-150"
-                    >
+                    <p className="font-sans text-sm text-text-muted">
                       {job.company}
-                    </a>
+                    </p>
 
                     {/* Meta row */}
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-sans text-text-muted mt-3 mb-4">
@@ -96,14 +86,14 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
                         {job.type}
                       </span>
                       <span className="font-mono font-semibold text-text-primary">
-                        {formatSalary(job.salaryMin, job.salaryMax)}
+                        {formatSalary(job.salaryMin, job.salaryMax, job.salary)}
                       </span>
                     </div>
 
                     {/* Badges */}
                     <div className="flex flex-wrap items-center gap-1.5 mb-5">
                       {job.featured && <Badge variant="featured">FEATURED</Badge>}
-                      {job.postedHoursAgo < 48 && <Badge variant="new">NEW</Badge>}
+                      {isNew && <Badge variant="new">NEW</Badge>}
                       <Badge variant="muted">{job.category}</Badge>
                       {job.type === "Contract" && (
                         <Badge variant="expiring">Contract</Badge>
@@ -138,14 +128,14 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
                     {/* Posted info */}
                     <p className="mt-4 text-xs font-mono text-text-muted flex items-center gap-1.5">
                       <Clock size={10} />
-                      Posted {formatTimeAgo(job.postedHoursAgo)} · Source: LinkedIn
+                      Posted {timeAgoFromISO(job.postedAt)} · Source: {job.source}
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Job description */}
-              <JobDescription />
+              <JobDescription job={job} />
             </div>
 
             {/* ── Right: sidebar ── */}
@@ -164,18 +154,19 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
                     value={job.type}
                     icon={<Briefcase size={12} />}
                   />
+                  <DetailRow label="Level" value={job.level} />
                   <DetailRow label="Category" value={job.category} />
                   <DetailRow
                     label="Salary"
-                    value={formatSalary(job.salaryMin, job.salaryMax)}
+                    value={formatSalary(job.salaryMin, job.salaryMax, job.salary)}
                   />
                   <DetailRow
                     label="Remote"
-                    value={job.location === "Remote" ? "Yes" : "On-site"}
+                    value={job.remote ? "Yes" : "On-site"}
                   />
                   <DetailRow
                     label="Posted"
-                    value={formatTimeAgo(job.postedHoursAgo)}
+                    value={timeAgoFromISO(job.postedAt)}
                     icon={<Clock size={12} />}
                   />
                 </dl>
@@ -199,7 +190,7 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
                   </div>
                 </div>
                 <a
-                  href="#"
+                  href={`/jobs?company=${encodeURIComponent(job.company)}`}
                   className="flex items-center gap-1.5 font-mono text-xs text-text-muted hover:text-accent transition-colors duration-150"
                 >
                   View all roles from {job.company}
@@ -236,44 +227,6 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
 
 // ─── Job description ─────────────────────────────────────────────────────────
 
-const RESPONSIBILITIES = [
-  "Monitor and maintain critical infrastructure including UPS systems, PDUs, diesel generators, ATS, CRAC/CRAH units, and BMS",
-  "Respond to critical alarms and execute emergency response procedures to minimize downtime impact",
-  "Perform scheduled and unscheduled preventive maintenance and document all activities in the CMMS",
-  "Coordinate third-party vendor and contractor work within the facility, ensuring safe practices and quality outcomes",
-  "Participate in the change management process and conduct risk assessments for all planned maintenance",
-  "Support capacity planning initiatives and assist with infrastructure expansion and build-out projects",
-  "Maintain accurate as-built documentation, single-line diagrams, and system schematics",
-  "Ensure compliance with SOC 2 Type II, ISO 27001, and SSAE 18 operational standards",
-];
-
-const REQUIREMENTS = [
-  "3+ years of experience in data center operations or critical facilities management",
-  "Strong working knowledge of electrical systems: UPS, PDU, MV/LV switchgear, generators, ATS",
-  "Hands-on experience with mechanical systems: CRAC/CRAH, precision cooling, chillers, cooling towers",
-  "Familiarity with DCIM software such as Nlyte, Sunbird, or Schneider EcoStruxure",
-  "OSHA 30-Hour certification or willingness to obtain within 60 days of hire",
-  "Ability to work on-call rotation and respond to after-hours emergencies",
-  "Associates or Bachelor's degree in Electrical, Mechanical, or Facilities Engineering preferred",
-];
-
-const NICE_TO_HAVE = [
-  "Certified Data Center Expert Professional (CDCEP) or equivalent certification",
-  "Experience operating Equinix IBX or other Tier III/IV colocation environments",
-  "Knowledge of 48V DC power infrastructure and battery systems",
-  "BICSI RCDD or OSP certification",
-];
-
-const BENEFITS = [
-  "Base salary: $95,000 – $120,000 depending on experience and certifications",
-  "Participation in Equinix's Employee Stock Purchase Plan (ESPP)",
-  "Comprehensive medical, dental, and vision coverage from day one",
-  "401(k) with Equinix matching contributions up to 6% of salary",
-  "Annual learning & development budget for certifications and training",
-  "On-call premium pay and shift differentials",
-  "Paid parental leave and employee wellness programs",
-];
-
 function BulletList({
   items,
   dotColor = "bg-accent",
@@ -309,47 +262,48 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-function JobDescription() {
+function JobDescription({ job }: { job: ApiJob }) {
   return (
     <article className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-6 flex flex-col gap-8">
 
-      {/* Overview */}
-      <section>
-        <SectionHeading>Overview</SectionHeading>
-        <p className="font-sans text-sm text-text-primary leading-relaxed">
-          Equinix is seeking an experienced Data Center Facilities Engineer to join our
-          critical infrastructure team in Dallas, TX. You will be responsible for the
-          day-to-day operations, maintenance, and continuous improvement of our Tier IV
-          colocation facility supporting some of the world&apos;s largest cloud providers,
-          financial institutions, and enterprise customers. Working within a 24/7/365
-          operational environment, you&apos;ll play a central role in maintaining
-          industry-leading uptime across all critical mechanical and electrical systems.
-        </p>
-      </section>
+      {job.description && (
+        <section>
+          <SectionHeading>Overview</SectionHeading>
+          <p className="font-sans text-sm text-text-primary leading-relaxed">
+            {job.description}
+          </p>
+        </section>
+      )}
 
-      {/* Responsibilities */}
-      <section>
-        <SectionHeading>Responsibilities</SectionHeading>
-        <BulletList items={RESPONSIBILITIES} dotColor="bg-accent" />
-      </section>
+      {job.responsibilities && job.responsibilities.length > 0 && (
+        <section>
+          <SectionHeading>Responsibilities</SectionHeading>
+          <BulletList items={job.responsibilities} dotColor="bg-accent" />
+        </section>
+      )}
 
-      {/* Requirements */}
-      <section>
-        <SectionHeading>Requirements</SectionHeading>
-        <BulletList items={REQUIREMENTS} dotColor="bg-[#E2DDD8]" />
-      </section>
+      {job.requirements && job.requirements.length > 0 && (
+        <section>
+          <SectionHeading>Requirements</SectionHeading>
+          <BulletList items={job.requirements} dotColor="bg-[#E2DDD8]" />
+        </section>
+      )}
 
-      {/* Nice to Have */}
-      <section>
-        <SectionHeading>Nice to Have</SectionHeading>
-        <BulletList items={NICE_TO_HAVE} dotColor="bg-text-muted/40" />
-      </section>
-
-      {/* Compensation */}
-      <section>
-        <SectionHeading>Compensation &amp; Benefits</SectionHeading>
-        <BulletList items={BENEFITS} dotColor="bg-accent/60" />
-      </section>
+      {job.tags && job.tags.length > 0 && (
+        <section>
+          <SectionHeading>Tags</SectionHeading>
+          <div className="flex flex-wrap gap-2">
+            {job.tags.map((tag) => (
+              <span
+                key={tag}
+                className="font-mono text-xs px-2.5 py-1 bg-[#E8E4DF] text-text-primary rounded-[4px]"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   );
 }

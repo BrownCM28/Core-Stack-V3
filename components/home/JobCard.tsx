@@ -1,27 +1,16 @@
+import Link from "next/link";
 import { MapPin, Clock, Briefcase } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
-import type { Job } from "@/lib/mock-data";
+import { timeAgoFromISO, formatSalary } from "@/lib/types";
+import type { ApiJob } from "@/lib/types";
 
-function formatSalary(min: number, max: number): string {
-  return `$${min}k–$${max}k`;
-}
-
-export function formatTimeAgo(hours: number): string {
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "1 day ago";
-  if (days < 7) return `${days} days ago`;
-  const weeks = Math.floor(days / 7);
-  return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
-}
-
-export function JobCard({ job }: { job: Job }) {
-  const isNew = job.postedHoursAgo < 48;
+export function JobCard({ job }: { job: ApiJob }) {
+  const isNew = Date.now() - new Date(job.postedAt).getTime() < 48 * 60 * 60 * 1000;
 
   return (
-    <a
-      href="#"
+    <Link
+      href={`/jobs/${job.id}`}
       className={cn(
         "group block bg-surface rounded-[8px] p-5",
         "border-[1.5px] border-[#E2DDD8]",
@@ -63,13 +52,13 @@ export function JobCard({ job }: { job: Job }) {
       {/* Footer: salary + time */}
       <div className="flex items-center justify-between pt-3 border-t border-[#E2DDD8]">
         <span className="font-mono text-sm font-semibold text-text-primary">
-          {formatSalary(job.salaryMin, job.salaryMax)}
+          {formatSalary(job.salaryMin, job.salaryMax, job.salary)}
         </span>
         <span className="flex items-center gap-1 text-[11px] font-mono text-text-muted">
           <Clock size={10} />
-          {formatTimeAgo(job.postedHoursAgo)}
+          {timeAgoFromISO(job.postedAt)}
         </span>
       </div>
-    </a>
+    </Link>
   );
 }
