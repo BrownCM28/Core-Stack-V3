@@ -206,6 +206,7 @@ model GitHubRepo {
   name        String
   description String?
   language    String?
+  topics      String[]
   stars       Int      @default(0)
   forks       Int      @default(0)
   url         String

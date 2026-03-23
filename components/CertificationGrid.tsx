@@ -1,11 +1,7 @@
 import { CertificationBadge } from "@/components/CertificationBadge";
-import type { Certification } from "@/lib/mock-profile";
+import type { DbCertification } from "@/components/CertificationBadge";
 
-interface CertificationGridProps {
-  certifications: Certification[];
-}
-
-export function CertificationGrid({ certifications }: CertificationGridProps) {
+export function CertificationGrid({ certifications }: { certifications: DbCertification[] }) {
   if (certifications.length === 0) return null;
 
   return (
@@ -15,7 +11,7 @@ export function CertificationGrid({ certifications }: CertificationGridProps) {
       </p>
       <div className="flex flex-col gap-3">
         {certifications.map((cert) => (
-          <CertificationBadge key={cert.name} cert={cert} />
+          <CertificationBadge key={cert.id} cert={cert} />
         ))}
       </div>
     </div>

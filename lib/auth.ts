@@ -37,6 +37,24 @@ export const auth = betterAuth({
       },
     },
   },
+
+  // Sync GitHub profile whenever a new GitHub account is linked (OAuth sign-in)
+  databaseHooks: {
+    account: {
+      create: {
+        after: async (account) => {
+          if (account.providerId !== "github" || !account.accessToken) return;
+          try {
+            const { syncGitHubProfile } = await import("@/lib/github");
+            // Fire and forget — don't block login
+            syncGitHubProfile(account.userId, account.accessToken).catch(() => {});
+          } catch {
+            // Silently ignore — login still succeeds
+          }
+        },
+      },
+    },
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;

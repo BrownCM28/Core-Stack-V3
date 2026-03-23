@@ -332,7 +332,17 @@ function CertificationsTab() {
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {ALEX_CHEN.certifications.map((cert) => (
-            <CertificationBadge key={cert.name} cert={cert} />
+            <CertificationBadge
+              key={cert.name}
+              cert={{
+                id: cert.name,
+                name: cert.name,
+                issuer: cert.issuer,
+                issuedAt: cert.issuedDate,
+                expiresAt: cert.expiryDate ?? null,
+                credentialUrl: cert.credentialUrl ?? null,
+              }}
+            />
           ))}
         </div>
       </SectionCard>
@@ -480,6 +490,22 @@ function OpenToWorkTab() {
 }
 
 function SettingsTab() {
+  const [syncing, setSyncing] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<"idle" | "success" | "error">("idle");
+
+  async function handleReconnectGitHub() {
+    setSyncing(true);
+    setSyncStatus("idle");
+    try {
+      const res = await fetch("/api/github/sync", { method: "POST" });
+      setSyncStatus(res.ok ? "success" : "error");
+    } catch {
+      setSyncStatus("error");
+    } finally {
+      setSyncing(false);
+    }
+  }
+
   return (
     <div className="flex flex-col gap-5">
       {/* Account */}
@@ -521,12 +547,19 @@ function SettingsTab() {
               <Github size={18} className="text-[#9CA3AF]" />
             </div>
             <div>
-              <p className="font-mono text-sm font-semibold text-text-primary">@alexchen-dc</p>
-              <p className="font-sans text-xs text-text-muted">Last synced Mar 21, 2026 09:14</p>
+              <p className="font-mono text-sm font-semibold text-text-primary">GitHub Integration</p>
+              <p className="font-sans text-xs text-text-muted">
+                {syncStatus === "success"
+                  ? "Sync complete — profile updated."
+                  : syncStatus === "error"
+                  ? "Sync failed. Check your GitHub connection."
+                  : "Sync your GitHub repos and skills."}
+              </p>
             </div>
           </div>
-          <WireButton>
-            <RefreshCw size={12} /> Reconnect GitHub
+          <WireButton onClick={handleReconnectGitHub}>
+            <RefreshCw size={12} className={syncing ? "animate-spin" : ""} />
+            {syncing ? "Syncing…" : "Reconnect GitHub"}
           </WireButton>
         </div>
       </SectionCard>
