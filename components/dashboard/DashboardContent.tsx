@@ -4,18 +4,45 @@ import { useState, useEffect } from "react";
 import {
   FileText, Bell, Award, Briefcase, Settings,
   Plus, Trash2, ArrowRight, Github,
-  RefreshCw, AlertTriangle, X,
+  RefreshCw, AlertTriangle, X, Loader2, CheckCircle,
 } from "lucide-react";
 import { CertificationBadge } from "@/components/CertificationBadge";
+import type { DbCertification } from "@/components/CertificationBadge";
 import { AddCertificationModal } from "@/components/AddCertificationModal";
 import { cn } from "@/lib/utils";
-import { ALEX_CHEN } from "@/lib/mock-profile";
-import {
-  MOCK_APPLICATIONS,
-  MOCK_ALERTS,
-  type Application,
-  type AlertFrequency,
-} from "@/lib/mock-dashboard";
+import { useSession } from "@/lib/auth-client";
+import { MOCK_ALERTS, type AlertFrequency } from "@/lib/mock-dashboard";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface AppJob {
+  id: string;
+  title: string;
+  company: string;
+  companyLogo: string | null;
+  location: string;
+  isActive: boolean;
+}
+
+interface UserApplication {
+  id: string;
+  status: "SUBMITTED" | "VIEWED" | "SHORTLISTED" | "REJECTED" | "WITHDRAWN";
+  appliedAt: string;
+  job: AppJob;
+}
+
+type AppDisplayStatus = "Applied" | "Viewed" | "Shortlisted" | "Rejected" | "Withdrawn";
+
+function mapStatus(s: UserApplication["status"]): AppDisplayStatus {
+  const map: Record<UserApplication["status"], AppDisplayStatus> = {
+    SUBMITTED: "Applied",
+    VIEWED: "Viewed",
+    SHORTLISTED: "Shortlisted",
+    REJECTED: "Rejected",
+    WITHDRAWN: "Withdrawn",
+  };
+  return map[s];
+}
 
 // ─── Shared primitives ────────────────────────────────────────────────────────
 
@@ -72,16 +99,19 @@ function WireButton({
   onClick,
   children,
   className,
+  disabled,
 }: {
   onClick?: () => void;
   children: React.ReactNode;
   className?: string;
+  disabled?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={cn(
-        "inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs border-[1.5px] border-[#E2DDD8] rounded-[6px] text-text-primary hover:border-accent hover:text-accent transition-all duration-150",
+        "inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs border-[1.5px] border-[#E2DDD8] rounded-[6px] text-text-primary hover:border-accent hover:text-accent transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed",
         className
       )}
     >
@@ -92,11 +122,13 @@ function WireButton({
 
 // ─── Status pill ──────────────────────────────────────────────────────────────
 
-function StatusPill({ status }: { status: Application["status"] }) {
-  const styles: Record<Application["status"], string> = {
+function StatusPill({ status }: { status: AppDisplayStatus }) {
+  const styles: Record<AppDisplayStatus, string> = {
     Applied: "bg-[#E8E4DF] text-text-muted",
     Viewed: "bg-[#DBEAFE] text-[#1D4ED8]",
-    Closed: "bg-[#FEF3C7] text-[#92400E]",
+    Shortlisted: "bg-[#DCFCE7] text-[#166534]",
+    Rejected: "bg-[#FEE2E2] text-[#991B1B]",
+    Withdrawn: "bg-[#F3F4F6] text-[#6B7280]",
   };
   return (
     <span className={cn("inline-block font-mono text-[11px] font-semibold px-2 py-0.5 rounded-[4px]", styles[status])}>
@@ -195,16 +227,31 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]["id"];
 
-// ─── Tab panels ───────────────────────────────────────────────────────────────
+// ─── Applications tab ─────────────────────────────────────────────────────────
 
 function ApplicationsTab() {
+  const [apps, setApps] = useState<UserApplication[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/applications")
+      .then((r) => r.json())
+      .then((data) => setApps(Array.isArray(data) ? data : []))
+      .catch(() => setApps([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <SectionCard>
       <SectionHeader
         title="Your Applications"
-        count={`${MOCK_APPLICATIONS.length} applications`}
+        count={loading ? undefined : `${apps.length} application${apps.length !== 1 ? "s" : ""}`}
       />
-      {MOCK_APPLICATIONS.length === 0 ? (
+      {loading ? (
+        <div className="flex justify-center py-10">
+          <Loader2 size={20} className="animate-spin text-text-muted" />
+        </div>
+      ) : apps.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-14 text-center">
           <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center mb-4">
             <FileText size={20} className="text-text-muted" />
@@ -223,46 +270,45 @@ function ApplicationsTab() {
           </a>
         </div>
       ) : (
-      <div className="flex flex-col divide-y divide-[#E2DDD8]">
-        {MOCK_APPLICATIONS.map((app) => (
-          <div
-            key={app.id}
-            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 py-4 first:pt-0 last:pb-0"
-          >
-            {/* Company logo placeholder */}
-            <div className="flex-shrink-0 w-9 h-9 rounded-[6px] bg-[#1E2128] border border-[#2A2D35] flex items-center justify-center font-mono font-bold text-sm text-[#4B5563]">
-              {app.company[0]}
+        <div className="flex flex-col divide-y divide-[#E2DDD8]">
+          {apps.map((app) => (
+            <div
+              key={app.id}
+              className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 py-4 first:pt-0 last:pb-0"
+            >
+              <div className="flex-shrink-0 w-9 h-9 rounded-[6px] bg-[#1E2128] border border-[#2A2D35] flex items-center justify-center font-mono font-bold text-sm text-[#4B5563]">
+                {app.job.company[0]}
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <p className="font-mono font-semibold text-sm text-text-primary leading-tight truncate">
+                  {app.job.title}
+                </p>
+                <p className="font-sans text-xs text-text-muted">
+                  {app.job.company} · {app.job.location}
+                </p>
+              </div>
+
+              <span className="font-mono text-xs text-text-muted whitespace-nowrap">
+                {new Date(app.appliedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+              </span>
+
+              <StatusPill status={mapStatus(app.status)} />
+
+              <a href={`/jobs/${app.job.id}`}>
+                <WireButton>
+                  View listing <ArrowRight size={11} />
+                </WireButton>
+              </a>
             </div>
-
-            {/* Job info */}
-            <div className="flex-1 min-w-0">
-              <p className="font-mono font-semibold text-sm text-text-primary leading-tight truncate">
-                {app.jobTitle}
-              </p>
-              <p className="font-sans text-xs text-text-muted">
-                {app.company} · {app.location}
-              </p>
-            </div>
-
-            {/* Applied date */}
-            <span className="font-mono text-xs text-text-muted whitespace-nowrap">
-              {app.appliedDate}
-            </span>
-
-            {/* Status */}
-            <StatusPill status={app.status} />
-
-            {/* Action */}
-            <WireButton>
-              View listing <ArrowRight size={11} />
-            </WireButton>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
       )}
     </SectionCard>
   );
 }
+
+// ─── Alerts tab ───────────────────────────────────────────────────────────────
 
 function AlertsTab() {
   const [alertOpen, setAlertOpen] = useState(false);
@@ -315,45 +361,151 @@ function AlertsTab() {
   );
 }
 
+// ─── Certifications tab ───────────────────────────────────────────────────────
+
 function CertificationsTab() {
+  const [certs, setCerts] = useState<DbCertification[]>([]);
+  const [loading, setLoading] = useState(true);
   const [addOpen, setAddOpen] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/certifications")
+      .then((r) => r.json())
+      .then((data) => setCerts(Array.isArray(data) ? data : []))
+      .catch(() => setCerts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  function handleCertAdded(cert: DbCertification) {
+    setCerts((prev) => [cert, ...prev]);
+  }
+
+  async function handleDelete(id: string) {
+    setDeleting(id);
+    try {
+      await fetch(`/api/certifications/${id}`, { method: "DELETE" });
+      setCerts((prev) => prev.filter((c) => c.id !== id));
+    } finally {
+      setDeleting(null);
+    }
+  }
 
   return (
     <>
       <SectionCard>
         <SectionHeader
           title="Your Certifications"
-          count={`${ALEX_CHEN.certifications.length} certifications`}
+          count={loading ? undefined : `${certs.length} certification${certs.length !== 1 ? "s" : ""}`}
           action={
             <WireButton onClick={() => setAddOpen(true)}>
               <Plus size={12} /> Add Certification
             </WireButton>
           }
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {ALEX_CHEN.certifications.map((cert) => (
-            <CertificationBadge
-              key={cert.name}
-              cert={{
-                id: cert.name,
-                name: cert.name,
-                issuer: cert.issuer,
-                issuedAt: cert.issuedDate,
-                expiresAt: cert.expiryDate ?? null,
-                credentialUrl: cert.credentialUrl ?? null,
-              }}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <Loader2 size={20} className="animate-spin text-text-muted" />
+          </div>
+        ) : certs.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center">
+            <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center mb-4">
+              <Award size={20} className="text-text-muted" />
+            </div>
+            <p className="font-mono font-semibold text-sm text-text-primary mb-1">
+              No certifications yet
+            </p>
+            <p className="font-sans text-sm text-text-muted mb-5 max-w-xs">
+              Add your professional certifications to strengthen your profile.
+            </p>
+            <WireButton onClick={() => setAddOpen(true)}>
+              <Plus size={12} /> Add your first cert
+            </WireButton>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {certs.map((cert) => (
+              <div key={cert.id} className="relative group">
+                <CertificationBadge cert={cert} />
+                <button
+                  onClick={() => handleDelete(cert.id)}
+                  disabled={deleting === cert.id}
+                  className="absolute top-2 right-2 p-1.5 rounded-[4px] bg-surface border border-[#E2DDD8] text-text-muted hover:text-red-500 hover:border-red-300 transition-all duration-150 opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                  aria-label="Delete certification"
+                >
+                  {deleting === cert.id
+                    ? <Loader2 size={12} className="animate-spin" />
+                    : <Trash2 size={12} />
+                  }
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </SectionCard>
-      <AddCertificationModal open={addOpen} onClose={() => setAddOpen(false)} />
+      <AddCertificationModal
+        open={addOpen}
+        onClose={() => setAddOpen(false)}
+        onSuccess={handleCertAdded}
+      />
     </>
   );
 }
 
+// ─── Open to Work tab ─────────────────────────────────────────────────────────
+
 function OpenToWorkTab() {
-  const [otw, setOtw] = useState(true);
+  const { data: sessionData } = useSession();
+  const [otw, setOtw] = useState(false);
   const [desiredRole, setDesiredRole] = useState("Full-time");
+  const [location, setLocation] = useState("");
+  const [remoteOk, setRemoteOk] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Load current user settings on mount
+  useEffect(() => {
+    fetch("/api/user/profile")
+      .then((r) => r.json())
+      .then((user) => {
+        if (user && typeof user === "object") {
+          setOtw(user.openToWork ?? false);
+          setLocation(user.location ?? "");
+          if (user.openToTypes?.includes("CONTRACT") && user.openToTypes?.includes("FULL_TIME")) {
+            setDesiredRole("Both");
+          } else if (user.openToTypes?.includes("CONTRACT")) {
+            setDesiredRole("Contract");
+          } else {
+            setDesiredRole("Full-time");
+          }
+        }
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
+
+  async function handleSave() {
+    setSaving(true);
+    setSaved(false);
+    try {
+      await fetch("/api/user/open-to-work", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          openToWork: otw,
+          desiredRoleType: desiredRole,
+          desiredLocation: location,
+        }),
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const username = sessionData?.user?.name?.toLowerCase().replace(/\s+/g, "") ?? "you";
 
   return (
     <SectionCard>
@@ -370,7 +522,7 @@ function OpenToWorkTab() {
         <Toggle checked={otw} onChange={() => setOtw((v) => !v)} />
       </div>
 
-      {otw && (
+      {otw && loaded && (
         <div className="flex flex-col gap-5">
           {/* Role type */}
           <div>
@@ -403,12 +555,19 @@ function OpenToWorkTab() {
             <div className="flex items-center gap-3">
               <input
                 type="text"
-                defaultValue="Austin, TX"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g. Austin, TX"
                 className="flex-1 font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
               />
               <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
                 <span className="relative flex-shrink-0">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    checked={remoteOk}
+                    onChange={() => setRemoteOk((v) => !v)}
+                  />
                   <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E2DDD8] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150" />
                 </span>
                 <span className="font-sans text-xs text-text-muted">Remote OK</span>
@@ -416,71 +575,26 @@ function OpenToWorkTab() {
             </div>
           </div>
 
-          {/* Salary range */}
-          <div>
-            <label className="block font-mono text-xs text-text-muted mb-1.5">
-              Expected Salary Range
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-xs text-text-muted">$</span>
-                <input
-                  type="number"
-                  defaultValue="130"
-                  placeholder="Min"
-                  className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] pl-6 pr-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
-                />
-              </div>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-xs text-text-muted">$</span>
-                <input
-                  type="number"
-                  defaultValue="160"
-                  placeholder="Max"
-                  className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] pl-6 pr-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Available from */}
-          <div>
-            <label className="block font-mono text-xs text-text-muted mb-1.5">
-              Available From
-            </label>
-            <div className="grid grid-cols-2 gap-3 max-w-xs">
-              <div className="relative">
-                <select className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none appearance-none cursor-pointer">
-                  <option>March</option>
-                  <option>April</option>
-                  <option>May</option>
-                </select>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </span>
-              </div>
-              <div className="relative">
-                <select className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none appearance-none cursor-pointer">
-                  <option>2026</option>
-                  <option>2027</option>
-                </select>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </span>
-              </div>
-            </div>
-          </div>
-
           <div className="flex items-center gap-4 pt-2">
-            <button className="px-5 py-2.5 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] hover:shadow-[0_0_16px_rgba(62,207,142,0.25)] transition-all duration-150">
-              Save preferences
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] hover:shadow-[0_0_16px_rgba(62,207,142,0.25)] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {saving && <Loader2 size={13} className="animate-spin" />}
+              {saving ? "Saving…" : "Save preferences"}
             </button>
+            {saved && (
+              <span className="flex items-center gap-1.5 font-mono text-xs text-accent">
+                <CheckCircle size={13} /> Saved
+              </span>
+            )}
           </div>
 
           <p className="font-mono text-xs text-text-muted pt-1 border-t border-[#E2DDD8]">
             Your profile is publicly visible at{" "}
-            <a href="#" className="text-accent hover:underline">
-              corestack.io/profile/alexchen-dc
+            <a href={`/profile/${username}`} className="text-accent hover:underline">
+              corestack.io/profile/{username}
             </a>
           </p>
         </div>
@@ -489,9 +603,42 @@ function OpenToWorkTab() {
   );
 }
 
+// ─── Settings tab ─────────────────────────────────────────────────────────────
+
 function SettingsTab() {
+  const { data: sessionData } = useSession();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileSaved, setProfileSaved] = useState(false);
+
   const [syncing, setSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"idle" | "success" | "error">("idle");
+
+  // Populate form from session
+  useEffect(() => {
+    if (sessionData?.user) {
+      setName(sessionData.user.name ?? "");
+      setEmail(sessionData.user.email ?? "");
+    }
+  }, [sessionData?.user?.id]);
+
+  async function handleSaveProfile() {
+    setProfileSaving(true);
+    setProfileSaved(false);
+    try {
+      await fetch("/api/user/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      setProfileSaved(true);
+      setTimeout(() => setProfileSaved(false), 3000);
+    } finally {
+      setProfileSaving(false);
+    }
+  }
 
   async function handleReconnectGitHub() {
     setSyncing(true);
@@ -518,7 +665,8 @@ function SettingsTab() {
             <label className="block font-mono text-xs text-text-muted mb-1.5">Full Name</label>
             <input
               type="text"
-              defaultValue="Alex Chen"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
             />
           </div>
@@ -526,13 +674,26 @@ function SettingsTab() {
             <label className="block font-mono text-xs text-text-muted mb-1.5">Email</label>
             <input
               type="email"
-              defaultValue="alex.chen@equinix.com"
-              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
+              value={email}
+              disabled
+              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-muted cursor-not-allowed opacity-60"
             />
           </div>
-          <button className="self-start px-4 py-2 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-xs rounded-[6px] hover:bg-[#34C47E] transition-all duration-150">
-            Save changes
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleSaveProfile}
+              disabled={profileSaving}
+              className="self-start inline-flex items-center gap-1.5 px-4 py-2 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-xs rounded-[6px] hover:bg-[#34C47E] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {profileSaving && <Loader2 size={12} className="animate-spin" />}
+              {profileSaving ? "Saving…" : "Save changes"}
+            </button>
+            {profileSaved && (
+              <span className="flex items-center gap-1.5 font-mono text-xs text-accent">
+                <CheckCircle size={13} /> Saved
+              </span>
+            )}
+          </div>
         </div>
       </SectionCard>
 
@@ -557,7 +718,7 @@ function SettingsTab() {
               </p>
             </div>
           </div>
-          <WireButton onClick={handleReconnectGitHub}>
+          <WireButton onClick={handleReconnectGitHub} disabled={syncing}>
             <RefreshCw size={12} className={syncing ? "animate-spin" : ""} />
             {syncing ? "Syncing…" : "Reconnect GitHub"}
           </WireButton>
@@ -612,10 +773,25 @@ function SettingsTab() {
   );
 }
 
-// ─── Main export ──────────────────────────────────────────────────────────────
+// ─── Main export ────────────────────���─────────────────────────────────────────
 
 export function DashboardContent() {
+  const { data: sessionData } = useSession();
   const [activeTab, setActiveTab] = useState<TabId>("applications");
+
+  // Resume pending apply after OAuth redirect
+  useEffect(() => {
+    const pendingJobId = sessionStorage.getItem("pendingApplyJobId");
+    if (!pendingJobId || !sessionData?.user) return;
+    sessionStorage.removeItem("pendingApplyJobId");
+    fetch("/api/applications", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jobId: pendingJobId }),
+    }).catch(() => {});
+  }, [sessionData?.user?.id]);
+
+  const userName = sessionData?.user?.name ?? "there";
 
   return (
     <div className="min-h-screen bg-background">
@@ -624,7 +800,7 @@ export function DashboardContent() {
         {/* Dashboard header */}
         <div className="mb-7">
           <h1 className="font-mono font-bold text-2xl text-text-primary mb-0.5">Dashboard</h1>
-          <p className="font-sans text-sm text-text-muted">Welcome back, Alex Chen</p>
+          <p className="font-sans text-sm text-text-muted">Welcome back, {userName}</p>
         </div>
 
         {/* Tab bar */}

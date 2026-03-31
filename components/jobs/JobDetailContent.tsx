@@ -219,7 +219,7 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
       <ApplyModal
         open={applyOpen}
         onClose={() => setApplyOpen(false)}
-        job={{ title: job.title, company: job.company }}
+        job={job}
       />
     </>
   );

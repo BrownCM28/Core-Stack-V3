@@ -230,7 +230,7 @@ export function JobsPageContent() {
       <ApplyModal
         open={applyJob !== null}
         onClose={() => setApplyJob(null)}
-        job={applyJob ? { title: applyJob.title, company: applyJob.company } : null}
+        job={applyJob}
       />
     </>
   );
