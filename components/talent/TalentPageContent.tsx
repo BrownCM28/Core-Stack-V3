@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { SlidersHorizontal, X } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { SlidersHorizontal, X, Loader2 } from "lucide-react";
 import { TalentCard } from "@/components/TalentCard";
-import type { TalentProfile } from "@/lib/mock-profile";
+import type { ApiTalent } from "@/app/api/talent/route";
 
 // ─── Filter sub-components ────────────────────────────────────────────────────
 
@@ -30,22 +31,11 @@ function FilterCheckbox({
   return (
     <label className="flex items-center gap-2.5 cursor-pointer group mb-2.5">
       <span className="relative flex-shrink-0">
-        <input
-          type="checkbox"
-          className="sr-only peer"
-          checked={checked}
-          onChange={onChange}
-        />
+        <input type="checkbox" className="sr-only peer" checked={checked} onChange={onChange} />
         <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E2DDD8] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150 flex items-center justify-center">
           {checked && (
             <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="absolute">
-              <path
-                d="M1 4L3.5 6.5L9 1"
-                stroke="#0D0F12"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M1 4L3.5 6.5L9 1" stroke="#0D0F12" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           )}
         </div>
@@ -59,51 +49,77 @@ function FilterCheckbox({
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-interface TalentPageContentProps {
-  talent: TalentProfile[];
-}
+const LANGUAGES = ["Python", "Go", "TypeScript", "Rust", "HCL", "Shell", "C++"];
+const ROLE_TYPES = ["Full-time", "Contract", "Both"];
 
-export function TalentPageContent({ talent }: TalentPageContentProps) {
-  const [languages, setLanguages] = useState<string[]>([]);
-  const [roleTypes, setRoleTypes] = useState<string[]>([]);
-  const [location, setLocation] = useState("");
-  const [availability, setAvailability] = useState<string[]>([]);
+export function TalentPageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [talent, setTalent] = useState<ApiTalent[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const hasActive =
-    languages.length > 0 || roleTypes.length > 0 || !!location || availability.length > 0;
+  // Read filter state from URL
+  const language = searchParams.get("language") ?? "";
+  const roleType = searchParams.get("roleType") ?? "";
+  const location = searchParams.get("location") ?? "";
 
-  function clearAll() {
-    setLanguages([]);
-    setRoleTypes([]);
-    setLocation("");
-    setAvailability([]);
+  const hasActive = !!(language || roleType || location);
+
+  const fetchTalent = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (language) params.set("language", language);
+      if (roleType) params.set("roleType", roleType);
+      if (location) params.set("location", location);
+      const res = await fetch(`/api/talent?${params.toString()}`);
+      const data = await res.json();
+      setTalent(data.talent ?? []);
+      setTotal(data.total ?? 0);
+    } catch {
+      setTalent([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [language, roleType, location]);
+
+  useEffect(() => { fetchTalent(); }, [fetchTalent]);
+
+  function setParam(key: string, value: string | null) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (!value) params.delete(key);
+    else params.set(key, value);
+    router.replace(`${pathname}?${params.toString()}`);
   }
 
-  function toggle(list: string[], setList: (v: string[]) => void, item: string) {
-    setList(list.includes(item) ? list.filter((x) => x !== item) : [...list, item]);
+  function clearAll() {
+    router.replace(pathname);
   }
 
   const filterPanel = (
     <div>
       <FilterSection title="Stack / Language">
-        {["Python", "Go", "TypeScript", "Rust", "HCL", "Shell", "C++"].map((lang) => (
+        {LANGUAGES.map((lang) => (
           <FilterCheckbox
             key={lang}
             label={lang}
-            checked={languages.includes(lang)}
-            onChange={() => toggle(languages, setLanguages, lang)}
+            checked={language === lang}
+            onChange={() => setParam("language", language === lang ? null : lang)}
           />
         ))}
       </FilterSection>
 
       <FilterSection title="Role Type">
-        {["Full-time", "Contract", "Both"].map((type) => (
+        {ROLE_TYPES.map((type) => (
           <FilterCheckbox
             key={type}
             label={type}
-            checked={roleTypes.includes(type)}
-            onChange={() => toggle(roleTypes, setRoleTypes, type)}
+            checked={roleType === type}
+            onChange={() => setParam("roleType", roleType === type ? null : type)}
           />
         ))}
       </FilterSection>
@@ -112,21 +128,10 @@ export function TalentPageContent({ talent }: TalentPageContentProps) {
         <input
           type="text"
           value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          onChange={(e) => setParam("location", e.target.value || null)}
           placeholder="City, state, or remote"
           className="w-full font-sans text-xs bg-surface border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
         />
-      </FilterSection>
-
-      <FilterSection title="Availability">
-        {["Available now", "Available in 30 days", "Available in 60 days"].map((a) => (
-          <FilterCheckbox
-            key={a}
-            label={a}
-            checked={availability.includes(a)}
-            onChange={() => toggle(availability, setAvailability, a)}
-          />
-        ))}
       </FilterSection>
 
       {hasActive && (
@@ -152,16 +157,18 @@ export function TalentPageContent({ talent }: TalentPageContentProps) {
           <p className="font-sans text-sm text-text-muted max-w-xl">
             Engineers and infrastructure specialists actively looking for their next role.
           </p>
-          <p className="font-mono text-xs text-text-muted mt-3">
-            <span className="text-text-primary font-semibold">148</span> candidates available
-          </p>
+          {!loading && (
+            <p className="font-mono text-xs text-text-muted mt-3">
+              <span className="text-text-primary font-semibold">{total}</span> candidate{total !== 1 ? "s" : ""} available
+            </p>
+          )}
         </div>
       </div>
 
       {/* Mobile filter toggle bar */}
       <div className="lg:hidden sticky top-14 z-30 bg-background border-b border-[#E2DDD8] px-4 py-3 flex items-center justify-between">
         <span className="font-mono text-xs text-text-muted">
-          <span className="text-text-primary font-semibold">{talent.length}</span> candidates shown
+          <span className="text-text-primary font-semibold">{loading ? "…" : talent.length}</span> shown
         </span>
         <button
           onClick={() => setMobileFiltersOpen(true)}
@@ -175,17 +182,11 @@ export function TalentPageContent({ talent }: TalentPageContentProps) {
       {/* Mobile filter drawer */}
       {mobileFiltersOpen && (
         <div className="lg:hidden fixed inset-0 z-40 flex">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setMobileFiltersOpen(false)}
-          />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileFiltersOpen(false)} />
           <aside className="relative z-10 w-[300px] bg-surface h-full overflow-y-auto p-6 border-r border-[#E2DDD8] shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <span className="font-mono font-semibold text-sm text-text-primary">Filters</span>
-              <button
-                onClick={() => setMobileFiltersOpen(false)}
-                className="text-text-muted hover:text-accent transition-colors duration-150 p-1"
-              >
+              <button onClick={() => setMobileFiltersOpen(false)} className="text-text-muted hover:text-accent p-1">
                 <X size={18} />
               </button>
             </div>
@@ -202,9 +203,7 @@ export function TalentPageContent({ talent }: TalentPageContentProps) {
           <div className="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto px-6 py-8">
             <div className="flex items-center gap-2 mb-6">
               <SlidersHorizontal size={13} className="text-text-muted" />
-              <span className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase">
-                Filters
-              </span>
+              <span className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase">Filters</span>
             </div>
             {filterPanel}
           </div>
@@ -212,7 +211,11 @@ export function TalentPageContent({ talent }: TalentPageContentProps) {
 
         {/* Talent grid */}
         <main className="flex-1 min-w-0 px-5 lg:px-8 py-8">
-          {talent.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <Loader2 size={24} className="animate-spin text-text-muted" />
+            </div>
+          ) : talent.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center mb-4">
                 <SlidersHorizontal size={20} className="text-text-muted" />
@@ -223,17 +226,19 @@ export function TalentPageContent({ talent }: TalentPageContentProps) {
               <p className="font-sans text-sm text-text-muted mb-5">
                 Try broadening your search or clearing filters.
               </p>
-              <button
-                onClick={clearAll}
-                className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
-              >
-                Clear all filters
-              </button>
+              {hasActive && (
+                <button
+                  onClick={clearAll}
+                  className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
+                >
+                  Clear all filters
+                </button>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {talent.map((profile) => (
-                <TalentCard key={profile.username} profile={profile} />
+                <TalentCard key={profile.id} profile={profile} />
               ))}
             </div>
           )}

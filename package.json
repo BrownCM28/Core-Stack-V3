@@ -22,8 +22,10 @@
     "react": "^18",
     "react-dom": "^18",
     "recharts": "^3.8.0",
+    "resend": "^6.10.0",
     "tailwind-merge": "^2.5.2",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",

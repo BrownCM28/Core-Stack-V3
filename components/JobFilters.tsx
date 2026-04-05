@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useSession } from "@/lib/auth-client";
 
 const CATEGORIES = [
   "Cloud Infra",
@@ -28,9 +28,13 @@ export function JobFilters() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const { data: sessionData } = useSession();
+
   const [saveSearchOpen, setSaveSearchOpen] = useState(false);
   const [alertName, setAlertName] = useState("");
   const [frequency, setFrequency] = useState("daily");
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const selectedCategories = searchParams.getAll("category");
   const selectedJobTypes = searchParams.getAll("jobType");
@@ -80,6 +84,47 @@ export function JobFilters() {
     !!salaryMin ||
     !!salaryMax ||
     !!location;
+
+  function openSaveModal() {
+    // Auto-generate alert name from active filters
+    const parts: string[] = [];
+    if (selectedCategories.length) parts.push(selectedCategories[0]);
+    if (location) parts.push(location);
+    if (remote) parts.push("Remote");
+    setAlertName(parts.join(" — ") || "My job alert");
+    setSaveSuccess(false);
+    setSaveSearchOpen(true);
+  }
+
+  async function handleSaveAlert() {
+    if (!alertName.trim()) return;
+    setSaving(true);
+    try {
+      // Build filters object from current URL params
+      const filters: Record<string, unknown> = {};
+      if (selectedCategories.length) filters.category = selectedCategories;
+      if (selectedJobTypes.length) filters.jobType = selectedJobTypes;
+      if (remote) filters.remote = true;
+      if (salaryMin) filters.salaryMin = salaryMin;
+      if (salaryMax) filters.salaryMax = salaryMax;
+      if (location) filters.location = location;
+
+      const res = await fetch("/api/alerts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: alertName.trim(), filters, frequency }),
+      });
+      if (res.ok) {
+        setSaveSuccess(true);
+        setTimeout(() => {
+          setSaveSearchOpen(false);
+          setSaveSuccess(false);
+        }, 1500);
+      }
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <>
@@ -182,7 +227,7 @@ export function JobFilters() {
             variant="default"
             size="sm"
             className="w-full"
-            onClick={() => setSaveSearchOpen(true)}
+            onClick={openSaveModal}
           >
             Save this search
           </Button>
@@ -216,9 +261,25 @@ export function JobFilters() {
               <option value="weekly">Weekly</option>
             </select>
           </div>
-          <Button variant="primary" size="md" className="w-full mt-1">
-            Save Alert
-          </Button>
+          {saveSuccess ? (
+            <div className="flex items-center justify-center gap-2 py-2.5 font-mono text-sm text-accent font-semibold">
+              ✓ Alert saved!
+            </div>
+          ) : !sessionData?.user ? (
+            <p className="font-mono text-xs text-text-muted text-center">
+              <a href="/auth/login" className="text-accent hover:underline">Sign in</a> to save alerts
+            </p>
+          ) : (
+            <Button
+              variant="primary"
+              size="md"
+              className="w-full mt-1"
+              onClick={handleSaveAlert}
+              disabled={saving || !alertName.trim()}
+            >
+              {saving ? "Saving…" : "Save Alert"}
+            </Button>
+          )}
         </div>
       </Modal>
     </>

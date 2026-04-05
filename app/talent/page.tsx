@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { TalentPageContent } from "@/components/talent/TalentPageContent";
-import { TALENT } from "@/lib/mock-profile";
 
 export const metadata: Metadata = {
   title: "Browse Talent | CoreStack",
@@ -9,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function TalentPage() {
-  return <TalentPageContent talent={TALENT} />;
+  return (
+    <Suspense>
+      <TalentPageContent />
+    </Suspense>
+  );
 }

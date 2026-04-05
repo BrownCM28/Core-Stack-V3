@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
 
 interface CertMini {
-  abbr: string;
+  /** Short display label — can be an abbreviation or the issuer name */
+  name: string;
   issuer: string;
 }
 
@@ -27,11 +28,11 @@ export function CertificationMiniPills({ certs }: CertificationMiniPillsProps) {
         const dotColor = ISSUER_DOT_COLORS[cert.issuer] ?? "bg-text-muted";
         return (
           <span
-            key={`${cert.issuer}-${cert.abbr}`}
+            key={`${cert.issuer}-${cert.name}`}
             className="inline-flex items-center gap-1.5 font-mono text-[10px] text-text-muted border border-[#E2DDD8] rounded-[4px] px-1.5 py-0.5"
           >
             <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", dotColor)} />
-            {cert.abbr}
+            {cert.name}
           </span>
         );
       })}

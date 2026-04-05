@@ -11,7 +11,6 @@ import type { DbCertification } from "@/components/CertificationBadge";
 import { AddCertificationModal } from "@/components/AddCertificationModal";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/auth-client";
-import { MOCK_ALERTS, type AlertFrequency } from "@/lib/mock-dashboard";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -137,9 +136,19 @@ function StatusPill({ status }: { status: AppDisplayStatus }) {
   );
 }
 
+// ─── Alert types ──────────────────────────────────────────────────────────────
+
+interface ApiAlert {
+  id: string;
+  name: string;
+  filterSummary: string;
+  frequency: string;
+  active: boolean;
+}
+
 // ─── Alert frequency pill ─────────────────────────────────────────────────────
 
-function FreqPill({ freq }: { freq: AlertFrequency }) {
+function FreqPill({ freq }: { freq: string }) {
   return (
     <span className="inline-block font-mono text-[10px] text-text-muted bg-[#F0ECE8] rounded-[4px] px-2 py-0.5">
       {freq}
@@ -311,50 +320,116 @@ function ApplicationsTab() {
 // ─── Alerts tab ───────────────────────────────────────────────────────────────
 
 function AlertsTab() {
+  const [alerts, setAlerts] = useState<ApiAlert[]>([]);
+  const [loading, setLoading] = useState(true);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [activeStates, setActiveStates] = useState<Record<string, boolean>>(
-    Object.fromEntries(MOCK_ALERTS.map((a) => [a.id, a.active]))
-  );
+  const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/alerts")
+      .then((r) => r.json())
+      .then((data) => setAlerts(Array.isArray(data) ? data : []))
+      .catch(() => setAlerts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleToggle(id: string, current: boolean) {
+    setTogglingId(id);
+    try {
+      const res = await fetch(`/api/alerts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: !current }),
+      });
+      if (res.ok) {
+        setAlerts((prev) =>
+          prev.map((a) => (a.id === id ? { ...a, active: !current } : a))
+        );
+      }
+    } finally {
+      setTogglingId(null);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    setDeletingId(id);
+    try {
+      await fetch(`/api/alerts/${id}`, { method: "DELETE" });
+      setAlerts((prev) => prev.filter((a) => a.id !== id));
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   return (
     <>
       <SectionCard>
         <SectionHeader
           title="Saved Searches"
-          count={`${MOCK_ALERTS.length} alerts`}
+          count={loading ? undefined : `${alerts.length} alert${alerts.length !== 1 ? "s" : ""}`}
           action={
             <WireButton onClick={() => setAlertOpen(true)}>
               <Plus size={12} /> Add Alert
             </WireButton>
           }
         />
-        <div className="flex flex-col gap-3">
-          {MOCK_ALERTS.map((alert) => (
-            <div
-              key={alert.id}
-              className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 border-[1.5px] border-[#E2DDD8] rounded-[8px] hover:border-accent/30 transition-colors duration-150"
-            >
-              <div className="flex-1 min-w-0">
-                <p className="font-mono font-semibold text-sm text-text-primary mb-0.5">
-                  {alert.name}
-                </p>
-                <p className="font-sans text-xs text-text-muted">{alert.filterSummary}</p>
-              </div>
-              <FreqPill freq={alert.frequency} />
-              <div className="flex items-center gap-3">
-                <Toggle
-                  checked={activeStates[alert.id]}
-                  onChange={() =>
-                    setActiveStates((s) => ({ ...s, [alert.id]: !s[alert.id] }))
-                  }
-                />
-                <button className="text-text-muted hover:text-red-500 transition-colors duration-150 p-1">
-                  <Trash2 size={14} />
-                </button>
-              </div>
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <Loader2 size={20} className="animate-spin text-text-muted" />
+          </div>
+        ) : alerts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center">
+            <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center mb-4">
+              <Bell size={20} className="text-text-muted" />
             </div>
-          ))}
-        </div>
+            <p className="font-mono font-semibold text-sm text-text-primary mb-1">No saved searches</p>
+            <p className="font-sans text-sm text-text-muted mb-5 max-w-xs">
+              Save a job search on the jobs page to get notified of new matches.
+            </p>
+            <a
+              href="/jobs"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-xs rounded-[6px] hover:bg-[#34C47E] transition-all duration-150"
+            >
+              Browse jobs
+            </a>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {alerts.map((alert) => (
+              <div
+                key={alert.id}
+                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 border-[1.5px] border-[#E2DDD8] rounded-[8px] hover:border-accent/30 transition-colors duration-150"
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="font-mono font-semibold text-sm text-text-primary mb-0.5">
+                    {alert.name}
+                  </p>
+                  <p className="font-sans text-xs text-text-muted">{alert.filterSummary}</p>
+                </div>
+                <FreqPill freq={alert.frequency} />
+                <div className="flex items-center gap-3">
+                  <Toggle
+                    checked={alert.active}
+                    onChange={() => {
+                      if (togglingId !== alert.id) handleToggle(alert.id, alert.active);
+                    }}
+                  />
+                  <button
+                    onClick={() => { if (deletingId !== alert.id) handleDelete(alert.id); }}
+                    disabled={deletingId === alert.id}
+                    className="text-text-muted hover:text-red-500 transition-colors duration-150 p-1 disabled:opacity-50"
+                  >
+                    {deletingId === alert.id
+                      ? <Loader2 size={14} className="animate-spin" />
+                      : <Trash2 size={14} />
+                    }
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </SectionCard>
       <AddAlertModal open={alertOpen} onClose={() => setAlertOpen(false)} />
     </>
