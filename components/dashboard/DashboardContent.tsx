@@ -691,13 +691,16 @@ function SettingsTab() {
   const [syncing, setSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"idle" | "success" | "error">("idle");
 
-  // Populate form from session
+  // Populate form from session — keyed on the individual values so ESLint is satisfied
+  const sessionUserId = sessionData?.user?.id;
+  const sessionUserName = sessionData?.user?.name;
+  const sessionUserEmail = sessionData?.user?.email;
   useEffect(() => {
-    if (sessionData?.user) {
-      setName(sessionData.user.name ?? "");
-      setEmail(sessionData.user.email ?? "");
+    if (sessionUserId) {
+      setName(sessionUserName ?? "");
+      setEmail(sessionUserEmail ?? "");
     }
-  }, [sessionData?.user?.id]);
+  }, [sessionUserId, sessionUserName, sessionUserEmail]);
 
   async function handleSaveProfile() {
     setProfileSaving(true);
@@ -855,16 +858,17 @@ export function DashboardContent() {
   const [activeTab, setActiveTab] = useState<TabId>("applications");
 
   // Resume pending apply after OAuth redirect
+  const currentUserId = sessionData?.user?.id;
   useEffect(() => {
     const pendingJobId = sessionStorage.getItem("pendingApplyJobId");
-    if (!pendingJobId || !sessionData?.user) return;
+    if (!pendingJobId || !currentUserId) return;
     sessionStorage.removeItem("pendingApplyJobId");
     fetch("/api/applications", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ jobId: pendingJobId }),
     }).catch(() => {});
-  }, [sessionData?.user?.id]);
+  }, [currentUserId]);
 
   const userName = sessionData?.user?.name ?? "there";
 
