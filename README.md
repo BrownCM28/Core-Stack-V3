@@ -61,6 +61,82 @@ The job board for data center construction, operations, and AI infrastructure pr
 | `RESEND_API_KEY` | Resend API key for transactional email |
 | `RESEND_FROM_EMAIL` | From address for outbound email |
 
+## Webhook Ingestion
+
+CoreStack accepts job postings via webhook from Make.com and Theirstack. All endpoints require an `x-webhook-secret` header.
+
+### Endpoints
+
+| Endpoint | Source | Notes |
+|----------|--------|-------|
+| `POST /api/webhooks/ingest` | Any | Generic handler; accepts CoreStack schema directly |
+| `POST /api/webhooks/make` | Make.com | Alias for `/ingest` — point your Make scenario here |
+| `POST /api/webhooks/theirstack` | Theirstack | Maps native Theirstack payload before ingesting |
+
+### Authentication
+
+Set a random secret in your environment and pass it as the `x-webhook-secret` header:
+
+```
+MAKE_WEBHOOK_SECRET=<random-secret>
+THEIRSTACK_WEBHOOK_SECRET=<random-secret>
+```
+
+### CoreStack webhook schema (Make.com / generic)
+
+```json
+{
+  "title": "Senior SRE",
+  "company": "Acme Corp",
+  "location": "Austin, TX",
+  "description": "...",
+  "applyUrl": "https://acme.com/jobs/123",
+  "jobType": "full-time",
+  "level": "senior",
+  "salaryMin": 140000,
+  "salaryMax": 180000,
+  "remote": false,
+  "tags": ["kubernetes", "terraform"],
+  "postedAt": "2026-04-05T00:00:00Z"
+}
+```
+
+Send a single object or a JSON array of objects. Duplicate jobs (matched by `applyUrl`, or by `title + company + location`) are silently skipped.
+
+### Example curl
+
+```bash
+curl -X POST https://your-domain.com/api/webhooks/ingest \
+  -H "Content-Type: application/json" \
+  -H "x-webhook-secret: $MAKE_WEBHOOK_SECRET" \
+  -d '{
+    "title": "Data Center Technician",
+    "company": "Equinix",
+    "location": "Dallas, TX",
+    "description": "Responsible for day-to-day operations of a Tier 4 facility...",
+    "applyUrl": "https://equinix.com/careers/1234",
+    "jobType": "full-time"
+  }'
+```
+
+### Theirstack payload
+
+The `/api/webhooks/theirstack` endpoint accepts Theirstack's native format and auto-maps fields:
+
+| Theirstack field | CoreStack field |
+|-----------------|-----------------|
+| `job_title` | `title` |
+| `company_object.name` | `company` |
+| `city` + `country` | `location` |
+| `employment_type` | `jobType` |
+| `min_annual_salary` | `salaryMin` |
+| `max_annual_salary` | `salaryMax` |
+| `description` | `description` |
+| `final_url` | `applyUrl` |
+| `posted_at` | `postedAt` |
+
+The payload may be a single job object, an array of job objects, or `{ "jobs": [...] }`.
+
 ## Design System
 
 | Token | Value |

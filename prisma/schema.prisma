@@ -152,6 +152,7 @@ model Job {
   requirements    String[]
   tags            String[]
   category        String
+  applyUrl        String?
   source          String          @default("direct")
   isActive        Boolean         @default(true)
   featured        Boolean         @default(false)
