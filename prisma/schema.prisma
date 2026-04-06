@@ -48,6 +48,7 @@ enum ActivityEventType {
   JOB_SAVED
   ALERT_MATCH
   CERT_ADDED
+  PAID_LISTING
 }
 
 // ─── Better Auth models ────────────────────────────────────────────────────────
@@ -153,6 +154,7 @@ model Job {
   tags            String[]
   category        String
   applyUrl        String?
+  paymentStatus   String          @default("free")
   source          String          @default("direct")
   isActive        Boolean         @default(true)
   featured        Boolean         @default(false)

@@ -7,6 +7,7 @@ interface EmployerPricingCardProps {
   features: string[];
   ctaLabel: string;
   featured?: boolean;
+  onClick?: () => void;
 }
 
 export function EmployerPricingCard({
@@ -15,6 +16,7 @@ export function EmployerPricingCard({
   features,
   ctaLabel,
   featured = false,
+  onClick,
 }: EmployerPricingCardProps) {
   return (
     <div
@@ -57,6 +59,7 @@ export function EmployerPricingCard({
       </ul>
 
       <button
+        onClick={onClick}
         className={cn(
           "w-full px-5 py-2.5 font-mono font-semibold text-sm rounded-[6px] border-[1.5px] transition-all duration-150",
           featured

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDown, ArrowRight, Zap } from "lucide-react";
 import { EmployerPricingCard } from "@/components/EmployerPricingCard";
 import { cn } from "@/lib/utils";
@@ -112,6 +113,7 @@ const TRUSTED_COMPANIES = [
 ];
 
 export function EmployersContent() {
+  const router = useRouter();
   const [openFaq, setOpenFaq] = useState<string | null>(null);
 
   return (
@@ -136,11 +138,17 @@ export function EmployersContent() {
             looking for their next role on CoreStack.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] hover:shadow-[0_0_20px_rgba(62,207,142,0.3)] transition-all duration-150">
+            <button
+              onClick={() => router.push("/employers/post")}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] hover:shadow-[0_0_20px_rgba(62,207,142,0.3)] transition-all duration-150"
+            >
               Post a Job
               <ArrowRight size={14} />
             </button>
-            <button className="inline-flex items-center gap-2 px-6 py-3 border-[1.5px] border-white/20 text-white font-mono font-medium text-sm rounded-[6px] hover:border-accent/60 hover:text-accent transition-all duration-150">
+            <button
+              onClick={() => router.push("/talent")}
+              className="inline-flex items-center gap-2 px-6 py-3 border-[1.5px] border-white/20 text-white font-mono font-medium text-sm rounded-[6px] hover:border-accent/60 hover:text-accent transition-all duration-150"
+            >
               Browse Talent
             </button>
           </div>
@@ -185,6 +193,7 @@ export function EmployersContent() {
             features={STANDARD_FEATURES}
             ctaLabel="Post Standard Listing"
             featured={false}
+            onClick={() => router.push("/employers/post")}
           />
           <EmployerPricingCard
             tier="Featured"
@@ -192,6 +201,7 @@ export function EmployersContent() {
             features={FEATURED_FEATURES}
             ctaLabel="Post Featured Listing"
             featured={true}
+            onClick={() => router.push("/employers/post")}
           />
         </div>
       </section>
@@ -278,7 +288,10 @@ export function EmployersContent() {
           <p className="font-sans text-sm text-[#9CA3AF] mb-7">
             Post a listing and reach thousands of qualified infrastructure engineers.
           </p>
-          <button className="inline-flex items-center gap-2 px-6 py-3 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] hover:shadow-[0_0_20px_rgba(62,207,142,0.3)] transition-all duration-150">
+          <button
+            onClick={() => router.push("/employers/post")}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] hover:shadow-[0_0_20px_rgba(62,207,142,0.3)] transition-all duration-150"
+          >
             Post a Job — from $99
             <ArrowRight size={14} />
           </button>
