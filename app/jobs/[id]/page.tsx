@@ -29,6 +29,7 @@ function prismaJobToApi(job: Awaited<ReturnType<typeof getJob>>): ApiJob {
     postedAt: job.postedAt.toISOString(),
     expiresAt: job.expiresAt?.toISOString() ?? null,
     source: job.source,
+    applyUrl: job.applyUrl ?? null,
     description: job.description,
     responsibilities: job.responsibilities,
     requirements: job.requirements,
@@ -85,6 +86,7 @@ export default async function JobDetailPage({ params }: Props) {
     postedAt: j.postedAt.toISOString(),
     expiresAt: j.expiresAt?.toISOString() ?? null,
     source: j.source,
+    applyUrl: j.applyUrl ?? null,
   }));
 
   return <JobDetailContent job={prismaJobToApi(job)} similarJobs={similarJobs} />;

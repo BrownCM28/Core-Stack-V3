@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useSession } from "@/lib/auth-client";
 import {
   MapPin,
   Clock,
@@ -22,10 +23,27 @@ interface JobDetailContentProps {
 }
 
 export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
+  const { data: sessionData } = useSession();
+  const isLoggedIn = !!sessionData?.user;
+
   const [applyOpen, setApplyOpen] = useState(false);
   const [saved, setSaved] = useState(false);
 
   const isNew = Date.now() - new Date(job.postedAt).getTime() < 48 * 60 * 60 * 1000;
+
+  const handleApplyClick = useCallback(() => {
+    if (isLoggedIn && job.applyUrl) {
+      // Record application fire-and-forget, then open the listing immediately
+      fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobId: job.id }),
+      }).catch(() => {});
+      window.open(job.applyUrl, "_blank", "noopener,noreferrer");
+    } else {
+      setApplyOpen(true);
+    }
+  }, [isLoggedIn, job.applyUrl, job.id]);
 
   return (
     <>
@@ -103,7 +121,7 @@ export function JobDetailContent({ job, similarJobs }: JobDetailContentProps) {
                     {/* Action buttons */}
                     <div className="flex flex-wrap items-center gap-3">
                       <button
-                        onClick={() => setApplyOpen(true)}
+                        onClick={handleApplyClick}
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] transition-all duration-150 hover:bg-[#34C47E] hover:shadow-[0_0_16px_rgba(62,207,142,0.25)]"
                       >
                         Apply Now
