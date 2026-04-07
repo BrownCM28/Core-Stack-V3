@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { searchTheirStackJobs, CORESTACK_JOB_QUERIES } from "@/lib/theirstack-api";
-import { mapIncomingJob, inferCategory, normalizeJobType, normalizeLevel } from "@/lib/ingest";
+import { inferCategory, normalizeJobType, normalizeLevel } from "@/lib/ingest";
 import { matchAlertsToJob } from "@/lib/alerts";
 import type { TheirStackJob } from "@/lib/theirstack-api";
 
