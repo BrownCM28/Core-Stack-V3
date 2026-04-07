@@ -3,9 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { resend } from "@/lib/resend";
 
-// Raw body required for Stripe signature verification
-export const config = { api: { bodyParser: false } };
-
 export async function POST(req: Request): Promise<NextResponse> {
   const sig = req.headers.get("stripe-signature");
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
