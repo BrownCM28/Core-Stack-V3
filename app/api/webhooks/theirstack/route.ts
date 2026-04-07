@@ -1,6 +1,6 @@
 // Theirstack webhook — maps native payload to CoreStack schema then delegates to ingest.
 import { NextResponse } from "next/server";
-import { handleIngest } from "@/app/api/webhooks/ingest/route";
+import { handleIngest } from "@/lib/ingest-handler";
 
 // Theirstack sends job objects nested like this (simplified):
 // {
