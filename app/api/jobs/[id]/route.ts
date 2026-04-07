@@ -36,6 +36,7 @@ export async function GET(
     postedAt: job.postedAt.toISOString(),
     expiresAt: job.expiresAt?.toISOString() ?? null,
     source: job.source,
+    applyUrl: job.applyUrl,
     description: job.description,
     responsibilities: job.responsibilities,
     requirements: job.requirements,

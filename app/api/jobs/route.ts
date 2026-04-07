@@ -89,6 +89,7 @@ export async function GET(req: NextRequest) {
         postedAt: true,
         expiresAt: true,
         source: true,
+        applyUrl: true,
       },
     }),
     prisma.job.count({ where }),

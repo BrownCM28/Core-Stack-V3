@@ -863,11 +863,19 @@ export function DashboardContent() {
     const pendingJobId = sessionStorage.getItem("pendingApplyJobId");
     if (!pendingJobId || !currentUserId) return;
     sessionStorage.removeItem("pendingApplyJobId");
+    const pendingApplyUrl = sessionStorage.getItem("pendingApplyUrl");
+    sessionStorage.removeItem("pendingApplyUrl");
     fetch("/api/applications", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ jobId: pendingJobId }),
-    }).catch(() => {});
+    })
+      .then((res) => {
+        if (res.ok && pendingApplyUrl) {
+          window.open(pendingApplyUrl, "_blank", "noopener,noreferrer");
+        }
+      })
+      .catch(() => {});
   }, [currentUserId]);
 
   const userName = sessionData?.user?.name ?? "there";

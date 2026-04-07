@@ -18,6 +18,7 @@ export interface ApiJob {
   postedAt: string; // ISO string
   expiresAt: string | null;
   source: string;
+  applyUrl: string | null;
   description?: string;
   responsibilities?: string[];
   requirements?: string[];

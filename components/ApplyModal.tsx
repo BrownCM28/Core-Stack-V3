@@ -57,6 +57,7 @@ export function ApplyModal({ open, onClose, job }: ApplyModalProps) {
       });
       if (res.ok) {
         setApplied(true);
+        if (job.applyUrl) window.open(job.applyUrl, "_blank", "noopener,noreferrer");
       } else {
         const data = await res.json().catch(() => ({}));
         setError((data as { error?: string }).error ?? "Failed to submit application");
@@ -69,7 +70,10 @@ export function ApplyModal({ open, onClose, job }: ApplyModalProps) {
   }
 
   function handleSocialSignIn(provider: "github" | "google") {
-    if (job) sessionStorage.setItem("pendingApplyJobId", job.id);
+    if (job) {
+      sessionStorage.setItem("pendingApplyJobId", job.id);
+      if (job.applyUrl) sessionStorage.setItem("pendingApplyUrl", job.applyUrl);
+    }
     signIn.social({ provider, callbackURL: "/dashboard" });
   }
 
@@ -114,6 +118,16 @@ export function ApplyModal({ open, onClose, job }: ApplyModalProps) {
                     <span className="text-text-primary font-medium">{job.title}</span> at{" "}
                     <span className="text-text-primary font-medium">{job.company}</span>.
                   </p>
+                )}
+                {job?.applyUrl && (
+                  <a
+                    href={job.applyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-sm text-accent hover:underline"
+                  >
+                    View original listing →
+                  </a>
                 )}
                 <button
                   onClick={onClose}
