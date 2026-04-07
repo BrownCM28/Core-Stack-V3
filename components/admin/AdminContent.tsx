@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search, Plus, ChevronLeft, ChevronRight,
-  ExternalLink, Eye, ShieldOff, ShieldCheck,
+  ExternalLink, Eye, ShieldOff, ShieldCheck, RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -100,6 +100,8 @@ export function AdminContent() {
   const [searchInput, setSearchInput] = useState(searchParams.get("search") ?? "");
   const [page, setPage] = useState(Number(searchParams.get("page") ?? "1"));
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<string | null>(null);
 
   // Fetch stats once
   useEffect(() => {
@@ -164,6 +166,27 @@ export function AdminContent() {
     }
   }
 
+  async function handleSync() {
+    setSyncing(true);
+    setSyncResult(null);
+    try {
+      const res = await fetch("/api/admin/sync-theirstack", { method: "POST" });
+      const data = await res.json();
+      if (res.ok) {
+        setSyncResult(`Done — fetched ${data.fetched}, inserted ${data.inserted}, skipped ${data.skipped}`);
+        // Refresh jobs table and stats
+        fetchJobs(page, searchParams.get("search") ?? "");
+        fetch("/api/admin/stats").then((r) => r.json()).then(setStats).catch(() => {});
+      } else {
+        setSyncResult(`Error: ${data.error ?? "unknown"}`);
+      }
+    } catch {
+      setSyncResult("Network error — check console");
+    } finally {
+      setSyncing(false);
+    }
+  }
+
   const currentSearch = searchParams.get("search") ?? "";
 
   function fmt(iso: string) {
@@ -181,6 +204,24 @@ export function AdminContent() {
             <span className="font-mono text-[10px] text-[#0D0F12] bg-accent px-2 py-0.5 rounded-[3px] font-bold uppercase tracking-wide">
               Admin
             </span>
+          </div>
+          <div className="flex items-center gap-3">
+            {syncResult && (
+              <span className={cn(
+                "font-mono text-[11px]",
+                syncResult.startsWith("Error") ? "text-red-400" : "text-accent"
+              )}>
+                {syncResult}
+              </span>
+            )}
+            <button
+              onClick={handleSync}
+              disabled={syncing}
+              className="inline-flex items-center gap-1.5 px-3 py-2 border-[1.5px] border-white/20 text-white font-mono font-semibold text-xs rounded-[6px] hover:border-accent hover:text-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <RefreshCw size={12} className={syncing ? "animate-spin" : ""} />
+              {syncing ? "Syncing…" : "Sync Theirstack"}
+            </button>
           </div>
         </div>
       </div>
