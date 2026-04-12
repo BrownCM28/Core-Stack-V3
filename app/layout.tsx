@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Mono } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
+import { PendingApplicationHandler } from "@/components/PendingApplicationHandler";
 import "./globals.css";
 
 const inter = Inter({
@@ -52,6 +53,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-background text-text-primary antialiased">
         <Navbar />
         <main>{children}</main>
+        <PendingApplicationHandler />
       </body>
     </html>
   );

@@ -13,7 +13,7 @@ function toApiJob(job: {
   location: string; remote: boolean; type: string; level: string;
   salary: string | null; salaryMin: number | null; salaryMax: number | null;
   category: string; tags: string[]; featured: boolean;
-  postedAt: Date; expiresAt: Date | null; source: string;
+  postedAt: Date; expiresAt: Date | null; source: string; applyUrl: string | null;
 }): ApiJob {
   return {
     ...job,
@@ -35,7 +35,7 @@ export default async function HomePage() {
         location: true, remote: true, type: true, level: true,
         salary: true, salaryMin: true, salaryMax: true,
         category: true, tags: true, featured: true,
-        postedAt: true, expiresAt: true, source: true,
+        postedAt: true, expiresAt: true, source: true, applyUrl: true,
       },
     }),
     prisma.job.findMany({
@@ -47,7 +47,7 @@ export default async function HomePage() {
         location: true, remote: true, type: true, level: true,
         salary: true, salaryMin: true, salaryMax: true,
         category: true, tags: true, featured: true,
-        postedAt: true, expiresAt: true, source: true,
+        postedAt: true, expiresAt: true, source: true, applyUrl: true,
       },
     }),
   ]);

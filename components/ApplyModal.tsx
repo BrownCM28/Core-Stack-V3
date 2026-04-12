@@ -71,7 +71,7 @@ export function ApplyModal({ open, onClose, job }: ApplyModalProps) {
 
   function handleSocialSignIn(provider: "github" | "google") {
     if (job) {
-      sessionStorage.setItem("pendingApplyJobId", job.id);
+      sessionStorage.setItem("pendingJobId", job.id);
       if (job.applyUrl) sessionStorage.setItem("pendingApplyUrl", job.applyUrl);
     }
     signIn.social({ provider, callbackURL: "/dashboard" });
@@ -209,6 +209,12 @@ export function ApplyModal({ open, onClose, job }: ApplyModalProps) {
               <p className="text-center">
                 <a
                   href="/auth/login"
+                  onClick={() => {
+                    if (job) {
+                      sessionStorage.setItem("pendingJobId", job.id);
+                      if (job.applyUrl) sessionStorage.setItem("pendingApplyUrl", job.applyUrl);
+                    }
+                  }}
                   className="font-mono text-sm text-text-muted hover:text-accent transition-colors duration-150"
                 >
                   Sign in with email →
