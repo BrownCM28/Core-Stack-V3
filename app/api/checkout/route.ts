@@ -5,7 +5,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { getSession } from "@/lib/session";
 import { IncomingJobSchema, mapIncomingJob } from "@/lib/ingest";
 
@@ -54,7 +54,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   const { amount, label } = TIERS[tier];
   const baseUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
 
-  const checkoutSession = await stripe.checkout.sessions.create({
+  const checkoutSession = await getStripe().checkout.sessions.create({
     mode: "payment",
     line_items: [
       {

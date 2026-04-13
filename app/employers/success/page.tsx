@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { CheckCircle } from "lucide-react";
 
@@ -23,7 +23,7 @@ export default async function EmployersSuccessPage({ searchParams }: Props) {
   let jobTitle: string | undefined;
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(session_id);
+    const session = await getStripe().checkout.sessions.retrieve(session_id);
 
     if (session.payment_status !== "paid") {
       return <ErrorState message="Payment not completed." />;

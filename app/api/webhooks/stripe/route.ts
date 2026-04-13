@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { resend } from "@/lib/resend";
 
 export async function POST(req: Request): Promise<NextResponse> {
@@ -11,6 +11,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "Missing signature or secret" }, { status: 400 });
   }
 
+  const stripe = getStripe();
   let event: ReturnType<typeof stripe.webhooks.constructEvent>;
   try {
     const rawBody = await req.text();
