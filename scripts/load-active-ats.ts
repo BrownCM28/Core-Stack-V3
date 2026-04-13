@@ -11,11 +11,14 @@ config({ path: path.resolve(__dirname, "../.env.local") });
 
 import { PrismaClient, JobType, ExperienceLevel } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
-const prisma  = new PrismaClient({ adapter } as never);
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const adapter = new PrismaPg(pool as any);
+const prisma = new PrismaClient({ adapter });
 
-const KEY  = process.env.RAPIDAPI_KEY!;
+const KEY = process.env.RAPIDAPI_KEY!;
 const HOST = "active-jobs-db.p.rapidapi.com";
 
 // ─── API types ────────────────────────────────────────────────────────────────
@@ -37,39 +40,39 @@ interface ATSJob {
 
 const QUERIES: { title: string; location: string }[] = [
   {
-    title:    '"data center" OR "datacenter" OR "critical facilities"',
+    title: '"data center" OR "datacenter" OR "critical facilities"',
     location: '"United States"',
   },
   {
-    title:    '"data center" OR "datacenter"',
+    title: '"data center" OR "datacenter"',
     location: '"United Kingdom" OR "Canada" OR "Australia"',
   },
   {
-    title:    '"infrastructure engineer" OR "site reliability engineer"',
+    title: '"infrastructure engineer" OR "site reliability engineer"',
     location: '"United States" OR "United Kingdom"',
   },
   {
-    title:    '"ai infrastructure" OR "gpu infrastructure" OR "ml infrastructure"',
+    title: '"ai infrastructure" OR "gpu infrastructure" OR "ml infrastructure"',
     location: '"United States" OR "United Kingdom"',
   },
   {
-    title:    '"platform engineer" OR "devops engineer"',
+    title: '"platform engineer" OR "devops engineer"',
     location: '"United States" OR "United Kingdom"',
   },
   {
-    title:    '"cloud infrastructure" OR "cloud engineer"',
+    title: '"cloud infrastructure" OR "cloud engineer"',
     location: '"United States"',
   },
   {
-    title:    '"network engineer" OR "network infrastructure"',
+    title: '"network engineer" OR "network infrastructure"',
     location: '"United States" OR "United Kingdom"',
   },
   {
-    title:    '"electrical engineer" OR "power systems engineer" OR "cooling engineer"',
+    title: '"electrical engineer" OR "power systems engineer" OR "cooling engineer"',
     location: '"United States"',
   },
   {
-    title:    '"facilities manager" OR "data center operations" OR "colocation"',
+    title: '"facilities manager" OR "data center operations" OR "colocation"',
     location: '"United States" OR "United Kingdom"',
   },
 ];
@@ -110,10 +113,10 @@ function normalizeType(raw: string | string[] | null): JobType {
 function normalizeLevel(title: string): ExperienceLevel {
   const t = title.toLowerCase();
   if (/principal|staff engineer|distinguished|fellow/.test(t)) return ExperienceLevel.PRINCIPAL;
-  if (/director|\bvp\b|vice president|head of/.test(t))         return ExperienceLevel.PRINCIPAL;
-  if (/\blead\b|tech lead|engineering lead/.test(t))            return ExperienceLevel.LEAD;
-  if (/senior|\bsr\.?\b|mid-senior/.test(t))                    return ExperienceLevel.SENIOR;
-  if (/junior|\bjr\.?\b|entry.level|associate|intern/.test(t))  return ExperienceLevel.ENTRY;
+  if (/director|\bvp\b|vice president|head of/.test(t)) return ExperienceLevel.PRINCIPAL;
+  if (/\blead\b|tech lead|engineering lead/.test(t)) return ExperienceLevel.LEAD;
+  if (/senior|\bsr\.?\b|mid-senior/.test(t)) return ExperienceLevel.SENIOR;
+  if (/junior|\bjr\.?\b|entry.level|associate|intern/.test(t)) return ExperienceLevel.ENTRY;
   return ExperienceLevel.MID;
 }
 
@@ -127,9 +130,9 @@ function annualiseSalary(raw: ATSJob["salary_raw"]) {
 }
 
 const TAG_KEYWORDS = [
-  "terraform","kubernetes","k8s","ansible","aws","gcp","azure",
-  "python","golang","typescript","rust","grafana","prometheus",
-  "docker","nvidia","cuda","gpu","mlops","vmware","bgp","ospf",
+  "terraform", "kubernetes", "k8s", "ansible", "aws", "gcp", "azure",
+  "python", "golang", "typescript", "rust", "grafana", "prometheus",
+  "docker", "nvidia", "cuda", "gpu", "mlops", "vmware", "bgp", "ospf",
 ];
 
 // ─── API fetch ────────────────────────────────────────────────────────────────
@@ -165,8 +168,8 @@ async function insertJob(job: ATSJob): Promise<"inserted" | "skipped"> {
   const description = job.description_text?.trim() ?? "";
   if (description.length < 80) return "skipped";
 
-  const title    = job.title.trim();
-  const company  = (job.organization ?? "Unknown").trim();
+  const title = job.title.trim();
+  const company = (job.organization ?? "Unknown").trim();
   const location = job.locations_derived?.[0] ?? (job.remote_derived ? "Remote" : "Unknown");
   const applyUrl = job.url;
 
@@ -176,13 +179,13 @@ async function insertJob(job: ATSJob): Promise<"inserted" | "skipped"> {
   });
   if (existing) return "skipped";
 
-  const postedAt  = job.date_posted ? new Date(job.date_posted) : new Date();
+  const postedAt = job.date_posted ? new Date(job.date_posted) : new Date();
   const expiresAt = new Date(postedAt);
   expiresAt.setDate(expiresAt.getDate() + 30);
 
   const { min: salaryMin, max: salaryMax } = annualiseSalary(job.salary_raw);
   const category = inferCategory(title, description);
-  const tags     = TAG_KEYWORDS.filter(kw => description.toLowerCase().includes(kw)).slice(0, 8);
+  const tags = TAG_KEYWORDS.filter(kw => description.toLowerCase().includes(kw)).slice(0, 8);
 
   await prisma.job.create({
     data: {
@@ -191,20 +194,20 @@ async function insertJob(job: ATSJob): Promise<"inserted" | "skipped"> {
       location,
       description,
       applyUrl,
-      type:             normalizeType(job.employment_type),
-      level:            normalizeLevel(title),
+      type: normalizeType(job.employment_type),
+      level: normalizeLevel(title),
       category,
-      remote:           job.remote_derived ?? /\bremote\b/i.test(location),
-      salary:           null,
+      remote: job.remote_derived ?? /\bremote\b/i.test(location),
+      salary: null,
       salaryMin,
       salaryMax,
       tags,
       responsibilities: [],
-      requirements:     [],
-      source:           "LinkedIn",
-      isActive:         true,
-      featured:         false,
-      paymentStatus:    "free",
+      requirements: [],
+      source: "LinkedIn",
+      isActive: true,
+      featured: false,
+      paymentStatus: "free",
       postedAt,
       expiresAt,
     },
@@ -224,7 +227,8 @@ async function main() {
   console.log(`\nCoreStack — Live Job Loader (active-ats-7d)`);
   console.log(`Target: ${TARGET} new jobs (skips any already in DB)\n`);
 
-  for (const [qi, query] of QUERIES.entries()) {
+  for (let qi = 0; qi < QUERIES.length; qi++) {
+    const query = QUERIES[qi];
     if (inserted >= TARGET) break;
 
     console.log(`Query ${qi + 1}/${QUERIES.length}: ${query.title.slice(0, 60)}…`);

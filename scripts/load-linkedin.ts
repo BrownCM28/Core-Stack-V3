@@ -12,13 +12,16 @@ config({ path: path.resolve(__dirname, "../.env.local") });
 
 import { PrismaClient, JobType, ExperienceLevel } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
-const prisma  = new PrismaClient({ adapter } as never);
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const adapter = new PrismaPg(pool as any);
+const prisma = new PrismaClient({ adapter });
 
-const RAPIDAPI_KEY  = process.env.RAPIDAPI_KEY!;
+const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY!;
 const RAPIDAPI_HOST = "linkedin-job-search-api.p.rapidapi.com";
-const BASE_URL      = `https://${RAPIDAPI_HOST}/active-jb-7d`;
+const BASE_URL = `https://${RAPIDAPI_HOST}/active-jb-7d`;
 
 // ─── LinkedIn response types ──────────────────────────────────────────────────
 
@@ -104,9 +107,9 @@ function normalizeJobType(raw: string | string[] | null | undefined): JobType {
 function normalizeLevel(title: string, seniority: string | null): ExperienceLevel {
   const s = `${title} ${seniority ?? ""}`.toLowerCase();
   if (/(principal|staff engineer|distinguished)/.test(s)) return ExperienceLevel.PRINCIPAL;
-  if (/(director|vp |vice president|head of)/.test(s))    return ExperienceLevel.PRINCIPAL;
-  if (/(lead|tech lead|engineering lead)/.test(s))         return ExperienceLevel.LEAD;
-  if (/(senior|sr\.|sr |mid-senior)/.test(s))              return ExperienceLevel.SENIOR;
+  if (/(director|vp |vice president|head of)/.test(s)) return ExperienceLevel.PRINCIPAL;
+  if (/(lead|tech lead|engineering lead)/.test(s)) return ExperienceLevel.LEAD;
+  if (/(senior|sr\.|sr |mid-senior)/.test(s)) return ExperienceLevel.SENIOR;
   if (/(junior|jr\.|entry[ -]level|associate|intern)/.test(s)) return ExperienceLevel.ENTRY;
   return ExperienceLevel.MID;
 }
@@ -135,9 +138,9 @@ function annualiseSalary(raw: LIJob["salary_raw"]): { min: number | null; max: n
   if (!raw) return { min: null, max: null };
   // unitText can be "YEAR", "MONTH", "HOUR", "WEEK"
   const mult = raw.unitText === "HOUR" ? 2080
-             : raw.unitText === "MONTH" ? 12
-             : raw.unitText === "WEEK" ? 52
-             : 1;
+    : raw.unitText === "MONTH" ? 12
+      : raw.unitText === "WEEK" ? 52
+        : 1;
   return {
     min: raw.minValue != null ? Math.round(raw.minValue * mult) : null,
     max: raw.maxValue != null ? Math.round(raw.maxValue * mult) : null,
@@ -188,32 +191,32 @@ async function insertJob(job: LIJob): Promise<"inserted" | "skipped" | "irreleva
   const description = job.description_text?.trim() ?? "";
   if (description.length < 80) return "skipped"; // too sparse
 
-  const applyUrl  = job.external_apply_url ?? job.url;
-  const company   = (job.organization ?? "Unknown").trim();
-  const location  = buildLocation(job);
-  const title     = job.title.trim();
+  const applyUrl = job.external_apply_url ?? job.url;
+  const company = (job.organization ?? "Unknown").trim();
+  const location = buildLocation(job);
+  const title = job.title.trim();
 
   // Dedup by applyUrl first, then title+company+location
   const existing = await prisma.job.findFirst({
     where: applyUrl
       ? { applyUrl }
       : {
-          title:    { equals: title,    mode: "insensitive" },
-          company:  { equals: company,  mode: "insensitive" },
-          location: { equals: location, mode: "insensitive" },
-        },
+        title: { equals: title, mode: "insensitive" },
+        company: { equals: company, mode: "insensitive" },
+        location: { equals: location, mode: "insensitive" },
+      },
     select: { id: true },
   });
   if (existing) return "skipped";
 
-  const postedAt  = job.date_posted ? new Date(job.date_posted) : new Date();
+  const postedAt = job.date_posted ? new Date(job.date_posted) : new Date();
   const expiresAt = new Date(postedAt);
   expiresAt.setDate(expiresAt.getDate() + 30);
 
   const { min: salaryMin, max: salaryMax } = annualiseSalary(job.salary_raw);
   const category = inferCategory(title, description);
-  const remote   = job.remote_derived ?? /\bremote\b/i.test(location);
-  const tags     = TAG_KEYWORDS.filter((kw) => description.toLowerCase().includes(kw)).slice(0, 8);
+  const remote = job.remote_derived ?? /\bremote\b/i.test(location);
+  const tags = TAG_KEYWORDS.filter((kw) => description.toLowerCase().includes(kw)).slice(0, 8);
 
   await prisma.job.create({
     data: {
@@ -222,20 +225,20 @@ async function insertJob(job: LIJob): Promise<"inserted" | "skipped" | "irreleva
       location,
       description,
       applyUrl,
-      type:             normalizeJobType(job.employment_type),
-      level:            normalizeLevel(title, job.seniority),
+      type: normalizeJobType(job.employment_type),
+      level: normalizeLevel(title, job.seniority),
       category,
       remote,
-      salary:           null,
+      salary: null,
       salaryMin,
       salaryMax,
       tags,
       responsibilities: [],
-      requirements:     [],
-      source:           "LinkedIn",
-      isActive:         true,
-      featured:         false,
-      paymentStatus:    "free",
+      requirements: [],
+      source: "LinkedIn",
+      isActive: true,
+      featured: false,
+      paymentStatus: "free",
       postedAt,
       expiresAt,
     },
@@ -257,7 +260,8 @@ async function main() {
   console.log(`Target: ${TARGET} jobs\n`);
 
   outer:
-  for (const [fi, filter] of TITLE_FILTERS.entries()) {
+  for (let fi = 0; fi < TITLE_FILTERS.length; fi++) {
+    const filter = TITLE_FILTERS[fi];
     console.log(`Filter ${fi + 1}/${TITLE_FILTERS.length}: ${filter}`);
 
     for (const offset of [0, 100]) {

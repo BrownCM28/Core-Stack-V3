@@ -14,12 +14,15 @@ config({ path: path.resolve(__dirname, "../.env.local") });
 
 import { PrismaClient, JobType, ExperienceLevel } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
-const prisma  = new PrismaClient({ adapter });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const adapter = new PrismaPg(pool as any);
+const prisma = new PrismaClient({ adapter });
 
 const BASE_URL = "https://api.theirstack.com/v1";
-const API_KEY  = process.env.THEIRSTACK_API_KEY ?? "";
+const API_KEY = process.env.THEIRSTACK_API_KEY ?? "";
 
 // ─── Theirstack types ─────────────────────────────────────────────────────────
 
@@ -169,7 +172,7 @@ async function insertJob(raw: TSJob): Promise<"inserted" | "skipped" | "error"> 
     if (!title || !description || description.length < 50) return "skipped";
 
     const company = raw.company_object?.name ?? raw.company ?? "Unknown";
-    const city    = raw.city ?? "";
+    const city = raw.city ?? "";
     const country = raw.country ?? "";
     const location = [city, country].filter(Boolean).join(", ") || "Remote";
     const applyUrl = raw.final_url ?? raw.apply_url ?? null;
@@ -179,43 +182,43 @@ async function insertJob(raw: TSJob): Promise<"inserted" | "skipped" | "error"> 
       where: applyUrl
         ? { applyUrl }
         : {
-            title:    { equals: title,    mode: "insensitive" },
-            company:  { equals: company,  mode: "insensitive" },
-            location: { equals: location, mode: "insensitive" },
-          },
+          title: { equals: title, mode: "insensitive" },
+          company: { equals: company, mode: "insensitive" },
+          location: { equals: location, mode: "insensitive" },
+        },
       select: { id: true },
     });
     if (existing) return "skipped";
 
-    const postedAt  = raw.posted_at ? new Date(raw.posted_at) : new Date();
+    const postedAt = raw.posted_at ? new Date(raw.posted_at) : new Date();
     const expiresAt = new Date(postedAt);
     expiresAt.setDate(expiresAt.getDate() + 30);
 
     const category = inferCategory(title, description);
-    const remote   = raw.remote ?? /\bremote\b/i.test(location);
-    const tags     = TAG_KEYWORDS.filter((kw) => description.toLowerCase().includes(kw)).slice(0, 8);
+    const remote = raw.remote ?? /\bremote\b/i.test(location);
+    const tags = TAG_KEYWORDS.filter((kw) => description.toLowerCase().includes(kw)).slice(0, 8);
 
     await prisma.job.create({
       data: {
         title,
-        company:         company.trim(),
-        location:        location.trim(),
+        company: company.trim(),
+        location: location.trim(),
         description,
         applyUrl,
-        type:            normalizeJobType(raw.employment_type),
-        level:           normalizeLevel(title),
+        type: normalizeJobType(raw.employment_type),
+        level: normalizeLevel(title),
         category,
         remote,
-        salary:          null,
-        salaryMin:       raw.min_annual_salary ?? null,
-        salaryMax:       raw.max_annual_salary ?? null,
+        salary: null,
+        salaryMin: raw.min_annual_salary ?? null,
+        salaryMax: raw.max_annual_salary ?? null,
         tags,
         responsibilities: [],
-        requirements:     [],
-        source:           "Theirstack",
-        isActive:         true,
-        featured:         false,
-        paymentStatus:    "free",
+        requirements: [],
+        source: "Theirstack",
+        isActive: true,
+        featured: false,
+        paymentStatus: "free",
         postedAt,
         expiresAt,
       },
@@ -236,13 +239,13 @@ async function main() {
     process.exit(1);
   }
 
-  const TARGET   = 200;
-  const DAYS     = 14;
+  const TARGET = 200;
+  const DAYS = 14;
 
   let inserted = 0;
-  let skipped  = 0;
-  let errors   = 0;
-  let fetched  = 0;
+  let skipped = 0;
+  let errors = 0;
+  let fetched = 0;
 
   const seenIds = new Set<number>();
 
@@ -250,7 +253,8 @@ async function main() {
   console.log(`Target: ${TARGET} new jobs | Last ${DAYS} days\n`);
 
   outer:
-  for (const [batchIdx, queries] of QUERY_BATCHES.entries()) {
+  for (let batchIdx = 0; batchIdx < QUERY_BATCHES.length; batchIdx++) {
+    const queries = QUERY_BATCHES[batchIdx];
     console.log(`Batch ${batchIdx + 1}/${QUERY_BATCHES.length} — ${queries.length} query terms`);
 
     for (let page = 0; page <= 7; page++) {
