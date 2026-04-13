@@ -142,7 +142,7 @@ export function JobFilters() {
               onChange={(e) => setParam("search", e.target.value)}
             />
             <Button
-              variant="outline"
+              variant="default"
               size="sm"
               className="px-3"
               onClick={() => setParam("search", search)}
