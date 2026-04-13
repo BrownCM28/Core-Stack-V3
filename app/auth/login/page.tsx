@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Zap } from "lucide-react";
 import { LoginForm } from "@/components/auth/LoginForm";
@@ -16,7 +17,9 @@ export default function LoginPage() {
             CoreStack
           </span>
         </div>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );
