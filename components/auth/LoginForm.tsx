@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { signIn } from "@/lib/auth-client";
 
@@ -29,6 +29,13 @@ function GoogleIcon() {
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTarget =
+    searchParams.get("redirect") ||
+    (typeof window !== "undefined"
+      ? window.sessionStorage.getItem("pendingRedirect")
+      : null) ||
+    "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -46,19 +53,28 @@ export function LoginForm() {
       setError(err.message ?? "Invalid email or password.");
       return;
     }
-    router.push("/dashboard");
+    if (typeof window !== "undefined") {
+      window.sessionStorage.removeItem("pendingRedirect");
+    }
+    router.push(redirectTarget);
     router.refresh();
   }
 
   async function handleGithub() {
     setLoadingGithub(true);
-    await signIn.social({ provider: "github", callbackURL: "/dashboard" });
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem("pendingRedirect", redirectTarget);
+    }
+    await signIn.social({ provider: "github", callbackURL: redirectTarget });
     // redirect happens — no need to reset loading
   }
 
   async function handleGoogle() {
     setLoadingGoogle(true);
-    await signIn.social({ provider: "google", callbackURL: "/dashboard" });
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem("pendingRedirect", redirectTarget);
+    }
+    await signIn.social({ provider: "google", callbackURL: redirectTarget });
   }
 
   return (

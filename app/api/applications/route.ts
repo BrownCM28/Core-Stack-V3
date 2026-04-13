@@ -34,24 +34,14 @@ export async function POST(req: Request) {
   const { jobId } = body as { jobId?: string };
   if (!jobId) return NextResponse.json({ error: "jobId required" }, { status: 400 });
 
-  const job = await prisma.job.findFirst({ where: { id: jobId, isActive: true } });
-  if (!job) return NextResponse.json({ error: "Job not found" }, { status: 404 });
+  const jobExists = await prisma.job.findFirst({ where: { id: jobId, isActive: true } });
+  if (!jobExists) return NextResponse.json({ error: "Job not found" }, { status: 404 });
 
   const application = await prisma.application.upsert({
     where: { userId_jobId: { userId: session.user.id, jobId } },
     create: { userId: session.user.id, jobId },
     update: {},
   });
-
-  prisma.activityEvent
-    .create({
-      data: {
-        type: "APPLICATION_SUBMITTED",
-        userId: session.user.id,
-        payload: { jobTitle: job.title, company: job.company },
-      },
-    })
-    .catch(() => {});
 
   return NextResponse.json({ success: true, application });
 }

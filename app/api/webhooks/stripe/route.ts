@@ -53,22 +53,6 @@ export async function POST(req: Request): Promise<NextResponse> {
 
       console.log(`[stripe-webhook] job ${jobId} activated (tier=${tier})`);
 
-      // Activity event — fire and forget
-      prisma.activityEvent
-        .create({
-          data: {
-            type: "PAID_LISTING",
-            userId,
-            payload: {
-              jobId: job.id,
-              displayText: `${job.company} just posted a new ${job.category} role`,
-            },
-          },
-        })
-        .catch((err: unknown) =>
-          console.error("[stripe-webhook] activityEvent failed:", err)
-        );
-
       // Confirmation email — fire and forget
       if (resend) {
         const user = await prisma.user.findUnique({
