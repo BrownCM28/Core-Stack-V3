@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
@@ -42,6 +43,7 @@ export function JobFilters() {
   const salaryMin = searchParams.get("salaryMin") ?? "";
   const salaryMax = searchParams.get("salaryMax") ?? "";
   const location = searchParams.get("location") ?? "";
+  const search = searchParams.get("search") ?? "";
 
   const push = useCallback(
     (params: URLSearchParams) => {
@@ -78,6 +80,7 @@ export function JobFilters() {
   }
 
   const hasActive =
+    !!search ||
     selectedCategories.length > 0 ||
     selectedJobTypes.length > 0 ||
     remote ||
@@ -129,6 +132,25 @@ export function JobFilters() {
   return (
     <>
       <div className="flex flex-col gap-6">
+
+        {/* CATEGORY */}
+        <FilterSection label="Search">
+          <div className="flex items-center gap-2">
+            <Input
+              placeholder="Search roles, companies, or keywords..."
+              value={search}
+              onChange={(e) => setParam("search", e.target.value)}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              className="px-3"
+              onClick={() => setParam("search", search)}
+            >
+              <Search size={14} />
+            </Button>
+          </div>
+        </FilterSection>
 
         {/* CATEGORY */}
         <FilterSection label="Category">

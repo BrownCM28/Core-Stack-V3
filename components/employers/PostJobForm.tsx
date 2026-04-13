@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { Check, ChevronRight, Zap } from "lucide-react";
+import { Check, ChevronRight, Loader2, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -47,7 +47,10 @@ const Step1Schema = z.object({
   jobType: z.string().min(1, "Job type is required"),
   category: z.string().min(1, "Category is required"),
   description: z.string().min(100, "Description must be at least 100 characters"),
-  applyUrl: z.string().url("Must be a valid URL (include https://)"),
+  applyUrl: z
+    .string()
+    .url("Must be a valid URL starting with https://")
+    .regex(/^https:\/\//i, "Must be a valid URL starting with https://"),
   salaryMin: z.union([z.literal(""), z.string().regex(/^\d+$/, "Must be a number")]),
   salaryMax: z.union([z.literal(""), z.string().regex(/^\d+$/, "Must be a number")]),
 });
@@ -284,7 +287,7 @@ function Step1(props: {
               props.data.description.length < 100 ? "text-text-muted" : "text-accent"
             )}
           >
-            {props.data.description.length} / 100 min
+            {props.data.description.length} / 100 minimum
           </span>
         </div>
       </div>
@@ -463,8 +466,17 @@ function Step3(props: {
           disabled={props.submitting}
           className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] hover:shadow-[0_0_16px_rgba(62,207,142,0.25)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {props.submitting ? "Redirecting…" : `Proceed to Payment — ${price}`}
-          {!props.submitting && <ChevronRight size={14} />}
+          {props.submitting ? (
+            <>
+              <Loader2 size={14} className="animate-spin" />
+              Processing...
+            </>
+          ) : (
+            <>
+              {`Proceed to Payment — ${price}`}
+              <ChevronRight size={14} />
+            </>
+          )}
         </button>
       </div>
     </div>
@@ -518,13 +530,13 @@ export function PostJobForm() {
 
       const data = await res.json();
       if (!res.ok || !data.checkoutUrl) {
-        setSubmitError(data.error ?? "Something went wrong. Please try again.");
+        setSubmitError("Something went wrong. Please try again.");
         return;
       }
 
       window.location.href = data.checkoutUrl;
     } catch {
-      setSubmitError("Network error. Please try again.");
+      setSubmitError("Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }

@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
 
   const categories = searchParams.getAll("category");
   const jobTypes = searchParams.getAll("jobType");
+  const search = searchParams.get("search")?.trim();
   const location = searchParams.get("location");
   const remote = searchParams.get("remote") === "true";
   const salaryMin = searchParams.get("salaryMin") ? parseInt(searchParams.get("salaryMin")!) : null;
@@ -18,13 +19,13 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(50, parseInt(searchParams.get("limit") ?? "20"));
 
   // Build where clause
-  const where: Prisma.JobWhereInput = {
-    isActive: true,
-    OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
-  };
+  const andFilters: Prisma.JobWhereInput[] = [
+    { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+  ];
+  const where: Prisma.JobWhereInput = { isActive: true };
 
   if (categories.length > 0) {
-    where.category = { in: categories };
+    andFilters.push({ category: { in: categories } });
   }
 
   if (jobTypes.length > 0) {
@@ -34,31 +35,43 @@ export async function GET(req: NextRequest) {
     };
     const dbTypes = jobTypes.map((t) => typeMap[t]).filter(Boolean);
     if (dbTypes.length > 0) {
-      where.type = { in: dbTypes as ("FULL_TIME" | "CONTRACT" | "BOTH")[] };
+      andFilters.push({
+        type: { in: dbTypes as ("FULL_TIME" | "CONTRACT" | "BOTH")[] },
+      });
     }
   }
 
   if (remote) {
-    where.AND = [
-      {
-        OR: [
-          { remote: true },
-          { location: { contains: "remote", mode: "insensitive" } },
-        ],
-      },
-    ];
+    andFilters.push({
+      OR: [
+        { remote: true },
+        { location: { contains: "remote", mode: "insensitive" } },
+      ],
+    });
   }
 
   if (location) {
-    where.location = { contains: location, mode: "insensitive" };
+    andFilters.push({ location: { contains: location, mode: "insensitive" } });
+  }
+
+  if (search) {
+    andFilters.push({
+      OR: [
+        { title: { contains: search, mode: "insensitive" } },
+        { company: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+      ],
+    });
   }
 
   if (salaryMin != null) {
-    where.salaryMax = { gte: salaryMin };
+    andFilters.push({ salaryMax: { gte: salaryMin } });
   }
   if (salaryMax != null) {
-    where.salaryMin = { lte: salaryMax };
+    andFilters.push({ salaryMin: { lte: salaryMax } });
   }
+
+  where.AND = andFilters;
 
   const orderBy: Prisma.JobOrderByWithRelationInput[] = [
     { featured: "desc" },

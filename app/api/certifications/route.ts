@@ -41,15 +41,5 @@ export async function POST(req: Request) {
     },
   });
 
-  prisma.activityEvent
-    .create({
-      data: {
-        type: "CERT_ADDED",
-        userId: session.user.id,
-        payload: { certName: name.trim() },
-      },
-    })
-    .catch(() => {});
-
   return NextResponse.json(cert, { status: 201 });
 }

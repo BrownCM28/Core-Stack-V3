@@ -1,7 +1,7 @@
 import { Hero } from "@/components/home/Hero";
+import { HomeSearchBar } from "@/components/home/HomeSearchBar";
 import { FeaturedJobsStrip } from "@/components/home/FeaturedJobsStrip";
 import { LatestJobs } from "@/components/home/LatestJobs";
-import { ActivityFeed } from "@/components/home/ActivityFeed";
 import { CategoriesStrip } from "@/components/home/CategoriesStrip";
 import { Footer } from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
@@ -54,31 +54,23 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-
-      {/* 1. Hero */}
       <Hero />
 
-      {/* 2. Featured jobs horizontal strip */}
-      <FeaturedJobsStrip jobs={featuredJobs.map(toApiJob)} />
-
-      {/* 3. Two-column: latest jobs + activity feed */}
-      <section className="bg-background py-12">
+      <section className="bg-background pb-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            <div className="lg:col-span-2">
-              <LatestJobs jobs={latestJobs.map(toApiJob)} />
-            </div>
-            <div className="lg:col-span-1">
-              <ActivityFeed />
-            </div>
-          </div>
+          <HomeSearchBar />
         </div>
       </section>
 
-      {/* 4. Categories strip */}
-      <CategoriesStrip />
+      <FeaturedJobsStrip jobs={featuredJobs.map(toApiJob)} />
 
-      {/* 5. Footer */}
+      <section className="bg-background py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <LatestJobs jobs={latestJobs.map(toApiJob)} />
+        </div>
+      </section>
+
+      <CategoriesStrip />
       <Footer />
     </div>
   );
