@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  Search,
 } from "lucide-react";
 import { JobFilters } from "@/components/JobFilters";
 import { JobListingCard } from "@/components/jobs/JobListingCard";
@@ -28,6 +29,7 @@ export function JobsPageContent() {
   const [applyJob, setApplyJob] = useState<ApiJob | null>(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "newest");
+  const [searchInput, setSearchInput] = useState(searchParams.get("search") ?? "");
 
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
 
@@ -56,6 +58,18 @@ export function JobsPageContent() {
     setSortBy(value);
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", value);
+    params.delete("page");
+    router.replace(`${pathname}?${params.toString()}`);
+  }
+
+  function handleSearch() {
+    const params = new URLSearchParams(searchParams.toString());
+    const q = searchInput.trim();
+    if (q) {
+      params.set("search", q);
+    } else {
+      params.delete("search");
+    }
     params.delete("page");
     router.replace(`${pathname}?${params.toString()}`);
   }
@@ -120,6 +134,25 @@ export function JobsPageContent() {
 
           {/* Listings */}
           <main className="flex-1 min-w-0 px-5 lg:px-8 py-8">
+
+            {/* Search bar */}
+            <div className="flex gap-2 mb-6">
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                placeholder="Search roles, companies, or keywords..."
+                className="input-field flex-1"
+              />
+              <button
+                onClick={handleSearch}
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-accent border-[1.5px] border-black text-[#0D0F12] font-mono font-semibold text-sm rounded-[6px] hover:bg-[#34C47E] transition-all duration-150 whitespace-nowrap"
+              >
+                <Search size={14} />
+                Search
+              </button>
+            </div>
 
             {/* Sort / results bar */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E2DDD8]">

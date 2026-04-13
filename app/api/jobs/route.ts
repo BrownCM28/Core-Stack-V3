@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
   const limit = Math.min(50, parseInt(searchParams.get("limit") ?? "20"));
 
-  // Build where clause
+  // Build where clause — all filters go through andFilters so they stack correctly
   const andFilters: Prisma.JobWhereInput[] = [
     { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
   ];

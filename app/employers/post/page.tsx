@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { PostJobForm } from "@/components/employers/PostJobForm";
 import { getSession } from "@/lib/session";
+import { PostJobForm } from "@/components/employers/PostJobForm";
 
 export const metadata: Metadata = {
   title: "Post a Job | CoreStack",
@@ -13,6 +13,5 @@ export default async function PostJobPage() {
   if (!session) {
     redirect("/auth/login?redirect=/employers/post");
   }
-
   return <PostJobForm />;
 }
