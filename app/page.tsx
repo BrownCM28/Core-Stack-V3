@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Hero } from "@/components/home/Hero";
 import { FeaturedJobsStrip } from "@/components/home/FeaturedJobsStrip";
 import { LatestJobs } from "@/components/home/LatestJobs";
