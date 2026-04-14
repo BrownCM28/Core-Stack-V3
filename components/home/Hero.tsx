@@ -1,26 +1,23 @@
 import { ArrowRight } from "lucide-react";
 import { HeroPillSearch } from "@/components/home/HeroPillSearch";
-import { DottedWorldMap } from "@/components/DottedWorldMap";
 
 export function Hero() {
   return (
     <section
-      className="relative w-full overflow-hidden py-24 px-4 sm:px-6 lg:px-8 bg-background"
+      className="relative flex flex-col items-center justify-center text-center px-4 pt-24 pb-20 overflow-hidden"
       style={{
-        backgroundImage: `
-          radial-gradient(ellipse 100% 60% at 50% 0%, rgba(62,207,142,0.08) 0%, transparent 60%),
-          linear-gradient(rgba(62,207,142,0.035) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(62,207,142,0.035) 1px, transparent 1px)
+        background: `
+          radial-gradient(
+            ellipse 80% 60% at 50% -10%,
+            rgba(62, 207, 142, 0.12) 0%,
+            rgba(62, 207, 142, 0.04) 40%,
+            transparent 70%
+          ),
+          linear-gradient(180deg, #FFFFFF 0%, #F5F2EE 100%)
         `,
-        backgroundSize: "100% 100%, 40px 40px, 40px 40px",
       }}
     >
-      {/* Background dotted world map */}
-      <div className="absolute inset-0 pointer-events-none select-none" aria-hidden="true">
-        <DottedWorldMap />
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-4xl text-center">
+      <div className="mx-auto max-w-4xl">
 
         {/* Live badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 text-accent text-xs font-mono mb-8 tracking-wide">
