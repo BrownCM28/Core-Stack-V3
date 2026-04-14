@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { HeroPillSearch } from "@/components/home/HeroPillSearch";
+import { DottedWorldMap } from "@/components/DottedWorldMap";
 
 export function Hero() {
   return (
@@ -14,7 +15,12 @@ export function Hero() {
         backgroundSize: "100% 100%, 40px 40px, 40px 40px",
       }}
     >
-      <div className="mx-auto max-w-4xl text-center">
+      {/* Background dotted world map */}
+      <div className="absolute inset-0 pointer-events-none select-none" aria-hidden="true">
+        <DottedWorldMap />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-4xl text-center">
 
         {/* Live badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 text-accent text-xs font-mono mb-8 tracking-wide">
