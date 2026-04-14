@@ -38,14 +38,14 @@ export function Navbar() {
     : "?";
 
   return (
-    <nav className="sticky top-0 z-40 w-full border-b border-b-black bg-[#0D0F12]">
+    <nav className="sticky top-0 z-40 w-full border-b border-[#E2DDD8] bg-white/95 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between">
 
           {/* Wordmark */}
           <Link href="/" className="flex items-center gap-2 group" aria-label="CoreStack home">
             <Zap size={16} className="text-accent transition-colors duration-150" aria-hidden="true" />
-            <span className="font-mono font-semibold text-base tracking-tight text-white group-hover:text-accent transition-colors duration-150">
+            <span className="font-mono font-semibold text-base tracking-tight text-[#0D0F12] group-hover:text-accent transition-colors duration-150">
               CoreStack
             </span>
           </Link>
@@ -70,7 +70,7 @@ export function Navbar() {
           {/* Desktop auth area */}
           <div className="hidden md:flex items-center gap-2">
             {isPending ? (
-              <div className="w-8 h-8 rounded-full bg-[#1E2128] animate-pulse" />
+              <div className="w-8 h-8 rounded-full bg-[#E2DDD8] animate-pulse" />
             ) : session ? (
               <>
                 <Link
@@ -80,7 +80,7 @@ export function Navbar() {
                   <LayoutDashboard size={14} />
                   Dashboard
                 </Link>
-                <div className="flex items-center gap-2 pl-2 border-l border-[#2A2D35]">
+                <div className="flex items-center gap-2 pl-2 border-l border-[#E2DDD8]">
                   <div className="w-7 h-7 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                     {session.user.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -120,7 +120,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-t-[#1E2128] bg-[#0D0F12] px-4 py-3 flex flex-col gap-1">
+        <div className="md:hidden border-t border-t-[#E2DDD8] bg-white px-4 py-3 flex flex-col gap-1">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -134,7 +134,7 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-t-[#1E2128]">
+          <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-t-[#E2DDD8]">
             {session ? (
               <>
                 <Link

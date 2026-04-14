@@ -8,12 +8,21 @@ export function Hero() {
       style={{
         background: `
           radial-gradient(
-            ellipse 80% 60% at 50% -10%,
-            rgba(62, 207, 142, 0.12) 0%,
-            rgba(62, 207, 142, 0.04) 40%,
+            ellipse 55% 70% at 0% 50%,
+            rgba(62, 207, 142, 0.13) 0%,
             transparent 70%
           ),
-          linear-gradient(180deg, #FFFFFF 0%, #F5F2EE 100%)
+          radial-gradient(
+            ellipse 55% 70% at 100% 50%,
+            rgba(99, 130, 245, 0.10) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            ellipse 60% 50% at 50% 100%,
+            rgba(62, 207, 142, 0.06) 0%,
+            transparent 60%
+          ),
+          #FFFFFF
         `,
       }}
     >
