@@ -1,5 +1,4 @@
 import { Hero } from "@/components/home/Hero";
-import { HomeSearchBar } from "@/components/home/HomeSearchBar";
 import { FeaturedJobsStrip } from "@/components/home/FeaturedJobsStrip";
 import { LatestJobs } from "@/components/home/LatestJobs";
 import { CategoriesStrip } from "@/components/home/CategoriesStrip";
@@ -55,12 +54,6 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       <Hero />
-
-      <section className="bg-background pb-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <HomeSearchBar />
-        </div>
-      </section>
 
       <FeaturedJobsStrip jobs={featuredJobs.map(toApiJob)} />
 
