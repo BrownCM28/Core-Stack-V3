@@ -4,7 +4,7 @@ import { HeroPillSearch } from "@/components/home/HeroPillSearch";
 export function Hero() {
   return (
     <section
-      className="relative flex flex-col items-center justify-center text-center px-4 pt-24 pb-20 overflow-hidden"
+      className="relative flex flex-col items-center justify-center text-center px-4 pt-14 pb-20 overflow-hidden"
       style={{
         background: `
           radial-gradient(
