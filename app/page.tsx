@@ -60,12 +60,22 @@ export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
+    <div
+      className="min-h-screen"
+      style={{
+        background: `
+          radial-gradient(ellipse 70% 55% at 0% 0%, rgba(62, 207, 142, 0.12) 0%, transparent 60%),
+          radial-gradient(ellipse 70% 55% at 100% 0%, rgba(99, 130, 245, 0.09) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 35% at 50% 18%, rgba(62, 207, 142, 0.05) 0%, transparent 50%),
+          #FFFFFF
+        `,
+      }}
+    >
 
       <Hero />
 
       {/* ── Section 1: Why CoreStack ─────────────────────────────────────── */}
-      <section className="bg-white border-t border-[#E2DDD8] py-20">
+      <section className="border-t border-[#E2DDD8] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] text-center mb-3">
             WHY CORESTACK
@@ -96,7 +106,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 2: CoreStack Score ───────────────────────────────────── */}
-      <section className="border-t border-[#E2DDD8] py-20" style={{ background: "#F5F2EE" }}>
+      <section className="border-t border-[#E2DDD8] py-20" style={{ background: "rgba(245,242,238,0.55)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
@@ -207,7 +217,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 3: How It Works ──────────────────────────────────────── */}
-      <section className="bg-white border-t border-[#E2DDD8] py-20">
+      <section className="border-t border-[#E2DDD8] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] text-center mb-3">
             HOW IT WORKS
@@ -264,7 +274,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 4: For Candidates / For Employers ────────────────────── */}
-      <section className="border-t border-[#E2DDD8] py-20" style={{ background: "#F5F2EE" }}>
+      <section className="border-t border-[#E2DDD8] py-20" style={{ background: "rgba(245,242,238,0.55)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -338,12 +348,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 5: Final CTA Banner ──────────────────────────────────── */}
-      <section
-        className="border-t border-[#E2DDD8] py-20 text-center"
-        style={{
-          background: `radial-gradient(ellipse 80% 80% at 50% 50%, rgba(62,207,142,0.10) 0%, transparent 70%), #FFFFFF`,
-        }}
-      >
+      <section className="border-t border-[#E2DDD8] py-20 text-center">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-mono font-bold text-4xl text-[#0D0F12] mb-4">
             Infrastructure talent.

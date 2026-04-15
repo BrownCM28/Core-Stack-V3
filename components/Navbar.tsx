@@ -38,10 +38,10 @@ export function Navbar() {
     : "?";
 
   return (
-    <div className="sticky top-0 z-40 w-full px-4 pt-3 pb-0">
+    <div className="sticky top-0 z-40 w-full px-4 sm:px-6 pt-3 pb-0">
     <nav className="mx-auto max-w-7xl rounded-2xl border border-[#E2DDD8] bg-white/95 backdrop-blur-sm shadow-sm">
-      <div className="px-4 sm:px-6">
-        <div className="flex h-12 items-center justify-between">
+      <div className="px-5 sm:px-7">
+        <div className="flex h-14 items-center justify-between">
 
           {/* Wordmark */}
           <Link href="/" className="flex items-center gap-2 group" aria-label="CoreStack home">

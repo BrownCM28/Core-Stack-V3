@@ -5,26 +5,6 @@ export function Hero() {
   return (
     <section
       className="relative flex flex-col items-center justify-center text-center px-4 pt-14 pb-20 overflow-hidden"
-      style={{
-        background: `
-          radial-gradient(
-            ellipse 55% 70% at 0% 50%,
-            rgba(62, 207, 142, 0.13) 0%,
-            transparent 70%
-          ),
-          radial-gradient(
-            ellipse 55% 70% at 100% 50%,
-            rgba(99, 130, 245, 0.10) 0%,
-            transparent 70%
-          ),
-          radial-gradient(
-            ellipse 60% 50% at 50% 100%,
-            rgba(62, 207, 142, 0.06) 0%,
-            transparent 60%
-          ),
-          #FFFFFF
-        `,
-      }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -38,7 +18,7 @@ export function Hero() {
       {/* Bottom fade into page background */}
       <div
         className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10"
-        style={{ background: "linear-gradient(to bottom, transparent, #F5F2EE)" }}
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.85))" }}
         aria-hidden="true"
       />
 
