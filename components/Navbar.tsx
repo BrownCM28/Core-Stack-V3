@@ -10,7 +10,7 @@ import { useSession, signOut } from "@/lib/auth-client";
 const NAV_LINKS = [
   { label: "Browse Jobs", href: "/jobs" },
   { label: "Talent", href: "/talent" },
-  { label: "Post a Job", href: "/post" },
+  { label: "Post a Job", href: "/employers" },
 ];
 
 const btnBase =

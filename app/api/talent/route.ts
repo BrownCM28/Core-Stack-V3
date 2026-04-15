@@ -6,6 +6,7 @@ export interface ApiTalent {
   id: string;
   name: string;
   username: string;
+  githubUsername: string | null;
   displayName: string | null;
   location: string | null;
   openToTypes: string[];
@@ -62,7 +63,7 @@ export async function GET(req: Request) {
           select: { id: true, name: true, issuer: true },
         },
         profile: {
-          select: { avatarUrl: true },
+          select: { avatarUrl: true, username: true },
         },
       },
     }),
@@ -73,6 +74,7 @@ export async function GET(req: Request) {
     id: u.id,
     name: u.name,
     username: u.username!,
+    githubUsername: u.profile?.username ?? null,
     displayName: u.displayName,
     location: u.location,
     openToTypes: u.openToTypes as string[],

@@ -103,13 +103,17 @@ export function TalentCard({ profile }: TalentCardProps) {
 
       {/* Footer */}
       <div className="pt-3 border-t border-[#E2DDD8]">
-        <a
-          href={`/profile/${profile.username}`}
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-text-primary border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
-        >
-          View Profile
-          <ArrowRight size={11} />
-        </a>
+        {profile.githubUsername ? (
+          <a
+            href={`/profile/${profile.githubUsername}`}
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-text-primary border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
+          >
+            View Profile
+            <ArrowRight size={11} />
+          </a>
+        ) : (
+          <span className="font-mono text-xs text-text-muted">No public profile</span>
+        )}
       </div>
     </div>
   );

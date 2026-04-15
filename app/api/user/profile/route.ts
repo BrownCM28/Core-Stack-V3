@@ -19,6 +19,9 @@ export async function GET() {
       openToWork: true,
       openToTypes: true,
       username: true,
+      profile: {
+        select: { avatarUrl: true, bio: true },
+      },
     },
   });
 

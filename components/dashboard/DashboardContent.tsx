@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   FileText, Bell, Award, Briefcase, Settings,
-  Plus, Trash2, ArrowRight, Github,
+  Plus, Trash2, ArrowRight, Github, MapPin,
   RefreshCw, AlertTriangle, X, Loader2, CheckCircle,
 } from "lucide-react";
 import { CertificationBadge } from "@/components/CertificationBadge";
@@ -43,6 +43,20 @@ function mapStatus(s: UserApplication["status"]): AppDisplayStatus {
   return map[s];
 }
 
+interface SidebarProfile {
+  id: string;
+  name: string;
+  email: string;
+  displayName: string | null;
+  title: string | null;
+  bio: string | null;
+  location: string | null;
+  openToWork: boolean;
+  openToTypes: string[];
+  username: string | null;
+  profile: { avatarUrl: string | null; bio: string | null } | null;
+}
+
 // ─── Shared primitives ────────────────────────────────────────────────────────
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -68,7 +82,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
 
 function SectionCard({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-6", className)}>
+    <div className={cn("bg-white border border-[#E2DDD8] rounded-lg p-6", className)}>
       {children}
     </div>
   );
@@ -228,9 +242,9 @@ function AddAlertModal({ open, onClose }: { open: boolean; onClose: () => void }
 
 const TABS = [
   { id: "applications", label: "Applications", icon: FileText },
-  { id: "alerts", label: "Alerts", icon: Bell },
   { id: "certifications", label: "Certifications", icon: Award },
   { id: "otw", label: "Open to Work", icon: Briefcase },
+  { id: "alerts", label: "Alerts", icon: Bell },
   { id: "settings", label: "Settings", icon: Settings },
 ] as const;
 
@@ -539,7 +553,6 @@ function OpenToWorkTab() {
   const [saved, setSaved] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  // Load current user settings on mount
   useEffect(() => {
     fetch("/api/user/profile")
       .then((r) => r.json())
@@ -691,7 +704,6 @@ function SettingsTab() {
   const [syncing, setSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"idle" | "success" | "error">("idle");
 
-  // Populate form from session — keyed on the individual values so ESLint is satisfied
   const sessionUserId = sessionData?.user?.id;
   const sessionUserName = sessionData?.user?.name;
   const sessionUserEmail = sessionData?.user?.email;
@@ -851,7 +863,166 @@ function SettingsTab() {
   );
 }
 
-// ─── Main export ────────────────────���─────────────────────────────────────────
+// ─── GitHub icon ──────────────────────────────────────────────────────────────
+
+function GithubIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+    </svg>
+  );
+}
+
+// ─── Profile sidebar ──────────────────────────────────────────────────────────
+
+function ProfileSidebar({
+  session,
+  onOtw,
+  onSettings,
+}: {
+  session: ReturnType<typeof useSession>["data"];
+  onOtw: () => void;
+  onSettings: () => void;
+}) {
+  const [profile, setProfile] = useState<SidebarProfile | null>(null);
+  const [appCount, setAppCount] = useState<number | null>(null);
+  const [certCount, setCertCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/user/profile")
+      .then((r) => r.json())
+      .then(setProfile)
+      .catch(() => {});
+    fetch("/api/applications")
+      .then((r) => r.json())
+      .then((data) => setAppCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => {});
+    fetch("/api/certifications")
+      .then((r) => r.json())
+      .then((data) => setCertCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => {});
+  }, []);
+
+  const name = profile?.name ?? session?.user?.name ?? "User";
+  const initials = name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase();
+  const avatarUrl = profile?.profile?.avatarUrl;
+  const githubUsername = profile?.username;
+  const location = profile?.location;
+  const bio = profile?.profile?.bio ?? profile?.bio;
+  const isOtw = profile?.openToWork ?? false;
+  const openToTypes = (profile?.openToTypes ?? []) as string[];
+
+  function roleLabel(types: string[]) {
+    const ft = types.includes("FULL_TIME");
+    const ct = types.includes("CONTRACT");
+    if (ft && ct) return "Full-time / Contract";
+    if (ft) return "Full-time";
+    if (ct) return "Contract";
+    return "";
+  }
+
+  return (
+    <div className="bg-white border border-[#E2DDD8] rounded-lg p-6 lg:sticky lg:top-20">
+      {/* Avatar + identity */}
+      <div className="flex flex-col items-center text-center mb-5">
+        {avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={avatarUrl}
+            alt={name}
+            className="w-20 h-20 rounded-full object-cover mb-3 flex-shrink-0"
+          />
+        ) : (
+          <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center font-mono font-bold text-2xl text-[#0D0F12] mb-3 flex-shrink-0">
+            {initials}
+          </div>
+        )}
+        <p className="font-mono font-semibold text-[#0D0F12] leading-tight">{name}</p>
+        {githubUsername && (
+          <a
+            href={`https://github.com/${githubUsername}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 mt-1 font-mono text-xs text-text-muted hover:text-accent transition-colors duration-150"
+          >
+            <GithubIcon size={11} />
+            @{githubUsername}
+          </a>
+        )}
+        {location && (
+          <span className="flex items-center gap-1 mt-1.5 font-sans text-xs text-text-muted">
+            <MapPin size={11} />
+            {location}
+          </span>
+        )}
+        {bio && (
+          <p className="font-sans text-xs text-text-muted mt-2 line-clamp-2 leading-relaxed">
+            {bio}
+          </p>
+        )}
+      </div>
+
+      {/* OTW status */}
+      <div className="border-t border-[#E2DDD8] pt-4 mb-4">
+        <div className="flex flex-col items-center gap-1.5 mb-3">
+          {isOtw ? (
+            <>
+              <span className="inline-block font-mono text-[10px] font-bold text-[#0D0F12] bg-accent px-2 py-0.5 rounded-[4px] uppercase tracking-wide">
+                Open to Work
+              </span>
+              {roleLabel(openToTypes) && (
+                <span className="font-sans text-xs text-text-muted">
+                  {roleLabel(openToTypes)}
+                </span>
+              )}
+            </>
+          ) : (
+            <span className="font-mono text-xs text-text-muted">Not open to work</span>
+          )}
+        </div>
+        <WireButton onClick={onOtw} className="w-full justify-center">
+          Update status
+        </WireButton>
+      </div>
+
+      {/* Stats */}
+      <div className="border-t border-[#E2DDD8] pt-4 mb-4">
+        <div className="flex items-center justify-center gap-3 font-mono text-xs text-text-muted">
+          <span>
+            <span className="font-semibold text-[#0D0F12] tabular-nums">
+              {appCount ?? "—"}
+            </span>{" "}
+            applications
+          </span>
+          <span className="text-[#E2DDD8]">•</span>
+          <span>
+            <span className="font-semibold text-[#0D0F12] tabular-nums">
+              {certCount ?? "—"}
+            </span>{" "}
+            certifications
+          </span>
+        </div>
+      </div>
+
+      {/* Links + edit */}
+      <div className="border-t border-[#E2DDD8] pt-4 flex flex-col gap-2">
+        {githubUsername && (
+          <a
+            href={`/profile/${githubUsername}`}
+            className="font-mono text-xs text-accent hover:underline text-center"
+          >
+            View public profile →
+          </a>
+        )}
+        <WireButton onClick={onSettings} className="w-full justify-center">
+          Edit Profile
+        </WireButton>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main export ──────────────────────────────────────────────────────────────
 
 export function DashboardContent() {
   const { data: sessionData } = useSession();
@@ -878,43 +1049,49 @@ export function DashboardContent() {
       .catch(() => {});
   }, [currentUserId]);
 
-  const userName = sessionData?.user?.name ?? "there";
-
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-[#F5F2EE]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
 
-        {/* Dashboard header */}
-        <div className="mb-7">
-          <h1 className="font-mono font-bold text-2xl text-text-primary mb-0.5">Dashboard</h1>
-          <p className="font-sans text-sm text-text-muted">Welcome back, {userName}</p>
+          {/* Sidebar */}
+          <aside className="w-full lg:w-[280px] flex-shrink-0">
+            <ProfileSidebar
+              session={sessionData}
+              onOtw={() => setActiveTab("otw")}
+              onSettings={() => setActiveTab("settings")}
+            />
+          </aside>
+
+          {/* Main content */}
+          <div className="flex-1 min-w-0">
+            {/* Tab bar */}
+            <div className="flex items-center gap-1 border-b border-[#E2DDD8] mb-5 overflow-x-auto scrollbar-hide">
+              {TABS.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3 py-2.5 font-mono text-xs whitespace-nowrap border-b-2 -mb-px transition-all duration-150",
+                    activeTab === id
+                      ? "border-accent text-[#0D0F12] font-semibold"
+                      : "border-transparent text-text-muted hover:text-text-primary"
+                  )}
+                >
+                  <Icon size={13} />
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab content */}
+            {activeTab === "applications" && <ApplicationsTab />}
+            {activeTab === "certifications" && <CertificationsTab />}
+            {activeTab === "otw" && <OpenToWorkTab />}
+            {activeTab === "alerts" && <AlertsTab />}
+            {activeTab === "settings" && <SettingsTab />}
+          </div>
         </div>
-
-        {/* Tab bar */}
-        <div className="flex items-center gap-1 border-b border-[#E2DDD8] mb-7 overflow-x-auto scrollbar-hide">
-          {TABS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id)}
-              className={cn(
-                "flex items-center gap-2 px-3 py-2.5 font-mono text-xs whitespace-nowrap border-b-2 -mb-px transition-all duration-150",
-                activeTab === id
-                  ? "border-accent text-text-primary font-semibold"
-                  : "border-transparent text-text-muted hover:text-text-primary"
-              )}
-            >
-              <Icon size={13} />
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Tab content */}
-        {activeTab === "applications" && <ApplicationsTab />}
-        {activeTab === "alerts" && <AlertsTab />}
-        {activeTab === "certifications" && <CertificationsTab />}
-        {activeTab === "otw" && <OpenToWorkTab />}
-        {activeTab === "settings" && <SettingsTab />}
       </div>
     </div>
   );
