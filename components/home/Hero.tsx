@@ -35,7 +35,14 @@ export function Hero() {
         style={{ opacity: 0.08 }}
       />
 
-      <div className="relative z-10 mx-auto max-w-4xl">
+      {/* Bottom fade into page background */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10"
+        style={{ background: "linear-gradient(to bottom, transparent, #F5F2EE)" }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-20 mx-auto max-w-4xl">
 
         {/* Live badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 text-accent text-xs font-mono mb-8 tracking-wide">
