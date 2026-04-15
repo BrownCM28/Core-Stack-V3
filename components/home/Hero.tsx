@@ -26,7 +26,16 @@ export function Hero() {
         `,
       }}
     >
-      <div className="mx-auto max-w-4xl">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/world-map-dots.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+        aria-hidden="true"
+        style={{ opacity: 0.08 }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-4xl">
 
         {/* Live badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 text-accent text-xs font-mono mb-8 tracking-wide">
