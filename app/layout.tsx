@@ -50,7 +50,17 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${ibmPlexMono.variable}`}
     >
-      <body className="min-h-screen bg-background text-text-primary antialiased">
+      <body
+        className="min-h-screen text-text-primary antialiased"
+        style={{
+          background: `
+            radial-gradient(ellipse 70% 55% at 0% 0%, rgba(62, 207, 142, 0.12) 0%, transparent 60%),
+            radial-gradient(ellipse 70% 55% at 100% 0%, rgba(99, 130, 245, 0.09) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 35% at 50% 18%, rgba(62, 207, 142, 0.05) 0%, transparent 50%),
+            #FFFFFF
+          `,
+        }}
+      >
         <Navbar />
         <main>{children}</main>
         <PendingApplicationHandler />
