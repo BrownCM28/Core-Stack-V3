@@ -17,7 +17,7 @@ const btnBase =
   "inline-flex items-center justify-center font-mono font-medium text-sm rounded-[6px] transition-all duration-150 select-none whitespace-nowrap";
 
 const btnWire =
-  "border-[1.5px] border-[#2A2D35] bg-transparent text-[#9CA3AF] px-4 py-2 hover:border-accent hover:text-accent hover:shadow-accent-sm";
+  "border-[1.5px] border-white/20 bg-transparent text-slate-300 px-4 py-2 hover:border-accent hover:text-accent hover:shadow-accent-sm";
 
 const btnPrimary =
   "border-[1.5px] border-black bg-accent text-[#0D0F12] px-4 py-2 hover:bg-accent-hover hover:shadow-accent-md";
@@ -39,14 +39,14 @@ export function Navbar() {
 
   return (
     <div className="sticky top-0 z-40 w-full px-4 sm:px-6 pt-3 pb-0">
-    <nav className="mx-auto max-w-7xl rounded-2xl border border-[#E2DDD8] bg-transparent shadow-sm">
+    <nav className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-slate-800/60 backdrop-blur-md shadow-sm">
       <div className="px-5 sm:px-7">
         <div className="flex h-14 items-center justify-between">
 
           {/* Wordmark */}
           <Link href="/" className="flex items-center gap-2 group" aria-label="CoreStack home">
             <Zap size={16} className="text-accent transition-colors duration-150" aria-hidden="true" />
-            <span className="font-mono font-semibold text-base tracking-tight text-[#0D0F12] group-hover:text-accent transition-colors duration-150">
+            <span className="font-mono font-semibold text-base tracking-tight text-white group-hover:text-accent transition-colors duration-150">
               CoreStack
             </span>
           </Link>
@@ -58,7 +58,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "font-mono text-sm text-[#6B6560] px-3 py-1.5 rounded-[6px]",
+                  "font-mono text-sm text-slate-300 px-3 py-1.5 rounded-[6px]",
                   "border border-transparent transition-all duration-150",
                   "hover:text-accent hover:border-accent/40"
                 )}
@@ -71,17 +71,17 @@ export function Navbar() {
           {/* Desktop auth area */}
           <div className="hidden md:flex items-center gap-2">
             {isPending ? (
-              <div className="w-8 h-8 rounded-full bg-[#E2DDD8] animate-pulse" />
+              <div className="w-8 h-8 rounded-full bg-slate-600 animate-pulse" />
             ) : session ? (
               <>
                 <Link
                   href="/dashboard"
-                  className={cn(btnBase, "gap-1.5 border-[1.5px] border-[#2A2D35] bg-transparent text-[#9CA3AF] px-3 py-2 hover:border-accent hover:text-accent")}
+                  className={cn(btnBase, "gap-1.5 border-[1.5px] border-white/20 bg-transparent text-slate-300 px-3 py-2 hover:border-accent hover:text-accent")}
                 >
                   <LayoutDashboard size={14} />
                   Dashboard
                 </Link>
-                <div className="flex items-center gap-2 pl-2 border-l border-[#E2DDD8]">
+                <div className="flex items-center gap-2 pl-2 border-l border-white/20">
                   <div className="w-7 h-7 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                     {session.user.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -92,7 +92,7 @@ export function Navbar() {
                   </div>
                   <button
                     onClick={handleSignOut}
-                    className="text-[#6B6560] hover:text-red-400 transition-colors duration-150 p-1"
+                    className="text-slate-400 hover:text-red-400 transition-colors duration-150 p-1"
                     title="Sign out"
                   >
                     <LogOut size={14} />
@@ -109,7 +109,7 @@ export function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden text-[#9CA3AF] hover:text-accent transition-colors duration-150 p-1.5"
+            className="md:hidden text-slate-300 hover:text-accent transition-colors duration-150 p-1.5"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
@@ -121,21 +121,21 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-t-[#E2DDD8] bg-white px-4 py-3 flex flex-col gap-1">
+        <div className="md:hidden border-t border-white/10 bg-slate-800/80 px-4 py-3 flex flex-col gap-1 rounded-b-2xl">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "font-mono text-sm text-[#6B6560] px-3 py-2 rounded-[6px]",
+                "font-mono text-sm text-slate-300 px-3 py-2 rounded-[6px]",
                 "transition-all duration-150 hover:text-accent hover:bg-white/5"
               )}
             >
               {link.label}
             </Link>
           ))}
-          <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-t-[#E2DDD8]">
+          <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-white/10">
             {session ? (
               <>
                 <Link
@@ -147,7 +147,7 @@ export function Navbar() {
                 </Link>
                 <button
                   onClick={() => { setMobileOpen(false); handleSignOut(); }}
-                  className={cn(btnBase, "w-full border-[1.5px] border-[#2A2D35] text-[#9CA3AF] px-4 py-2 hover:border-red-400 hover:text-red-400 gap-1.5")}
+                  className={cn(btnBase, "w-full border-[1.5px] border-white/20 text-slate-300 px-4 py-2 hover:border-red-400 hover:text-red-400 gap-1.5")}
                 >
                   <LogOut size={14} /> Sign out
                 </button>
