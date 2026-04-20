@@ -1,7 +1,19 @@
 import { MapPin, ArrowRight } from "lucide-react";
 import { CertificationMiniPills } from "@/components/CertificationMiniPills";
-import { LANGUAGE_COLORS } from "@/lib/mock-profile";
 import type { ApiTalent } from "@/app/api/talent/route";
+
+const LANGUAGE_COLORS: Record<string, string> = {
+  Python: "#3572A5",
+  Go: "#00ADD8",
+  TypeScript: "#3178C6",
+  JavaScript: "#F1E05A",
+  HCL: "#844FBA",
+  Shell: "#89E051",
+  Rust: "#DEA584",
+  "C++": "#F34B7D",
+  Ruby: "#CC342D",
+  Java: "#b07219",
+};
 
 function getInitials(name: string): string {
   return name
