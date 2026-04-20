@@ -48,23 +48,38 @@ async function getProfileData(username: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const user = await getProfileData(params.username);
-  if (!user) return { title: "Profile Not Found" };
-  return {
-    title: `${user.displayName ?? user.name} — CoreStack`,
-    description: user.bio ?? `${user.name}'s CoreStack profile.`,
-  };
+  try {
+    const user = await getProfileData(params.username);
+    if (!user) return { title: "Profile Not Found" };
+    return {
+      title: `${user.displayName ?? user.name} — CoreStack`,
+      description: user.bio ?? `${user.name}'s CoreStack profile.`,
+    };
+  } catch {
+    return { title: "Profile Not Found" };
+  }
 }
 
 export default async function ProfilePage({ params }: Props) {
-  const user = await getProfileData(params.username);
-  if (!user) notFound();
+  // ── Wrapped in try-catch so DB errors never produce a 500 ──
+  let user;
+  try {
+    user = await getProfileData(params.username);
+  } catch (error) {
+    console.error("Profile fetch failed:", error);
+    return notFound();
+  }
+  if (!user) return notFound();
 
   const ghProfile = user.profile;
-  const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
+  const initials = user.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2);
 
   // Compute skill graph from repos (convert DB repos to match expected shape)
-  const reposForSkillGraph = ghProfile?.repos.map((r) => ({
+  const reposForSkillGraph = ghProfile?.repos?.map((r) => ({
     ...r,
     description: r.description,
     language: r.language,
@@ -76,11 +91,11 @@ export default async function ProfilePage({ params }: Props) {
     name: r.name,
   })) as GitHubRepoResponse[] | undefined;
 
-  const { skillLanguages, skillTopics } = reposForSkillGraph
+  const { skillLanguages, skillTopics } = reposForSkillGraph?.length
     ? computeSkillGraph(reposForSkillGraph)
-    : { skillLanguages: {}, skillTopics: [] };
+    : { skillLanguages: {} as Record<string, number>, skillTopics: [] as string[] };
 
-  // Map DB certifications to DbCertification shape
+  // Map DB certifications to CertificationGrid shape
   const certifications = user.certifications.map((c) => ({
     id: c.id,
     name: c.name,
@@ -243,7 +258,7 @@ export default async function ProfilePage({ params }: Props) {
                   Stack
                 </p>
                 <p className="font-sans text-xs text-text-muted">
-                  This user hasn&apos;t connected GitHub yet.
+                  This user has not connected GitHub yet.
                 </p>
               </div>
             )}
@@ -265,7 +280,7 @@ export default async function ProfilePage({ params }: Props) {
 
               {!ghProfile ? (
                 <p className="font-sans text-sm text-text-muted">
-                  This user hasn&apos;t connected GitHub yet.
+                  This user has not connected GitHub yet.
                 </p>
               ) : ghProfile.repos.length === 0 ? (
                 <p className="font-sans text-sm text-text-muted">No public repos yet.</p>
