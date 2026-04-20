@@ -3,8 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { mapJobType, mapLevel } from "@/lib/types";
 import type { ApiJob } from "@/lib/types";
 import { Prisma } from "@prisma/client";
+import { checkRateLimit, standardLimit } from "@/lib/ratelimit";
 
 export async function GET(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") ?? "anonymous";
+  const rl = await checkRateLimit(standardLimit, ip);
+  if (rl) return rl;
+
   const { searchParams } = req.nextUrl;
 
   const categories = searchParams.getAll("category");

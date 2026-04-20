@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
+import { checkRateLimit, standardLimit } from "@/lib/ratelimit";
 
 const CreateAlertSchema = z.object({
   name: z.string().min(1).max(100),
@@ -28,6 +29,8 @@ function filterSummaryFromFilters(filters: Record<string, unknown>): string {
 export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const rl = await checkRateLimit(standardLimit, session.user.id);
+  if (rl) return rl;
 
   const alerts = await prisma.savedSearch.findMany({
     where: { userId: session.user.id },
@@ -52,6 +55,8 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const rl = await checkRateLimit(standardLimit, session.user.id);
+  if (rl) return rl;
 
   const body = await req.json().catch(() => null);
   const parsed = CreateAlertSchema.safeParse(body);

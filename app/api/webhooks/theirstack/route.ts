@@ -1,6 +1,7 @@
 // Theirstack webhook — maps native payload to CoreStack schema then delegates to ingest.
 import { NextResponse } from "next/server";
 import { handleIngest } from "@/lib/ingest-handler";
+import { checkRateLimit, webhookLimit } from "@/lib/ratelimit";
 
 // Theirstack sends job objects nested like this (simplified):
 // {
@@ -42,6 +43,9 @@ function mapTheirstack(raw: Record<string, unknown>): Record<string, unknown> {
 }
 
 export async function POST(req: Request): Promise<NextResponse> {
+  const rl = await checkRateLimit(webhookLimit, "theirstack-webhook");
+  if (rl) return rl;
+
   let body: unknown;
   try {
     body = await req.json();

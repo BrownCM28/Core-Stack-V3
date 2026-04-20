@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
+import { checkRateLimit, standardLimit } from "@/lib/ratelimit";
 
 export interface ApiTalent {
   id: string;
@@ -16,6 +17,10 @@ export interface ApiTalent {
 }
 
 export async function GET(req: Request) {
+  const ip = req.headers.get("x-forwarded-for") ?? "anonymous";
+  const rl = await checkRateLimit(standardLimit, ip);
+  if (rl) return rl;
+
   const { searchParams } = new URL(req.url);
 
   const language = searchParams.get("language");

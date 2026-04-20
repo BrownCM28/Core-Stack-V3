@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { getStripe } from "@/lib/stripe";
 import { getSession } from "@/lib/session";
 import { IncomingJobSchema, mapIncomingJob } from "@/lib/ingest";
+import { checkRateLimit, strictLimit } from "@/lib/ratelimit";
 
 const TIERS = {
   standard: { amount: 9900, label: "CoreStack Standard Listing – 30 days" },
@@ -24,6 +25,8 @@ export async function POST(req: Request): Promise<NextResponse> {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const rl = await checkRateLimit(strictLimit, session.user.id);
+  if (rl) return rl;
 
   let body: unknown;
   try {
