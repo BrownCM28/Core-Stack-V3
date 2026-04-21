@@ -71,7 +71,7 @@ export function JobListingCard({ job, onApply }: JobListingCardProps) {
       </div>
 
       {/* Title */}
-      <h3 className="font-mono font-semibold text-base leading-snug text-text-primary mb-1 group-hover:text-accent transition-colors duration-150">
+      <h3 className="font-display font-semibold text-base leading-snug text-text-primary mb-1 group-hover:text-accent transition-colors duration-150">
         {job.title}
       </h3>
 

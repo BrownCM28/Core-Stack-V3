@@ -147,7 +147,7 @@ export default async function ProfilePage({ params }: Props) {
 
             {/* Info */}
             <div className="flex-1 min-w-0 pt-1">
-              <h1 className="font-mono font-bold text-2xl text-text-primary mb-0.5">
+              <h1 className="font-display font-bold text-2xl text-text-primary mb-0.5">
                 {user.displayName ?? user.name}
               </h1>
 
