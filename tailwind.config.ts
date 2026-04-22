@@ -30,9 +30,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
-        display: ["var(--font-fraunces)", "serif"],
+        sans: ["var(--font-satoshi)", "sans-serif"],
+        mono: ["var(--font-wavehaus)", "sans-serif"],
+        display: ["var(--font-vercetti)", "serif"],
       },
       borderWidth: {
         DEFAULT: "1.5px",

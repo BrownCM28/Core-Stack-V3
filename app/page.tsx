@@ -70,7 +70,7 @@ export default function HomePage() {
           <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] text-center mb-3">
             WHY CORESTACK
           </p>
-          <h2 className="font-display font-bold text-4xl text-[#0D0F12] text-center mb-4">
+          <h2 className="font-display font-normal text-4xl text-[#0D0F12] text-center mb-4">
             Built for infrastructure.
             <br />
             Not generic job boards.
@@ -87,7 +87,7 @@ export default function HomePage() {
                 className="bg-white border border-[#E2DDD8] rounded-lg p-6 hover:border-[#3ECF8E] transition-colors duration-150"
               >
                 <Icon size={20} />
-                <h3 className="font-display font-semibold text-[#0D0F12] mt-3 mb-2">{title}</h3>
+                <h3 className="font-display font-normal text-[#0D0F12] mt-3 mb-2">{title}</h3>
                 <p className="font-sans text-sm text-[#6B6560] leading-relaxed">{body}</p>
               </div>
             ))}
@@ -105,7 +105,7 @@ export default function HomePage() {
               <span className="inline-block border border-[#3ECF8E] text-[#3ECF8E] rounded-full px-3 py-1 text-xs font-mono mb-4">
                 PREMIUM FEATURE
               </span>
-              <h2 className="font-display font-bold text-3xl text-[#0D0F12] leading-tight mb-4">
+              <h2 className="font-display font-normal text-3xl text-[#0D0F12] leading-tight mb-4">
                 The CoreStack Score.
                 <br />
                 Monthly talent reports
@@ -212,7 +212,7 @@ export default function HomePage() {
           <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] text-center mb-3">
             HOW IT WORKS
           </p>
-          <h2 className="font-display font-bold text-4xl text-[#0D0F12] text-center mb-16">
+          <h2 className="font-display font-normal text-4xl text-[#0D0F12] text-center mb-16">
             From search to hired in three steps.
           </h2>
 
@@ -220,7 +220,7 @@ export default function HomePage() {
 
             <div className="flex-1 text-center px-6 py-8 md:py-0">
               <p className="font-mono font-bold text-6xl leading-none mb-3 text-[#3ECF8E] opacity-20">01</p>
-              <h3 className="font-mono font-semibold text-lg text-[#0D0F12] mb-2">Create your profile</h3>
+              <h3 className="font-display font-normal text-lg text-[#0D0F12] mb-2">Create your profile</h3>
               <p className="font-sans text-sm text-[#6B6560] leading-relaxed max-w-xs mx-auto">
                 Sign in with GitHub in one click. Your repos, stack, and
                 certifications sync automatically. Add your open-to-work
@@ -235,7 +235,7 @@ export default function HomePage() {
 
             <div className="flex-1 text-center px-6 py-8 md:py-0">
               <p className="font-mono font-bold text-6xl leading-none mb-3 text-[#3ECF8E] opacity-20">02</p>
-              <h3 className="font-mono font-semibold text-lg text-[#0D0F12] mb-2">Browse curated roles</h3>
+              <h3 className="font-display font-normal text-lg text-[#0D0F12] mb-2">Browse curated roles</h3>
               <p className="font-sans text-sm text-[#6B6560] leading-relaxed max-w-xs mx-auto">
                 Search and filter hundreds of data center and AI infrastructure
                 roles updated daily from top employers. Save searches and get
@@ -250,7 +250,7 @@ export default function HomePage() {
 
             <div className="flex-1 text-center px-6 py-8 md:py-0">
               <p className="font-mono font-bold text-6xl leading-none mb-3 text-[#3ECF8E] opacity-20">03</p>
-              <h3 className="font-mono font-semibold text-lg text-[#0D0F12] mb-2">Get found by employers</h3>
+              <h3 className="font-display font-normal text-lg text-[#0D0F12] mb-2">Get found by employers</h3>
               <p className="font-sans text-sm text-[#6B6560] leading-relaxed max-w-xs mx-auto">
                 Premium employers receive monthly CoreStack Score reports
                 featuring the top-ranked candidates in their category. Your
@@ -273,7 +273,7 @@ export default function HomePage() {
               <p className="text-xs font-mono uppercase tracking-widest text-[#3ECF8E] mb-3">
                 FOR CANDIDATES
               </p>
-              <h3 className="font-display font-bold text-2xl text-[#0D0F12] mb-3">
+              <h3 className="font-display font-normal text-2xl text-[#0D0F12] mb-3">
                 Your GitHub is your resume.
               </h3>
               <p className="font-sans text-sm text-[#6B6560] leading-relaxed mb-6">
@@ -304,7 +304,7 @@ export default function HomePage() {
               <p className="text-xs font-mono uppercase tracking-widest text-[#3ECF8E] mb-3">
                 FOR EMPLOYERS
               </p>
-              <h3 className="font-display font-bold text-2xl text-white mb-3">
+              <h3 className="font-display font-normal text-2xl text-white mb-3">
                 Hire before your competitors
                 <br />
                 even start searching.
@@ -340,7 +340,7 @@ export default function HomePage() {
       {/* ── Section 5: Final CTA Banner ──────────────────────────────────── */}
       <section className="border-t border-[#E2DDD8] py-20 text-center">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display font-bold text-4xl text-[#0D0F12] mb-4">
+          <h2 className="font-display font-normal text-4xl text-[#0D0F12] mb-4">
             Infrastructure talent.
             <br />
             Finally in one place.

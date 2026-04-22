@@ -22,18 +22,23 @@
   body {
     background-color: var(--background);
     color: var(--text-primary);
-    font-family: var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-satoshi), sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-fraunces), serif;
+    font-family: var(--font-vercetti), serif;
   }
 }
 
 @layer utilities {
+  /* Prevent weight synthesis on single-weight display font */
+  .font-display {
+    font-weight: 400 !important;
+  }
+
   /* Hide scrollbar while preserving scroll functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;

@@ -34,7 +34,7 @@ export function Hero() {
         </div>
 
         {/* Headline */}
-        <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-[3.25rem] text-[#0D0F12] leading-[1.15] tracking-tight mb-6 text-balance">
+        <h1 className="font-display font-normal text-5xl md:text-6xl text-[#0D0F12] leading-[1.1] mb-6 text-balance">
           Infrastructure jobs for the people who{" "}
           <span className="text-accent">keep the world running.</span>
         </h1>

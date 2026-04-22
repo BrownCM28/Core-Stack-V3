@@ -46,7 +46,7 @@ export function Navbar() {
           {/* Wordmark */}
           <Link href="/" className="flex items-center gap-2 group" aria-label="CoreStack home">
             <Zap size={16} className="text-accent transition-colors duration-150" aria-hidden="true" />
-            <span className="font-display font-bold text-xl tracking-tight">
+            <span className="font-display font-normal text-xl tracking-tight">
               <span className="text-white group-hover:text-accent transition-colors duration-150">Core</span>
               <span className="text-accent">Stack</span>
             </span>

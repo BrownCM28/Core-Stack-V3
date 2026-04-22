@@ -1,24 +1,72 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { Navbar } from "@/components/Navbar";
 import { PendingApplicationHandler } from "@/components/PendingApplicationHandler";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+const satoshi = localFont({
+  src: [
+    {
+      path: "../Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Variable.woff2",
+      weight: "300 900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-satoshi",
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
+const vercetti = localFont({
+  src: "../Fonts/Vercetti Regular/OpenType WOFFs/Vercetti-Regular.woff2",
+  variable: "--font-vercetti",
+  weight: "400",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+const wavehaus = localFont({
+  src: [
+    {
+      path: "../Fonts/graham-paterson-wavehaus-typeface/Wavehaus-42Light.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../Fonts/graham-paterson-wavehaus-typeface/Wavehaus-66Book.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../Fonts/graham-paterson-wavehaus-typeface/Wavehaus-95SemiBold.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../Fonts/graham-paterson-wavehaus-typeface/Wavehaus-128Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-wavehaus",
   display: "swap",
 });
 
@@ -53,7 +101,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
+      className={`${satoshi.variable} ${vercetti.variable} ${wavehaus.variable}`}
     >
       <body
         className="min-h-screen text-text-primary antialiased"

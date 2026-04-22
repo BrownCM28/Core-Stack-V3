@@ -29,6 +29,13 @@ const nextConfig = {
   images: {
     remotePatterns: [],
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.(otf|ttf|woff|woff2)$/,
+      type: "asset/resource",
+    });
+    return config;
+  },
   async headers() {
     return [
       {

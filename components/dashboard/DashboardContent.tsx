@@ -100,7 +100,7 @@ function SectionHeader({
   return (
     <div className="flex items-center justify-between mb-5">
       <div className="flex items-baseline gap-2">
-        <h2 className="font-display font-semibold text-base text-text-primary">{title}</h2>
+        <h2 className="font-display font-normal text-base text-text-primary">{title}</h2>
         {count && <span className="font-mono text-xs text-text-muted">{count}</span>}
       </div>
       {action}
