@@ -378,6 +378,7 @@ export default function HomePage() {
               {[
                 { label: "Browse Jobs", href: "/jobs" },
                 { label: "Talent",      href: "/talent" },
+                { label: "Wiki",        href: "/wiki" },
                 { label: "Post a Job",  href: "/employers" },
               ].map(({ label, href }) => (
                 <a

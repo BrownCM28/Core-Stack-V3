@@ -50,6 +50,82 @@
   }
 }
 
+/* ── Wiki article content styles ──────────────────────────────────── */
+.wiki-content h2 {
+  font-family: var(--font-vercetti), serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #0D0F12;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #E2DDD8;
+}
+.wiki-content h3 {
+  font-family: var(--font-vercetti), serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: #0D0F12;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.wiki-content p {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #0D0F12;
+  margin-bottom: 1.25rem;
+}
+.wiki-content ul,
+.wiki-content ol {
+  font-family: var(--font-satoshi), sans-serif;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #0D0F12;
+}
+.wiki-content li {
+  line-height: 1.8;
+  margin-bottom: 0.4rem;
+}
+.wiki-content strong {
+  font-weight: 600;
+}
+.wiki-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 0.875rem;
+}
+.wiki-content th {
+  font-family: var(--font-wavehaus), sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6B6560;
+  border-bottom: 2px solid #E2DDD8;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.wiki-content td {
+  border-bottom: 1px solid #E2DDD8;
+  padding: 0.625rem 0.75rem;
+  color: #0D0F12;
+}
+.wiki-content tr:last-child td {
+  border-bottom: none;
+}
+.wiki-content .callout {
+  background: rgba(62, 207, 142, 0.08);
+  border: 1px solid #3ECF8E;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 0.9rem;
+  color: #0D0F12;
+}
+
 @layer components {
   /* Wire border button base */
   .btn-wire {

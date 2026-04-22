@@ -10,6 +10,7 @@ import { useSession, signOut } from "@/lib/auth-client";
 const NAV_LINKS = [
   { label: "Browse Jobs", href: "/jobs" },
   { label: "Talent", href: "/talent" },
+  { label: "Wiki", href: "/wiki" },
   { label: "Post a Job", href: "/employers" },
 ];
 
@@ -39,7 +40,7 @@ export function Navbar() {
 
   return (
     <div className="sticky top-0 z-40 w-full px-4 sm:px-6 pt-3 pb-0">
-    <nav className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-slate-800/60 backdrop-blur-md shadow-sm">
+    <nav className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-transparent shadow-sm">
       <div className="px-5 sm:px-7">
         <div className="flex h-14 items-center justify-between">
 
