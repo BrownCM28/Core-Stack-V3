@@ -28,7 +28,8 @@
 }
 
 :root {
-  --background: #F0F0F0;
+  --background: #FFFFFF;
+  --surface-alt: #F5F5F7;
   --surface: #FFFFFF;
   --accent: #3ECF8E;
   --accent-hover: #34C47E;
