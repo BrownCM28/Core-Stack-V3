@@ -12,6 +12,10 @@ const CreateAlertSchema = z.object({
   frequency: z.enum(["instant", "daily", "weekly"]),
 });
 
+function capitalize(s: string): string {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
+
 function filterSummaryFromFilters(filters: Record<string, unknown>): string {
   const parts: string[] = [];
   const categories = filters.category as string[] | undefined;
