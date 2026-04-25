@@ -27,72 +27,79 @@ function filterSummaryFromFilters(filters: Record<string, unknown>): string {
 }
 
 export async function GET() {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const rl = await checkRateLimit(standardLimit, session.user.id);
-  if (rl) return rl;
+  try {
+    const session = await getSession();
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const rl = await checkRateLimit(standardLimit, session.user.id);
+    if (rl) return rl;
 
-  const alerts = await prisma.savedSearch.findMany({
-    where: { userId: session.user.id },
-    orderBy: { createdAt: "desc" },
-  });
+    const alerts = await prisma.savedSearch.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+    });
 
-  const result = alerts.map((a) => ({
-    id: a.id,
-    name: a.name,
-    filterSummary: filterSummaryFromFilters(
-      (a.filters as Record<string, unknown>) ?? {}
-    ),
-    frequency: capitalize(a.alertFreq),
-    active: a.enabled,
-    filters: a.filters,
-    createdAt: a.createdAt,
-  }));
+    const result = alerts.map((a) => ({
+      id: a.id,
+      name: a.name,
+      filterSummary: filterSummaryFromFilters(
+        (a.filters as Record<string, unknown>) ?? {}
+      ),
+      frequency: capitalize(a.alertFreq),
+      active: a.enabled,
+      filters: a.filters,
+      createdAt: a.createdAt,
+    }));
 
-  return NextResponse.json(result);
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("[api/alerts GET]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const rl = await checkRateLimit(standardLimit, session.user.id);
-  if (rl) return rl;
+  try {
+    const session = await getSession();
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const rl = await checkRateLimit(standardLimit, session.user.id);
+    if (rl) return rl;
 
-  const body = await req.json().catch(() => null);
-  const parsed = CreateAlertSchema.safeParse(body);
-  if (!parsed.success) {
+    const body = await req.json().catch(() => null);
+    const parsed = CreateAlertSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid request", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
+
+    const { name, filters, frequency } = parsed.data;
+
+    const alert = await prisma.savedSearch.create({
+      data: {
+        name,
+        filters: filters as Prisma.InputJsonValue,
+        alertFreq: frequency,
+        enabled: true,
+        userId: session.user.id,
+      },
+    });
+
     return NextResponse.json(
-      { error: "Invalid request", issues: parsed.error.issues },
-      { status: 400 }
+      {
+        id: alert.id,
+        name: alert.name,
+        filterSummary: filterSummaryFromFilters(filters),
+        frequency: capitalize(frequency),
+        active: alert.enabled,
+        filters: alert.filters,
+        createdAt: alert.createdAt,
+      },
+      { status: 201 }
     );
+  } catch (error) {
+    console.error("[api/alerts POST]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-
-  const { name, filters, frequency } = parsed.data;
-
-  const alert = await prisma.savedSearch.create({
-    data: {
-      name,
-      filters: filters as Prisma.InputJsonValue,
-      alertFreq: frequency,
-      enabled: true,
-      userId: session.user.id,
-    },
-  });
-
-  return NextResponse.json(
-    {
-      id: alert.id,
-      name: alert.name,
-      filterSummary: filterSummaryFromFilters(filters),
-      frequency: capitalize(frequency),
-      active: alert.enabled,
-      filters: alert.filters,
-      createdAt: alert.createdAt,
-    },
-    { status: 201 }
-  );
 }
 
-function capitalize(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
