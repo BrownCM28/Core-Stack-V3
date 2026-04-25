@@ -129,7 +129,7 @@ export async function GET(req: NextRequest) {
     totalPages: Math.ceil(total / limit),
   });
   } catch (error) {
-    console.error["api/jobs GET]", error);
+    console.error("[api/jobs GET]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
