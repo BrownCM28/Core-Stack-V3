@@ -26,6 +26,8 @@ export function Navbar() {
     router.refresh();
   }
 
+  if (pathname === "/") return null;
+
   const userInitials = session?.user?.name
     ? session.user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
     : "?";

@@ -1,394 +1,621 @@
-import { Hero } from "@/components/home/Hero";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
-  Server, BadgeCheck, Zap, Check, ArrowRight,
+  Search, MapPin, Server, Zap, BadgeCheck, Briefcase,
+  ArrowRight, MessageCircle, ChevronDown, User,
 } from "lucide-react";
+
+// ─────────────────────────────────────────────────────────────
+// Shared helpers
+// ─────────────────────────────────────────────────────────────
 
 function GithubIcon({ size = 20 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className="text-[#3ECF8E]" aria-hidden="true">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
     </svg>
   );
 }
 
-const WHY_CARDS = [
+// ─────────────────────────────────────────────────────────────
+// NAVBAR
+// ─────────────────────────────────────────────────────────────
+
+function HomeNav() {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white">
+      <div className="flex items-center justify-between px-8 md:px-16 h-16">
+        {/* Wordmark */}
+        <Link href="/" className="font-display text-xl leading-none">
+          <span className="text-black">Core</span>
+          <span className="text-[#3ECF8E]">Stack</span>
+        </Link>
+
+        {/* Nav links */}
+        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-8">
+          {[
+            { label: "Browse Jobs", href: "/jobs" },
+            { label: "Wiki", href: "/wiki" },
+            { label: "Talent", href: "/talent" },
+            { label: "Post a Job", href: "/employers" },
+          ].map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className="font-mono text-sm text-black hover:text-[#3ECF8E] transition-colors duration-150"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* CTA */}
+        <Link
+          href="/jobs"
+          className="bg-black text-white rounded-full px-5 py-2 font-mono text-sm hover:bg-gray-900 transition-colors duration-150"
+        >
+          Browse Jobs
+        </Link>
+      </div>
+
+      {/* Rule + animated SVG trace */}
+      <div className="relative h-px bg-[#E5E5E5]">
+        <div className="absolute inset-x-0 -top-2 h-6 pointer-events-none overflow-hidden">
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 1440 24"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <circle cx="32" cy="8" r="4" fill="black" />
+            <circle cx="1408" cy="8" r="4" fill="black" />
+            <motion.path
+              d="M 32 8 C 240 8 480 22 720 22 C 960 22 1200 8 1408 8"
+              stroke="black"
+              strokeWidth="1.5"
+              fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 1.5, ease: "easeInOut", delay: 0.3 }}
+            />
+          </svg>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// HERO
+// ─────────────────────────────────────────────────────────────
+
+function Hero() {
+  const [keyword, setKeyword] = useState("");
+  const [location, setLocation] = useState("");
+  const router = useRouter();
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (keyword.trim()) params.set("search", keyword.trim());
+    if (location.trim()) params.set("location", location.trim());
+    router.push(`/jobs${params.toString() ? `?${params.toString()}` : ""}`);
+  }
+
+  return (
+    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-32 pb-16 flex flex-col justify-between">
+      {/* Massive editorial headline */}
+      <motion.div
+        initial={{ opacity: 0, y: 48 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <h1 className="font-display font-normal uppercase tracking-tight text-black leading-none" aria-label="Infrastructure jobs, built for builders.">
+
+          {/* Line 1 — with inline decorative elements */}
+          <span className="flex items-center flex-wrap gap-4 mb-1" aria-hidden="true">
+            <span className="text-[clamp(2.5rem,11vw,10rem)]">INFRASTRUCTURE</span>
+            {/* Featured role card */}
+            <span className="hidden md:flex flex-col justify-center w-40 h-20 rounded-xl border border-gray-200 bg-[#0D0F12] px-3 py-2 flex-shrink-0 self-center">
+              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mb-1 block">FEATURED ROLE</span>
+              <span className="font-sans text-[11px] text-white font-medium leading-tight mb-1.5 block">Sr. Data Center Engineer</span>
+              <span className="inline-block w-fit px-2 py-0.5 rounded-full text-[9px] font-mono bg-[#3ECF8E]/20 text-[#3ECF8E]">AI Infrastructure</span>
+            </span>
+            {/* Code badge */}
+            <span className="hidden md:flex w-14 h-14 rounded-xl bg-black items-center justify-center flex-shrink-0 self-center">
+              <span className="font-mono text-base text-white leading-none">{"{ }"}</span>
+            </span>
+          </span>
+
+          {/* Line 2 — with spinning star */}
+          <span className="flex items-baseline gap-2 mb-1 flex-wrap" aria-hidden="true">
+            <span className="text-[clamp(2.5rem,11vw,10rem)]">JOBS,&nbsp;</span>
+            <motion.span
+              className="text-[#3ECF8E] inline-block text-[clamp(2.5rem,11vw,10rem)]"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              aria-hidden="true"
+            >
+              ✦
+            </motion.span>
+            <span className="text-[clamp(2.5rem,11vw,10rem)]">&nbsp;BUILT</span>
+          </span>
+
+          {/* Line 3 — with inline description */}
+          <span className="flex items-end flex-wrap gap-8" aria-hidden="true">
+            <span className="text-[clamp(2.5rem,11vw,10rem)]">FOR BUILDERS.</span>
+            <p className="hidden xl:block max-w-xs font-sans text-sm font-normal not-uppercase text-gray-400 leading-relaxed normal-case tracking-normal pb-2 flex-shrink-0" style={{ textTransform: "none", letterSpacing: "normal" }}>
+              CoreStack aggregates data center and AI infrastructure roles from top employers — updated daily. Your GitHub profile is your resume.
+            </p>
+          </span>
+
+        </h1>
+      </motion.div>
+
+      {/* Search + bottom bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="mt-14"
+      >
+        {/* Search bar */}
+        <form onSubmit={handleSearch} className="max-w-3xl" role="search">
+          <div className="flex items-center h-14 bg-white border-2 border-black rounded-full px-2">
+            {/* Keyword */}
+            <label htmlFor="hero-keyword" className="sr-only">Job title or keyword</label>
+            <div className="flex items-center gap-2 flex-1 px-4 min-w-0">
+              <Search size={16} className="text-gray-400 flex-shrink-0" aria-hidden="true" />
+              <input
+                id="hero-keyword"
+                type="search"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="Search roles, companies, or keywords..."
+                className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-black placeholder:text-gray-400"
+              />
+            </div>
+            {/* Divider */}
+            <div className="w-px h-6 bg-[#E5E5E5] flex-shrink-0" aria-hidden="true" />
+            {/* Location */}
+            <label htmlFor="hero-location" className="sr-only">Location</label>
+            <div className="flex items-center gap-2 flex-1 px-4 min-w-0">
+              <MapPin size={16} className="text-gray-400 flex-shrink-0" aria-hidden="true" />
+              <input
+                id="hero-location"
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Location"
+                className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-black placeholder:text-gray-400"
+              />
+            </div>
+            {/* Submit */}
+            <button
+              type="submit"
+              className="flex-shrink-0 bg-black text-white rounded-full h-10 px-6 font-mono text-sm font-medium mr-1 hover:bg-gray-900 transition-colors duration-150"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+
+        {/* Bottom bar */}
+        <div className="border-t border-[#E5E5E5] mt-8 pt-6 flex items-center justify-between flex-wrap gap-4">
+          <a
+            href="mailto:hello@corestack.io"
+            className="flex items-center gap-2 font-mono text-sm text-black underline underline-offset-2 hover:text-[#3ECF8E] transition-colors duration-150"
+          >
+            <MessageCircle size={14} aria-hidden="true" />
+            Contact us
+          </a>
+
+          <div className="flex items-center gap-4 font-mono text-sm text-gray-400" aria-label="Featured employers">
+            <span>Equinix</span>
+            <span className="h-4 w-px bg-gray-200" aria-hidden="true" />
+            <span>CoreWeave</span>
+            <span className="h-4 w-px bg-gray-200" aria-hidden="true" />
+            <span>Digital Realty</span>
+          </div>
+
+          <div className="flex items-center gap-2 font-mono text-sm text-black">
+            <span>Scroll down</span>
+            <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center" aria-hidden="true">
+              <ChevronDown size={14} className="text-white" />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 1 — RESOURCES
+// ─────────────────────────────────────────────────────────────
+
+const RESOURCE_CARDS = [
   {
     icon: Server,
-    title: "Niche by design",
-    body: "Every role on CoreStack is in data center ops, construction, electrical, cooling, AI infrastructure, or related fields. No noise. No irrelevant listings.",
-  },
-  {
-    icon: GithubIcon,
-    title: "GitHub-native profiles",
-    body: "Candidates sign in with GitHub. Their public repos, tech stack, and contribution activity are automatically synced — giving employers a real signal, not just a resume.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Verified certifications",
-    body: "Engineers display industry credentials — AWS, CKA, BICSI, CompTIA, Cisco — directly on their profiles. Real qualifications, visible at a glance.",
+    title: "Data Center Ops",
+    body: "Facilities, power, cooling, and DCIM roles at the world's largest data center operators.",
   },
   {
     icon: Zap,
-    title: "Automated and always fresh",
-    body: "Listings are aggregated daily from top employers across Greenhouse, Lever, and direct company feeds. No stale postings. No ghost jobs.",
+    title: "AI Infrastructure",
+    body: "GPU clusters, HPC, and ML infrastructure roles at hyperscalers and AI-native companies. The fastest growing category on CoreStack.",
+  },
+  {
+    icon: BadgeCheck,
+    title: "Certified Talent",
+    body: "Engineers with AWS, BICSI, CKA, and Cisco credentials. Verified certifications visible on every candidate profile.",
   },
 ] as const;
 
-const CANDIDATE_FEATURES = [
-  "GitHub OAuth sign-in",
-  "Auto-synced repos and skill graph",
-  "Industry certification badges",
-  "Open to Work discovery",
-  "Saved job alerts",
+function ResourcesSection() {
+  return (
+    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+      <Link href="/wiki" className="block mb-16 group">
+        <h2 className="font-display font-normal text-[clamp(2rem,7vw,6rem)] uppercase text-black leading-tight group-hover:text-[#3ECF8E] transition-colors duration-150">
+          INFRASTRUCTURE<br />RESOURCES ↗
+        </h2>
+      </Link>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {RESOURCE_CARDS.map(({ icon: Icon, title, body }, i) => (
+          <motion.div
+            key={title}
+            className="bg-[#F5F5F5] rounded-2xl p-8 hover:bg-[#EFEFEF] transition-colors duration-150 cursor-pointer"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="w-10 h-10 rounded-lg bg-[#3ECF8E]/20 flex items-center justify-center mb-6">
+              <Icon size={20} className="text-[#3ECF8E]" aria-hidden="true" />
+            </div>
+            <h3 className="font-display text-2xl text-black mb-3">{title}</h3>
+            <p className="font-sans text-sm text-gray-500 leading-relaxed">{body}</p>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 2 — ACCORDION
+// ─────────────────────────────────────────────────────────────
+
+const ACCORDION_ITEMS = [
+  {
+    title: "Find Your Role",
+    body: "Search and filter thousands of data center and AI infrastructure roles updated daily. Set saved searches and get instant email alerts when new matching roles are posted.",
+  },
+  {
+    title: "Build Your Profile",
+    body: "Sign in with GitHub and your entire tech stack syncs automatically. Repos, languages, topics, and contribution activity — visible to employers at a glance. Add certification badges in one click.",
+  },
+  {
+    title: "Get Discovered",
+    body: "Toggle Open to Work and your profile appears in our talent directory. Premium employers receive monthly CoreStack Score reports — ranked candidates in their exact category, delivered before they even post a job.",
+  },
+  {
+    title: "Post and Hire",
+    body: "Standard and Featured job listings reach thousands of infrastructure engineers. View applicant GitHub profiles and certifications directly — no resume parsing, no noise.",
+  },
 ];
 
-const EMPLOYER_FEATURES = [
-  "Standard and Featured listings",
-  "Candidate profile browsing",
-  "GitHub signal on every applicant",
-  "Certification verification",
-  "Monthly CoreStack Score reports (Premium)",
+function AccordionSection() {
+  const [open, setOpen] = useState(0);
+
+  return (
+    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+      <h2 className="font-display font-normal text-[clamp(2rem,6vw,5.5rem)] uppercase text-black mb-16 leading-tight">
+        INTRODUCING<br />CORESTACK
+      </h2>
+
+      <div>
+        {ACCORDION_ITEMS.map((item, i) => (
+          <div key={item.title} className="border-b border-[#E5E5E5]">
+            <button
+              onClick={() => setOpen(open === i ? -1 : i)}
+              className="w-full py-6 flex items-center justify-between hover:bg-[#FAFAFA] transition-colors duration-150 -mx-8 px-8 text-left"
+              aria-expanded={open === i}
+            >
+              <span className="font-display text-2xl md:text-3xl font-normal text-black">
+                {item.title}
+              </span>
+              <span className="text-2xl font-light text-black flex-shrink-0 ml-4 leading-none" aria-hidden="true">
+                {open === i ? "−" : "+"}
+              </span>
+            </button>
+
+            <AnimatePresence initial={false}>
+              {open === i && (
+                <motion.div
+                  key="body"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.22, ease: "easeInOut" }}
+                  style={{ overflow: "hidden" }}
+                >
+                  <p className="font-sans text-sm text-gray-500 max-w-lg leading-relaxed pt-2 pb-8">
+                    {item.body}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 3 — COVERED
+// ─────────────────────────────────────────────────────────────
+
+function ConnectorDiagram({ nodes }: {
+  nodes: { icon: React.ReactNode; accent?: boolean; label: string }[];
+}) {
+  return (
+    <div className="flex items-center justify-center mt-8 gap-0" aria-hidden="true">
+      {nodes.map((node, i) => (
+        <div key={i} className="flex items-center">
+          <div
+            className={`w-12 h-12 rounded-xl border flex items-center justify-center ${
+              node.accent
+                ? "bg-[#3ECF8E] border-black"
+                : "bg-white border-gray-300"
+            }`}
+            title={node.label}
+          >
+            {node.icon}
+          </div>
+          {i < nodes.length - 1 && (
+            <div className="w-12 border-t-2 border-dashed border-gray-300" />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OrbitDiagram() {
+  return (
+    <div className="relative w-36 h-36 mx-auto mt-8" aria-hidden="true">
+      <div className="absolute inset-0 rounded-full border-2 border-gray-200" />
+      <div className="absolute inset-5 rounded-full border-2 border-gray-200" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-[#3ECF8E]/15 flex items-center justify-center">
+          <span className="font-mono text-xs font-bold text-[#3ECF8E]">CS</span>
+        </div>
+      </div>
+      <motion.div
+        className="absolute inset-0"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+      >
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-black" />
+      </motion.div>
+      <motion.div
+        className="absolute inset-5"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+      >
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#3ECF8E]" />
+      </motion.div>
+    </div>
+  );
+}
+
+function CoveredSection() {
+  return (
+    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+      <h2 className="font-display font-normal text-[clamp(2rem,5vw,4.5rem)] uppercase text-black mb-12 leading-tight">
+        CORESTACK HAS<br />GOT YOU COVERED
+      </h2>
+
+      <div className="flex flex-col gap-4">
+        {[
+          {
+            title: "GitHub-native candidate profiles",
+            visual: (
+              <ConnectorDiagram nodes={[
+                { icon: <GithubIcon size={20} />, label: "GitHub" },
+                { icon: <Zap size={20} className="text-black" />, label: "CoreStack", accent: true },
+                { icon: <Briefcase size={20} className="text-gray-500" />, label: "Employer" },
+              ]} />
+            ),
+          },
+          {
+            title: "Automated monthly talent reports",
+            visual: <OrbitDiagram />,
+          },
+          {
+            title: "Certification verification at a glance",
+            visual: (
+              <ConnectorDiagram nodes={[
+                { icon: <User size={20} className="text-gray-500" />, label: "Candidate" },
+                { icon: <BadgeCheck size={20} className="text-black" />, label: "Verified Badge", accent: true },
+                { icon: <Briefcase size={20} className="text-gray-500" />, label: "Employer" },
+              ]} />
+            ),
+          },
+        ].map(({ title, visual }, i) => (
+          <motion.div
+            key={title}
+            className="bg-[#F5F5F5] rounded-2xl p-8"
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h3 className="font-sans text-lg font-semibold text-black">{title}</h3>
+            {visual}
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 4 — TESTIMONIALS
+// ─────────────────────────────────────────────────────────────
+
+const TESTIMONIALS = [
+  {
+    category: "DATA CENTER OPS",
+    quote: (
+      <>
+        CoreStack found me a senior facilities role at{" "}
+        <strong>Equinix</strong> in three weeks. No other platform had roles
+        at this level of specificity.
+      </>
+    ),
+    name: "James Liu",
+    role: "Facilities Engineer, Dallas TX",
+  },
+  {
+    category: "AI INFRASTRUCTURE",
+    quote: (
+      <>
+        My GitHub profile did the talking. <strong>CoreWeave</strong> reached
+        out directly after seeing my Kubernetes repos on CoreStack.
+      </>
+    ),
+    name: "Mia Kumar",
+    role: "GPU Cluster Engineer, Remote",
+  },
+  {
+    category: "EMPLOYER",
+    quote: (
+      <>
+        The CoreStack Score report sent us three qualified{" "}
+        <strong>BICSI-certified</strong> candidates before we even posted the
+        role.
+      </>
+    ),
+    name: "Sarah Chen",
+    role: "Talent Lead, Digital Realty",
+  },
+  {
+    category: "CONSTRUCTION",
+    quote: (
+      <>
+        Found a $140k construction PM role at{" "}
+        <strong>Turner Construction</strong> within two weeks. The job was on
+        CoreStack before it appeared anywhere else.
+      </>
+    ),
+    name: "David Park",
+    role: "Construction PM, Seattle WA",
+  },
 ];
 
-const SCORE_CANDIDATES = [
-  { rank: "#1", initials: "AC", name: "Alex Chen",  username: "@alexchen-dc",    score: 94, pct: "94%",  opacity: "opacity-100" },
-  { rank: "#2", initials: "MK", name: "Mia Kumar",  username: "@mkumar-infra",   score: 87, pct: "87%",  opacity: "opacity-75"  },
-  { rank: "#3", initials: "JL", name: "James Liu",  username: "@jliu-ops",       score: 81, pct: "81%",  opacity: "opacity-50"  },
-];
+function TestimonialsSection() {
+  return (
+    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+      <h2 className="font-display font-normal text-[clamp(2rem,5vw,4.5rem)] uppercase text-black mb-12 leading-tight">
+        WHAT ENGINEERS<br />ARE SAYING
+      </h2>
+
+      <div className="flex gap-6 overflow-x-auto scrollbar-hide pb-4">
+        {TESTIMONIALS.map(({ category, quote, name, role }) => (
+          <article
+            key={name}
+            className="min-w-[340px] bg-[#F5F5F5] rounded-2xl p-8 flex flex-col justify-between flex-shrink-0"
+          >
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-4">
+                {category}
+              </p>
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <p className="font-sans text-base text-black leading-relaxed">{quote}</p>
+                <div
+                  className="w-8 h-8 rounded-full bg-black flex items-center justify-center flex-shrink-0 mt-1"
+                  aria-hidden="true"
+                >
+                  <ArrowRight size={14} className="text-white" />
+                </div>
+              </div>
+            </div>
+            <footer>
+              <p className="font-display text-lg text-black">{name}</p>
+              <p className="font-mono text-xs text-gray-400 mt-1">{role}</p>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// FOOTER
+// ─────────────────────────────────────────────────────────────
+
+function PageFooter() {
+  return (
+    <footer className="bg-[#0D0F12] py-12 px-8 md:px-16">
+      <div className="flex justify-between items-center flex-wrap gap-4 mb-8">
+        <Link href="/" className="font-display text-xl leading-none">
+          <span className="text-white">Core</span>
+          <span className="text-[#3ECF8E]">Stack</span>
+        </Link>
+        <nav aria-label="Footer navigation">
+          <ul className="flex gap-6 flex-wrap" role="list">
+            {[
+              { label: "Browse Jobs", href: "/jobs" },
+              { label: "Talent", href: "/talent" },
+              { label: "Wiki", href: "/wiki" },
+              { label: "Post a Job", href: "/employers" },
+            ].map(({ label, href }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className="text-sm font-sans text-white/40 hover:text-white/80 transition-colors duration-150"
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+      <div className="border-t border-white/10 pt-6">
+        <p className="text-xs text-white/25 font-mono text-center">
+          © 2025 CoreStack. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// PAGE
+// ─────────────────────────────────────────────────────────────
 
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
-
+      <HomeNav />
       <Hero />
-
-      {/* ── Section 1: Why CoreStack ─────────────────────────────────────── */}
-      <section className="bg-white py-32 border-t border-[#E5E5EA]">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#6B7280] text-center mb-5">
-            Why CoreStack
-          </p>
-          <h2 className="font-display text-[2.75rem] md:text-5xl text-[#0D0F12] text-center leading-tight mb-5">
-            Built for infrastructure.
-            <br />
-            Not generic job boards.
-          </h2>
-          <p className="font-sans text-lg text-[#6B7280] text-center max-w-xl mx-auto mb-20 leading-relaxed">
-            CoreStack is the only talent platform purpose-built for data center
-            construction, operations, and AI infrastructure.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
-            {WHY_CARDS.map(({ icon: Icon, title, body }) => (
-              <div
-                key={title}
-                className="bg-[#F5F5F7] rounded-2xl p-8 transition-shadow duration-200 hover:shadow-[0_4px_24px_rgba(0,0,0,0.07)]"
-              >
-                <div className="mb-5">
-                  <Icon size={22} />
-                </div>
-                <h3 className="font-display text-xl text-[#0D0F12] mb-2">{title}</h3>
-                <p className="font-sans text-sm text-[#6B7280] leading-relaxed">{body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 2: CoreStack Score ───────────────────────────────────── */}
-      <section className="bg-[#0D0F12] py-32">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-
-            {/* Left */}
-            <div>
-              <span className="inline-block border border-[#3ECF8E]/40 text-[#3ECF8E] rounded-full px-3 py-1 text-xs font-mono tracking-wider mb-6">
-                PREMIUM FEATURE
-              </span>
-              <h2 className="font-display text-[2.25rem] md:text-[2.75rem] text-white leading-tight mb-6">
-                The CoreStack Score.
-                <br />
-                Monthly talent reports
-                <br />
-                delivered to top employers.
-              </h2>
-              <div className="font-sans text-[#A1A1AA] leading-relaxed mb-8 space-y-4 text-[0.9375rem]">
-                <p>
-                  Every month, CoreStack automatically generates a ranked talent
-                  report and delivers it directly to our premium employer
-                  subscribers — before they even post a job.
-                </p>
-                <p>
-                  Each candidate is scored using our proprietary algorithm that
-                  analyzes GitHub activity, repository quality, language
-                  relevance, certification depth, and open-to-work status.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-10">
-                {["GitHub signal analysis", "Cert depth scoring", "Monthly auto-delivery"].map((pill) => (
-                  <span
-                    key={pill}
-                    className="border border-white/15 rounded-full px-3.5 py-1.5 text-xs font-mono text-white/70"
-                  >
-                    {pill}
-                  </span>
-                ))}
-              </div>
-              <a
-                href="/employers#premium"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#3ECF8E] text-[#0D0F12] font-sans font-medium text-sm rounded-xl hover:bg-[#34C47E] transition-colors duration-200"
-              >
-                Join the Premium Waitlist
-                <ArrowRight size={14} />
-              </a>
-            </div>
-
-            {/* Right — scorecard */}
-            <div
-              className="bg-[#161618] rounded-2xl p-8 relative overflow-hidden"
-              style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.06)" }}
-            >
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-                <span
-                  className="font-mono text-5xl text-white/5 font-bold"
-                  style={{ transform: "rotate(-15deg)" }}
-                >
-                  PREVIEW
-                </span>
-              </div>
-
-              <div className="flex justify-between items-center mb-1">
-                <span className="font-mono text-sm font-semibold text-white">CoreStack Score Report</span>
-                <span className="text-xs text-white/40 font-sans">April 2026</span>
-              </div>
-              <p className="text-xs font-mono text-white/40 mb-5">
-                Top 3 candidates · AI Infrastructure · Remote
-              </p>
-              <div className="border-t border-white/8 mb-5" />
-
-              <div className="flex flex-col gap-5">
-                {SCORE_CANDIDATES.map(({ rank, initials, name, username, score, pct, opacity }) => (
-                  <div key={rank} className="flex items-center gap-4">
-                    <span className="text-[#3ECF8E] font-mono font-bold text-sm w-6 text-center flex-shrink-0">
-                      {rank}
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-xs font-mono font-bold">{initials}</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white font-sans leading-tight">{name}</p>
-                      <p className="text-xs text-white/40 font-mono">{username}</p>
-                    </div>
-                    <div className="flex flex-col items-end gap-1.5 w-20 flex-shrink-0">
-                      <span className="text-sm font-mono font-bold text-white">{score}</span>
-                      <div className="w-full h-1 bg-white/10 rounded-full">
-                        <div
-                          className={`h-full rounded-full bg-[#3ECF8E] ${opacity}`}
-                          style={{ width: pct }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6 pt-5 border-t border-white/8">
-                <p className="text-xs text-white/30 font-mono text-center">
-                  Delivered automatically · 47 employers receiving reports
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 3: How It Works ──────────────────────────────────────── */}
-      <section className="bg-white py-32 border-b border-[#E5E5EA]">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#6B7280] text-center mb-5">
-            How It Works
-          </p>
-          <h2 className="font-display text-[2.75rem] md:text-5xl text-[#0D0F12] text-center leading-tight mb-24">
-            From search to hired
-            <br />
-            in three steps.
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-            {[
-              {
-                n: "01",
-                title: "Create your profile",
-                body: "Sign in with GitHub in one click. Your repos, stack, and certifications sync automatically. Add your open-to-work preferences and you're discoverable.",
-              },
-              {
-                n: "02",
-                title: "Browse curated roles",
-                body: "Search and filter hundreds of data center and AI infrastructure roles updated daily from top employers. Save searches and get instant email alerts on new matches.",
-              },
-              {
-                n: "03",
-                title: "Get found by employers",
-                body: "Premium employers receive monthly CoreStack Score reports featuring the top-ranked candidates in their category. Your GitHub signal and certifications work for you.",
-              },
-            ].map(({ n, title, body }) => (
-              <div key={n} className="flex flex-col">
-                <p
-                  className="font-display text-[6rem] leading-none text-[#0D0F12] mb-6 select-none"
-                  style={{ opacity: 0.06 }}
-                  aria-hidden="true"
-                >
-                  {n}
-                </p>
-                <h3 className="font-display text-xl text-[#0D0F12] mb-3">{title}</h3>
-                <p className="font-sans text-sm text-[#6B7280] leading-relaxed">{body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 4: For Candidates / For Employers ────────────────────── */}
-      <section className="bg-[#F5F5F7] py-32">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-            {/* For Candidates */}
-            <div className="bg-white rounded-2xl p-10 flex flex-col">
-              <p className="text-xs font-mono uppercase tracking-[0.18em] text-[#3ECF8E] mb-4">
-                For Candidates
-              </p>
-              <h3 className="font-display text-[1.75rem] text-[#0D0F12] leading-snug mb-4">
-                Your GitHub is your resume.
-              </h3>
-              <p className="font-sans text-sm text-[#6B7280] leading-relaxed mb-8">
-                Connect GitHub, add your certifications, and set your
-                availability. CoreStack builds your infrastructure profile
-                automatically — and shares it with the employers that matter.
-              </p>
-              <ul className="flex flex-col gap-3 mb-10" role="list">
-                {CANDIDATE_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-[#0D0F12] font-sans">
-                    <Check size={15} className="text-[#3ECF8E] flex-shrink-0" aria-hidden="true" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto">
-                <a
-                  href="/auth/signup"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#0D0F12] text-white font-sans font-medium text-sm rounded-xl hover:bg-[#1E2128] transition-colors duration-200"
-                >
-                  Create Free Profile
-                </a>
-              </div>
-            </div>
-
-            {/* For Employers */}
-            <div className="bg-[#0D0F12] rounded-2xl p-10 flex flex-col">
-              <p className="text-xs font-mono uppercase tracking-[0.18em] text-[#3ECF8E] mb-4">
-                For Employers
-              </p>
-              <h3 className="font-display text-[1.75rem] text-white leading-snug mb-4">
-                Hire before your competitors
-                <br />
-                even start searching.
-              </h3>
-              <p className="font-sans text-sm text-[#A1A1AA] leading-relaxed mb-8">
-                Post a listing, browse open-to-work candidates, or subscribe
-                to monthly CoreStack Score reports — pre-ranked talent in your
-                exact category, delivered automatically.
-              </p>
-              <ul className="flex flex-col gap-3 mb-10" role="list">
-                {EMPLOYER_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-white font-sans">
-                    <Check size={15} className="text-[#3ECF8E] flex-shrink-0" aria-hidden="true" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto">
-                <a
-                  href="/employers"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#3ECF8E] text-[#0D0F12] font-sans font-medium text-sm rounded-xl hover:bg-[#34C47E] transition-colors duration-200"
-                >
-                  Post a Job
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 5: Final CTA Banner ──────────────────────────────────── */}
-      <section className="bg-[#0D0F12] py-36 text-center">
-        <div className="mx-auto max-w-2xl px-6">
-          <h2 className="font-display text-[2.75rem] md:text-5xl text-white leading-tight mb-5">
-            Infrastructure talent.
-            <br />
-            Finally in one place.
-          </h2>
-          <p className="font-sans text-[#A1A1AA] mb-12 text-lg leading-relaxed">
-            Join 1,200+ engineers and 300+ employers already on CoreStack.
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <a
-              href="/jobs"
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#3ECF8E] text-[#0D0F12] font-sans font-medium text-sm rounded-xl hover:bg-[#34C47E] transition-colors duration-200"
-            >
-              Browse Jobs
-              <ArrowRight size={14} />
-            </a>
-            <a
-              href="/employers"
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-transparent border border-white/20 text-white font-sans font-medium text-sm rounded-xl hover:border-white/40 transition-colors duration-200"
-            >
-              Post a Job
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <footer className="bg-[#0D0F12] border-t border-white/8 py-10">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
-          <div className="flex justify-between items-center flex-wrap gap-4">
-            <span className="font-mono text-base font-bold">
-              <span className="text-white">Core</span>
-              <span className="text-[#3ECF8E]">Stack</span>
-            </span>
-            <nav aria-label="Footer navigation">
-              <ul className="flex gap-6 flex-wrap" role="list">
-                {[
-                  { label: "Browse Jobs", href: "/jobs" },
-                  { label: "Talent",      href: "/talent" },
-                  { label: "Wiki",        href: "/wiki" },
-                  { label: "Post a Job",  href: "/employers" },
-                ].map(({ label, href }) => (
-                  <li key={href}>
-                    <a
-                      href={href}
-                      className="text-sm font-sans text-white/40 hover:text-white/80 transition-colors duration-150"
-                    >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-          <div className="mt-8 pt-6 border-t border-white/8">
-            <p className="text-xs text-white/25 font-mono text-center">
-              © 2025 CoreStack. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
-
+      <ResourcesSection />
+      <AccordionSection />
+      <CoveredSection />
+      <TestimonialsSection />
+      <PageFooter />
     </div>
   );
 }
