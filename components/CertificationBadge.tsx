@@ -27,7 +27,7 @@ const ISSUER_STYLES: Record<string, { bg: string; text: string }> = {
 };
 
 function getIssuerStyle(issuer: string) {
-  return ISSUER_STYLES[issuer] ?? { bg: "bg-[#E2DDD8]", text: "text-text-muted" };
+  return ISSUER_STYLES[issuer] ?? { bg: "bg-[#E0E0E0]", text: "text-text-muted" };
 }
 
 function parseMonthYear(s: string): Date | null {
@@ -61,7 +61,7 @@ export function CertificationBadge({ cert }: { cert: DbCertification }) {
   const expiryState = getExpiryState(cert.expiresAt);
 
   return (
-    <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-4 hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-150">
+    <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-4 hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-150">
       <div className="mb-3">
         <span
           className={cn(

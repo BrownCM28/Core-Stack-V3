@@ -75,7 +75,7 @@ function ProgressBar({ step }: { step: 1 | 2 | 3 }) {
                     ? "bg-accent border-black text-[#0D0F12]"
                     : active
                     ? "bg-[#0D0F12] border-black text-white"
-                    : "bg-surface border-[#E2DDD8] text-text-muted"
+                    : "bg-surface border-[#E0E0E0] text-text-muted"
                 )}
               >
                 {done ? <Check size={13} /> : n}
@@ -93,7 +93,7 @@ function ProgressBar({ step }: { step: 1 | 2 | 3 }) {
               <div
                 className={cn(
                   "flex-1 h-[1.5px] mb-5 mx-2",
-                  done ? "bg-accent" : "bg-[#E2DDD8]"
+                  done ? "bg-accent" : "bg-[#E0E0E0]"
                 )}
               />
             )}
@@ -119,7 +119,7 @@ function Label({ children, required }: { children: React.ReactNode; required?: b
 }
 
 const inputCls =
-  "w-full px-3 py-2.5 bg-surface border-[1.5px] border-[#E2DDD8] rounded-[6px] font-sans text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent focus:shadow-[0_0_0_2px_rgba(62,207,142,0.15)] transition-all";
+  "w-full px-3 py-2.5 bg-surface border-[1.5px] border-[#E0E0E0] rounded-[6px] font-sans text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent focus:shadow-[0_0_0_2px_rgba(62,207,142,0.15)] transition-all";
 
 // ─── Steps ───────────────────────────────────────────────────────────────────
 
@@ -326,8 +326,8 @@ function Step2(props: {
                 selected
                   ? "border-accent shadow-[0_0_0_1px_#3ECF8E,0_0_24px_rgba(62,207,142,0.15)]"
                   : isFeature
-                  ? "border-[#E2DDD8] hover:border-accent/50"
-                  : "border-[#E2DDD8] hover:border-accent/50"
+                  ? "border-[#E0E0E0] hover:border-accent/50"
+                  : "border-[#E0E0E0] hover:border-accent/50"
               )}
             >
               {isFeature && (
@@ -391,7 +391,7 @@ function Step2(props: {
 
 function ReviewRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-start justify-between gap-4 py-3 border-b border-[#E2DDD8] last:border-0">
+    <div className="flex items-start justify-between gap-4 py-3 border-b border-[#E0E0E0] last:border-0">
       <span className="font-mono text-xs text-text-muted w-32 flex-shrink-0">{label}</span>
       <span className="font-sans text-sm text-text-primary text-right">{value}</span>
     </div>
@@ -412,8 +412,8 @@ function Step3(props: {
   return (
     <div className="flex flex-col gap-6">
       {/* Job summary */}
-      <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] px-6">
-        <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase py-4 border-b border-[#E2DDD8]">
+      <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] px-6">
+        <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase py-4 border-b border-[#E0E0E0]">
           Job Details
         </p>
         <ReviewRow label="Title" value={jobData.title} />
@@ -436,8 +436,8 @@ function Step3(props: {
       </div>
 
       {/* Tier + price */}
-      <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] px-6">
-        <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase py-4 border-b border-[#E2DDD8]">
+      <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] px-6">
+        <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase py-4 border-b border-[#E0E0E0]">
           Order Summary
         </p>
         <div className="flex items-center justify-between py-4">

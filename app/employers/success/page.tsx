@@ -68,7 +68,7 @@ export default async function EmployersSuccessPage({ searchParams }: Props) {
           )}
           <Link
             href="/jobs"
-            className="inline-flex items-center gap-2 px-6 py-2.5 border-[1.5px] border-[#E2DDD8] text-text-primary font-mono font-medium text-sm rounded-[6px] hover:border-accent hover:text-accent transition-all"
+            className="inline-flex items-center gap-2 px-6 py-2.5 border-[1.5px] border-[#E0E0E0] text-text-primary font-mono font-medium text-sm rounded-[6px] hover:border-accent hover:text-accent transition-all"
           >
             Browse all jobs
           </Link>

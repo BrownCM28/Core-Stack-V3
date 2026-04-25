@@ -32,7 +32,7 @@ function FilterCheckbox({
     <label className="flex items-center gap-2.5 cursor-pointer group mb-2.5">
       <span className="relative flex-shrink-0">
         <input type="checkbox" className="sr-only peer" checked={checked} onChange={onChange} />
-        <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E2DDD8] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150 flex items-center justify-center">
+        <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E0E0E0] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150 flex items-center justify-center">
           {checked && (
             <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="absolute">
               <path d="M1 4L3.5 6.5L9 1" stroke="#0D0F12" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -130,7 +130,7 @@ export function TalentPageContent() {
           value={location}
           onChange={(e) => setParam("location", e.target.value || null)}
           placeholder="City, state, or remote"
-          className="w-full font-sans text-xs bg-surface border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
+          className="w-full font-sans text-xs bg-surface border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
         />
       </FilterSection>
 
@@ -149,7 +149,7 @@ export function TalentPageContent() {
     <div className="min-h-screen bg-background">
 
       {/* Page header */}
-      <div className="border-b border-[#E2DDD8] bg-surface">
+      <div className="border-b border-[#E0E0E0] bg-surface">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="font-mono font-bold text-3xl text-text-primary mb-2">
             Open to Work
@@ -166,13 +166,13 @@ export function TalentPageContent() {
       </div>
 
       {/* Mobile filter toggle bar */}
-      <div className="lg:hidden sticky top-14 z-30 bg-background border-b border-[#E2DDD8] px-4 py-3 flex items-center justify-between">
+      <div className="lg:hidden sticky top-14 z-30 bg-background border-b border-[#E0E0E0] px-4 py-3 flex items-center justify-between">
         <span className="font-mono text-xs text-text-muted">
           <span className="text-text-primary font-semibold">{loading ? "…" : talent.length}</span> shown
         </span>
         <button
           onClick={() => setMobileFiltersOpen(true)}
-          className="flex items-center gap-2 font-mono text-xs text-text-primary border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
+          className="flex items-center gap-2 font-mono text-xs text-text-primary border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
         >
           <SlidersHorizontal size={13} />
           Filters
@@ -183,7 +183,7 @@ export function TalentPageContent() {
       {mobileFiltersOpen && (
         <div className="lg:hidden fixed inset-0 z-40 flex">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileFiltersOpen(false)} />
-          <aside className="relative z-10 w-[300px] bg-surface h-full overflow-y-auto p-6 border-r border-[#E2DDD8] shadow-2xl">
+          <aside className="relative z-10 w-[300px] bg-surface h-full overflow-y-auto p-6 border-r border-[#E0E0E0] shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <span className="font-mono font-semibold text-sm text-text-primary">Filters</span>
               <button onClick={() => setMobileFiltersOpen(false)} className="text-text-muted hover:text-accent p-1">
@@ -199,7 +199,7 @@ export function TalentPageContent() {
       <div className="flex">
 
         {/* Desktop sidebar */}
-        <aside className="hidden lg:block w-[280px] flex-shrink-0 border-r border-[#E2DDD8] bg-surface">
+        <aside className="hidden lg:block w-[280px] flex-shrink-0 border-r border-[#E0E0E0] bg-surface">
           <div className="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto px-6 py-8">
             <div className="flex items-center gap-2 mb-6">
               <SlidersHorizontal size={13} className="text-text-muted" />
@@ -229,7 +229,7 @@ export function TalentPageContent() {
               {hasActive && (
                 <button
                   onClick={clearAll}
-                  className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
+                  className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E0E0E0] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
                 >
                   Clear all filters
                 </button>

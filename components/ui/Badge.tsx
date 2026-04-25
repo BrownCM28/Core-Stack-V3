@@ -10,7 +10,7 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 const variantClasses: Record<BadgeVariant, string> = {
   new: "bg-accent border-[1.5px] border-black text-[#0D0F12]",
   featured: "bg-transparent border-[1.5px] border-accent text-accent",
-  muted: "bg-[#F5F2EE] border-[1.5px] border-[#E2DDD8] text-text-muted",
+  muted: "bg-[#F0F0F0] border-[1.5px] border-[#E0E0E0] text-text-muted",
   expired: "bg-red-50 border-[1.5px] border-red-300 text-red-600",
   expiring: "bg-amber-50 border-[1.5px] border-amber-300 text-amber-700",
 };

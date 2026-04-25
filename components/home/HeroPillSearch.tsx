@@ -23,35 +23,35 @@ export function HeroPillSearch() {
   return (
     <div className="mx-auto w-full max-w-[560px] mb-10">
       <div
-        className="flex items-center h-[52px] bg-white border border-[#E2DDD8] rounded-full pr-[6px]"
+        className="flex items-center h-[52px] bg-white border border-[#E0E0E0] rounded-full pr-[6px]"
         style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
       >
         {/* Title / keyword field — 55% */}
         <div className="flex items-center gap-2 pl-4 pr-3 flex-[0_0_55%] min-w-0">
-          <Search size={16} className="text-[#6B6560] flex-shrink-0" />
+          <Search size={16} className="text-[#6B7280] flex-shrink-0" />
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Job title or keyword"
-            className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-[#0D0F12] placeholder:text-[#6B6560]"
+            className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-[#0D0F12] placeholder:text-[#6B7280]"
           />
         </div>
 
         {/* Vertical divider */}
-        <div className="w-px h-6 bg-[#E2DDD8] flex-shrink-0" />
+        <div className="w-px h-6 bg-[#E0E0E0] flex-shrink-0" />
 
         {/* Location field — remaining width */}
         <div className="flex items-center gap-2 pl-3 pr-2 flex-1 min-w-0">
-          <MapPin size={16} className="text-[#6B6560] flex-shrink-0" />
+          <MapPin size={16} className="text-[#6B7280] flex-shrink-0" />
           <input
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Location"
-            className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-[#0D0F12] placeholder:text-[#6B6560]"
+            className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-[#0D0F12] placeholder:text-[#6B7280]"
           />
         </div>
 

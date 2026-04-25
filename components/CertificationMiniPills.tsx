@@ -29,7 +29,7 @@ export function CertificationMiniPills({ certs }: CertificationMiniPillsProps) {
         return (
           <span
             key={`${cert.issuer}-${cert.name}`}
-            className="inline-flex items-center gap-1.5 font-mono text-[10px] text-text-muted border border-[#E2DDD8] rounded-[4px] px-1.5 py-0.5"
+            className="inline-flex items-center gap-1.5 font-mono text-[10px] text-text-muted border border-[#E0E0E0] rounded-[4px] px-1.5 py-0.5"
           >
             <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", dotColor)} />
             {cert.name}

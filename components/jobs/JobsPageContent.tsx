@@ -79,13 +79,13 @@ export function JobsPageContent() {
       <div className="min-h-screen bg-background">
 
         {/* ── Mobile filter toggle bar ── */}
-        <div className="lg:hidden sticky top-14 z-30 bg-background border-b border-[#E2DDD8] px-4 py-3 flex items-center justify-between">
+        <div className="lg:hidden sticky top-14 z-30 bg-background border-b border-[#E0E0E0] px-4 py-3 flex items-center justify-between">
           <span className="font-mono text-xs text-text-muted">
             <span className="text-text-primary font-semibold">{total}</span> roles found
           </span>
           <button
             onClick={() => setMobileFiltersOpen(true)}
-            className="flex items-center gap-2 font-mono text-xs text-text-primary border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
+            className="flex items-center gap-2 font-mono text-xs text-text-primary border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
           >
             <SlidersHorizontal size={13} />
             Filters
@@ -99,7 +99,7 @@ export function JobsPageContent() {
               className="absolute inset-0 bg-black/50 backdrop-blur-sm"
               onClick={() => setMobileFiltersOpen(false)}
             />
-            <aside className="relative z-10 w-[300px] bg-surface h-full overflow-y-auto p-6 border-r border-[#E2DDD8] shadow-2xl">
+            <aside className="relative z-10 w-[300px] bg-surface h-full overflow-y-auto p-6 border-r border-[#E0E0E0] shadow-2xl">
               <div className="flex items-center justify-between mb-6">
                 <span className="font-mono font-semibold text-sm text-text-primary">
                   Filters
@@ -120,7 +120,7 @@ export function JobsPageContent() {
         <div className="flex">
 
           {/* Desktop sidebar */}
-          <aside className="hidden lg:block w-[280px] flex-shrink-0 border-r border-[#E2DDD8] bg-surface">
+          <aside className="hidden lg:block w-[280px] flex-shrink-0 border-r border-[#E0E0E0] bg-surface">
             <div className="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto px-6 py-8">
               <div className="flex items-center gap-2 mb-6">
                 <SlidersHorizontal size={13} className="text-text-muted" />
@@ -155,7 +155,7 @@ export function JobsPageContent() {
             </div>
 
             {/* Sort / results bar */}
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E2DDD8]">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E0E0E0]">
               <p className="font-mono text-sm text-text-muted">
                 <span className="text-text-primary font-semibold">{total}</span>{" "}
                 roles found
@@ -165,7 +165,7 @@ export function JobsPageContent() {
                 <select
                   value={sortBy}
                   onChange={(e) => handleSort(e.target.value)}
-                  className="appearance-none font-mono text-xs bg-surface border-[1.5px] border-[#E2DDD8] rounded-[6px] pl-3 pr-8 py-1.5 text-text-primary cursor-pointer focus:border-accent focus:outline-none hover:border-accent transition-colors duration-150"
+                  className="appearance-none font-mono text-xs bg-surface border-[1.5px] border-[#E0E0E0] rounded-[6px] pl-3 pr-8 py-1.5 text-text-primary cursor-pointer focus:border-accent focus:outline-none hover:border-accent transition-colors duration-150"
                 >
                   <option value="newest">Newest</option>
                   <option value="relevant">Most Relevant</option>
@@ -197,7 +197,7 @@ export function JobsPageContent() {
                 </p>
                 <button
                   onClick={() => router.replace(pathname)}
-                  className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
+                  className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E0E0E0] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
                 >
                   Clear all filters
                 </button>
@@ -292,8 +292,8 @@ function PageBtn({
         active
           ? "bg-accent border-black text-[#0D0F12] font-semibold"
           : disabled
-          ? "border-[#E2DDD8] text-[#C4BFB9] cursor-not-allowed"
-          : "border-[#E2DDD8] text-text-primary hover:border-accent hover:text-accent cursor-pointer"
+          ? "border-[#E0E0E0] text-[#C4BFB9] cursor-not-allowed"
+          : "border-[#E0E0E0] text-text-primary hover:border-accent hover:text-accent cursor-pointer"
       )}
     >
       {children}

@@ -17,7 +17,7 @@ export function WikiSidebarLink({ href, title }: WikiSidebarLinkProps) {
     <Link
       href={href}
       className={cn(
-        "font-sans text-sm text-[#6B6560] hover:text-[#0D0F12] transition-colors py-1 block leading-snug",
+        "font-sans text-sm text-[#6B7280] hover:text-[#0D0F12] transition-colors py-1 block leading-snug",
         isActive && "text-[#0D0F12] font-medium border-l-2 border-[#3ECF8E] pl-2 -ml-2"
       )}
     >

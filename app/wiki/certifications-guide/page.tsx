@@ -41,10 +41,10 @@ export default function CertificationsGuidePage() {
         <h1 className="font-display text-4xl font-normal text-[#0D0F12] leading-tight mb-4">
           {article.title}
         </h1>
-        <p className="font-sans text-lg text-[#6B6560] leading-relaxed mb-4">
+        <p className="font-sans text-lg text-[#6B7280] leading-relaxed mb-4">
           {article.description}
         </p>
-        <div className="flex items-center gap-3 font-mono text-xs text-[#6B6560] pb-6 border-b border-[#E2DDD8]">
+        <div className="flex items-center gap-3 font-mono text-xs text-[#6B7280] pb-6 border-b border-[#E0E0E0]">
           <span>{article.author}</span>
           <span>·</span>
           <span>{article.readTime}</span>
@@ -275,12 +275,12 @@ export default function CertificationsGuidePage() {
       </div>
 
       {/* Tags */}
-      <div className="mt-10 pt-6 border-t border-[#E2DDD8]">
-        <span className="font-mono text-xs text-[#6B6560] uppercase tracking-widest mr-3">Tags</span>
+      <div className="mt-10 pt-6 border-t border-[#E0E0E0]">
+        <span className="font-mono text-xs text-[#6B7280] uppercase tracking-widest mr-3">Tags</span>
         {article.tags.map((tag) => (
           <span
             key={tag}
-            className="font-mono text-xs bg-[#F5F2EE] text-[#6B6560] px-2 py-1 rounded mr-2"
+            className="font-mono text-xs bg-[#F0F0F0] text-[#6B7280] px-2 py-1 rounded mr-2"
           >
             {tag}
           </span>
@@ -288,14 +288,14 @@ export default function CertificationsGuidePage() {
       </div>
 
       {/* Related articles */}
-      <div className="mt-10 pt-6 border-t border-[#E2DDD8]">
+      <div className="mt-10 pt-6 border-t border-[#E0E0E0]">
         <h3 className="font-display text-xl font-normal text-[#0D0F12] mb-4">More from the Wiki</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {related.map((a) => (
             <Link
               key={a.slug}
               href={`/wiki/${a.slug}`}
-              className="block border border-[#E2DDD8] rounded-lg p-4 hover:border-[#3ECF8E] transition-colors"
+              className="block border border-[#E0E0E0] rounded-lg p-4 hover:border-[#3ECF8E] transition-colors"
             >
               <span className="font-mono text-xs border border-[#3ECF8E] text-[#3ECF8E] rounded-full px-2 py-0.5 inline-block mb-2">
                 {a.category}
@@ -303,7 +303,7 @@ export default function CertificationsGuidePage() {
               <p className="font-display text-sm font-normal text-[#0D0F12] leading-snug mb-1">
                 {a.title}
               </p>
-              <p className="font-mono text-xs text-[#6B6560]">{a.readTime}</p>
+              <p className="font-mono text-xs text-[#6B7280]">{a.readTime}</p>
             </Link>
           ))}
         </div>

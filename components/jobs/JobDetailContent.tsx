@@ -274,7 +274,7 @@ function BulletList({
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="font-mono font-semibold text-base text-text-primary mb-4 pb-2 border-b border-[#E2DDD8]">
+    <h2 className="font-mono font-semibold text-base text-text-primary mb-4 pb-2 border-b border-[#E0E0E0]">
       {children}
     </h2>
   );
@@ -282,7 +282,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 
 function JobDescription({ job }: { job: ApiJob }) {
   return (
-    <article className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-6 flex flex-col gap-8">
+    <article className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-6 flex flex-col gap-8">
 
       {job.description && (
         <section>
@@ -303,7 +303,7 @@ function JobDescription({ job }: { job: ApiJob }) {
       {job.requirements && job.requirements.length > 0 && (
         <section>
           <SectionHeading>Requirements</SectionHeading>
-          <BulletList items={job.requirements} dotColor="bg-[#E2DDD8]" />
+          <BulletList items={job.requirements} dotColor="bg-[#E0E0E0]" />
         </section>
       )}
 
@@ -336,8 +336,8 @@ function SidebarCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-5">
-      <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-4 pb-3 border-b border-[#E2DDD8]">
+    <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-5">
+      <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-4 pb-3 border-b border-[#E0E0E0]">
         {title}
       </p>
       {children}

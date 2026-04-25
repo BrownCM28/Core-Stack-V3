@@ -42,7 +42,7 @@ function FeaturedJobCard({ job }: { job: ApiJob }) {
             </span>
           </div>
 
-          <div className="pt-3 border-t border-[#E2DDD8]">
+          <div className="pt-3 border-t border-[#E0E0E0]">
             <span className="font-mono text-sm font-semibold text-text-primary">
               {formatSalary(job.salaryMin, job.salaryMax, job.salary)}
             </span>
@@ -57,13 +57,13 @@ export function FeaturedJobsStrip({ jobs }: { jobs: ApiJob[] }) {
   if (jobs.length === 0) return null;
 
   return (
-    <section className="bg-background border-b border-[#E2DDD8] py-10">
+    <section className="bg-background border-b border-[#E0E0E0] py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3 mb-6">
           <span className="font-mono text-[11px] text-text-muted tracking-[0.12em] uppercase whitespace-nowrap">
             Featured Roles
           </span>
-          <div className="flex-1 h-px bg-[#E2DDD8]" />
+          <div className="flex-1 h-px bg-[#E0E0E0]" />
         </div>
 
         <div className="scrollbar-hide flex gap-4 overflow-x-auto pb-2">

@@ -23,10 +23,10 @@ const ISSUERS = [
 const YEARS = Array.from({ length: 10 }, (_, i) => String(2026 - i));
 
 const inputClass =
-  "w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150";
+  "w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150";
 
 const selectClass =
-  "w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150 appearance-none cursor-pointer";
+  "w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150 appearance-none cursor-pointer";
 
 const ChevronSvg = () => (
   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -126,7 +126,7 @@ export function AddCertificationModal({ open, onClose, onSuccess }: AddCertifica
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-[#E2DDD8]">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-[#E0E0E0]">
             <h2 className="font-mono font-semibold text-base text-text-primary">
               Add Certification
             </h2>
@@ -229,7 +229,7 @@ export function AddCertificationModal({ open, onClose, onSuccess }: AddCertifica
                       checked={noExpiry}
                       onChange={() => setNoExpiry((v) => !v)}
                     />
-                    <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E2DDD8] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150 flex items-center justify-center">
+                    <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E0E0E0] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150 flex items-center justify-center">
                       {noExpiry && (
                         <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
                           <path d="M1 4L3.5 6.5L9 1" stroke="#0D0F12" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -277,7 +277,7 @@ export function AddCertificationModal({ open, onClose, onSuccess }: AddCertifica
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-6 py-5 border-t border-[#E2DDD8]">
+          <div className="flex items-center justify-between px-6 py-5 border-t border-[#E0E0E0]">
             <button
               onClick={onClose}
               className="font-mono text-sm text-text-muted hover:text-accent transition-colors duration-150"

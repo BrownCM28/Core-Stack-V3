@@ -65,7 +65,7 @@ function FaqItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border-b border-[#E2DDD8] last:border-0">
+    <div className="border-b border-[#E0E0E0] last:border-0">
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between gap-4 py-4 text-left"
@@ -156,9 +156,9 @@ export function EmployersContent() {
       </section>
 
       {/* ── Stats bar ── */}
-      <section className="bg-surface border-b border-[#E2DDD8]">
+      <section className="bg-surface border-b border-[#E0E0E0]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-5">
-          <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#E2DDD8]">
+          <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#E0E0E0]">
             {[
               { value: "3,241", label: "engineers" },
               { value: "148", label: "open to work" },
@@ -207,7 +207,7 @@ export function EmployersContent() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="bg-surface border-y border-[#E2DDD8]">
+      <section className="bg-surface border-y border-[#E0E0E0]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-10">
             <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-2">
@@ -256,7 +256,7 @@ export function EmployersContent() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="bg-surface border-t border-[#E2DDD8]">
+      <section className="bg-surface border-t border-[#E0E0E0]">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-14">
           <div className="text-center mb-8">
             <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-2">
@@ -266,7 +266,7 @@ export function EmployersContent() {
               Common questions
             </h2>
           </div>
-          <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] px-6 divide-y divide-[#E2DDD8]">
+          <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] px-6 divide-y divide-[#E0E0E0]">
             {FAQS.map((faq) => (
               <FaqItem
                 key={faq.id}

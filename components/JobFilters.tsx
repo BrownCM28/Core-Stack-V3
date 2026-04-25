@@ -186,7 +186,7 @@ export function JobFilters() {
               onClick={() => setParam("remote", remote ? null : "true")}
               className={cn(
                 "relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors duration-200",
-                remote ? "bg-accent" : "bg-[#E2DDD8]"
+                remote ? "bg-accent" : "bg-[#E0E0E0]"
               )}
             >
               <span
@@ -236,7 +236,7 @@ export function JobFilters() {
         </FilterSection>
 
         {/* Footer controls */}
-        <div className="flex flex-col gap-2.5 pt-2 border-t border-[#E2DDD8]">
+        <div className="flex flex-col gap-2.5 pt-2 border-t border-[#E0E0E0]">
           {hasActive && (
             <button
               onClick={clearAll}
@@ -344,7 +344,7 @@ function FilterCheckbox({
         checked={checked}
         onChange={onChange}
       />
-      <div className="w-4 h-4 border-[1.5px] border-[#E2DDD8] rounded-[3px] flex-shrink-0 peer-checked:bg-accent peer-checked:border-accent transition-colors duration-150" />
+      <div className="w-4 h-4 border-[1.5px] border-[#E0E0E0] rounded-[3px] flex-shrink-0 peer-checked:bg-accent peer-checked:border-accent transition-colors duration-150" />
       <span className="font-sans text-sm text-text-primary group-hover:text-accent transition-colors duration-150 leading-none select-none">
         {label}
       </span>

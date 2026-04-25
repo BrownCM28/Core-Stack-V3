@@ -111,7 +111,7 @@ export default async function ProfilePage({ params }: Props) {
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
 
         {/* ── Profile Header ── */}
-        <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-6 mb-6">
+        <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-start gap-6">
 
             {/* Avatar with OTW ring */}
@@ -223,7 +223,7 @@ export default async function ProfilePage({ params }: Props) {
                     href={`https://github.com/${ghProfile.username}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
+                    className="inline-flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#E0E0E0] rounded-[6px] font-mono text-xs text-text-primary hover:border-accent hover:text-accent transition-all duration-150"
                   >
                     <GithubIcon size={13} />
                     View GitHub Profile
@@ -246,14 +246,14 @@ export default async function ProfilePage({ params }: Props) {
 
             {/* Stack — only if GitHub is connected */}
             {ghProfile ? (
-              <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-5">
+              <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-5">
                 <SkillGraph
                   skillLanguages={skillLanguages}
                   skillTopics={skillTopics}
                 />
               </div>
             ) : (
-              <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-5">
+              <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-5">
                 <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-3">
                   Stack
                 </p>
@@ -265,7 +265,7 @@ export default async function ProfilePage({ params }: Props) {
 
             {/* Certifications */}
             {certifications.length > 0 && (
-              <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-5">
+              <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-5">
                 <CertificationGrid certifications={certifications} />
               </div>
             )}
@@ -273,7 +273,7 @@ export default async function ProfilePage({ params }: Props) {
 
           {/* Right: Repos */}
           <div className="lg:col-span-2">
-            <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-5">
+            <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-5">
               <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-4">
                 Public Repos
               </p>
@@ -302,7 +302,7 @@ export default async function ProfilePage({ params }: Props) {
                       />
                     ))}
                   </div>
-                  <div className="mt-5 pt-4 border-t border-[#E2DDD8]">
+                  <div className="mt-5 pt-4 border-t border-[#E0E0E0]">
                     <a
                       href={`https://github.com/${ghProfile.username}`}
                       target="_blank"

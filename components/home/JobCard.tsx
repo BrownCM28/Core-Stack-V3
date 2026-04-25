@@ -13,7 +13,7 @@ export function JobCard({ job }: { job: ApiJob }) {
       href={`/jobs/${job.id}`}
       className={cn(
         "group block bg-surface rounded-[8px] p-5",
-        "border-[1.5px] border-[#E2DDD8]",
+        "border-[1.5px] border-[#E0E0E0]",
         "transition-all duration-150 cursor-pointer",
         "hover:border-accent/40 hover:-translate-y-0.5 hover:shadow-sm"
       )}
@@ -50,7 +50,7 @@ export function JobCard({ job }: { job: ApiJob }) {
       </div>
 
       {/* Footer: salary + time */}
-      <div className="flex items-center justify-between pt-3 border-t border-[#E2DDD8]">
+      <div className="flex items-center justify-between pt-3 border-t border-[#E0E0E0]">
         <span className="font-mono text-sm font-semibold text-text-primary">
           {formatSalary(job.salaryMin, job.salaryMax, job.salary)}
         </span>

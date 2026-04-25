@@ -10,18 +10,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#F5F2EE",
+        background: "#F0F0F0",
         surface: "#FFFFFF",
         accent: "#3ECF8E",
         "accent-hover": "#34C47E",
         border: {
           DEFAULT: "#000000",
-          muted: "#E2DDD8",
+          muted: "#E0E0E0",
           input: "#1E2128",
         },
         text: {
           primary: "#0D0F12",
-          muted: "#6B6560",
+          muted: "#6B7280",
         },
         badge: {
           new: "#3ECF8E",

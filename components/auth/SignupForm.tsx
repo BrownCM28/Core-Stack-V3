@@ -62,7 +62,7 @@ export function SignupForm() {
   }
 
   return (
-    <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-8">
+    <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-8">
       <h1 className="font-mono font-bold text-xl text-text-primary text-center mb-1">
         Create your account
       </h1>
@@ -84,7 +84,7 @@ export function SignupForm() {
       <button
         onClick={handleGoogle}
         disabled={loadingGoogle}
-        className="w-full flex items-center justify-center gap-3 px-5 py-2.5 bg-surface border-[1.5px] border-[#E2DDD8] text-text-primary font-mono font-medium text-sm rounded-[6px] hover:border-accent hover:text-accent transition-all duration-150 mb-7 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full flex items-center justify-center gap-3 px-5 py-2.5 bg-surface border-[1.5px] border-[#E0E0E0] text-text-primary font-mono font-medium text-sm rounded-[6px] hover:border-accent hover:text-accent transition-all duration-150 mb-7 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {loadingGoogle ? <Loader2 size={16} className="animate-spin" /> : <GoogleIcon />}
         Continue with Google
@@ -93,7 +93,7 @@ export function SignupForm() {
       {/* Divider */}
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[#E2DDD8]" />
+          <div className="w-full border-t border-[#E0E0E0]" />
         </div>
         <div className="relative flex justify-center">
           <span className="bg-surface px-3 font-sans text-xs text-text-muted">
@@ -110,7 +110,7 @@ export function SignupForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
+          className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
         />
         <input
           type="email"
@@ -118,7 +118,7 @@ export function SignupForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
+          className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
         />
         <input
           type="password"
@@ -127,7 +127,7 @@ export function SignupForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={8}
-          className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
+          className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
         />
 
         {error && (

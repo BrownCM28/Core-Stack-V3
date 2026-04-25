@@ -90,19 +90,19 @@ async function sendAlertEmail(
 <html>
 <head><meta charset="utf-8" /></head>
 <body style="font-family:ui-monospace,monospace;background:#F5F0EB;margin:0;padding:24px;">
-  <div style="max-width:520px;margin:0 auto;background:#FAFAF8;border:1.5px solid #E2DDD8;border-radius:8px;overflow:hidden;">
+  <div style="max-width:520px;margin:0 auto;background:#FAFAF8;border:1.5px solid #E0E0E0;border-radius:8px;overflow:hidden;">
     <div style="background:#0D0F12;padding:20px 24px;">
       <span style="font-family:ui-monospace,monospace;font-size:14px;font-weight:700;color:#3ECF8E;letter-spacing:-0.02em;">CoreStack</span>
     </div>
     <div style="padding:24px;">
-      <p style="font-size:12px;color:#6B6560;margin:0 0 4px;">New match for your alert</p>
+      <p style="font-size:12px;color:#6B7280;margin:0 0 4px;">New match for your alert</p>
       <h2 style="font-size:16px;font-weight:700;color:#0D0F12;margin:0 0 20px;">${savedSearch.name}</h2>
 
-      <div style="border:1.5px solid #E2DDD8;border-radius:8px;padding:16px;margin-bottom:20px;">
+      <div style="border:1.5px solid #E0E0E0;border-radius:8px;padding:16px;margin-bottom:20px;">
         <p style="font-size:15px;font-weight:700;color:#0D0F12;margin:0 0 4px;">${job.title}</p>
-        <p style="font-size:13px;color:#6B6560;margin:0 0 12px;">${job.company} · ${job.location}</p>
+        <p style="font-size:13px;color:#6B7280;margin:0 0 12px;">${job.company} · ${job.location}</p>
         ${salary ? `<p style="font-size:13px;font-weight:700;color:#0D0F12;margin:0 0 12px;">${salary}</p>` : ""}
-        <p style="font-size:12px;color:#6B6560;margin:0;line-height:1.6;">${(job.description ?? "").slice(0, 200)}${(job.description?.length ?? 0) > 200 ? "…" : ""}</p>
+        <p style="font-size:12px;color:#6B7280;margin:0;line-height:1.6;">${(job.description ?? "").slice(0, 200)}${(job.description?.length ?? 0) > 200 ? "…" : ""}</p>
       </div>
 
       <a href="${jobUrl}"
@@ -110,7 +110,7 @@ async function sendAlertEmail(
         View &amp; Apply on CoreStack →
       </a>
     </div>
-    <div style="border-top:1px solid #E2DDD8;padding:16px 24px;">
+    <div style="border-top:1px solid #E0E0E0;padding:16px 24px;">
       <p style="font-size:11px;color:#9CA3AF;margin:0;">
         You're receiving this because you saved the search "${savedSearch.name}" on CoreStack.
         <a href="${SITE_URL}/dashboard" style="color:#3ECF8E;">Manage alerts →</a>

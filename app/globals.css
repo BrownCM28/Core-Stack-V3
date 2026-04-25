@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --background: #F5F2EE;
+  --background: #F0F0F0;
   --surface: #FFFFFF;
   --accent: #3ECF8E;
   --accent-hover: #34C47E;
   --border: #000000;
-  --border-muted: #E2DDD8;
+  --border-muted: #E0E0E0;
   --border-input: #1E2128;
   --text-primary: #0D0F12;
-  --text-muted: #6B6560;
+  --text-muted: #6B7280;
 }
 
 @layer base {
@@ -59,7 +59,7 @@
   margin-top: 2.5rem;
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #E2DDD8;
+  border-bottom: 1px solid #E0E0E0;
 }
 .wiki-content h3 {
   font-family: var(--font-vercetti), serif;
@@ -102,13 +102,13 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6B6560;
-  border-bottom: 2px solid #E2DDD8;
+  color: #6B7280;
+  border-bottom: 2px solid #E0E0E0;
   padding: 0.5rem 0.75rem;
   text-align: left;
 }
 .wiki-content td {
-  border-bottom: 1px solid #E2DDD8;
+  border-bottom: 1px solid #E0E0E0;
   padding: 0.625rem 0.75rem;
   color: #0D0F12;
 }

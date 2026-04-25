@@ -45,7 +45,7 @@ export function TalentCard({ profile }: TalentCardProps) {
   }));
 
   return (
-    <div className="group bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-5 hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-150 flex flex-col">
+    <div className="group bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-5 hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-150 flex flex-col">
       {/* Header row */}
       <div className="flex items-start gap-3 mb-4">
         {profile.avatarUrl ? (
@@ -81,7 +81,7 @@ export function TalentCard({ profile }: TalentCardProps) {
               <MapPin size={11} className="flex-shrink-0" />
               {profile.location}
             </span>
-            <span className="text-[#E2DDD8]">·</span>
+            <span className="text-[#E0E0E0]">·</span>
           </>
         )}
         <span>{desiredRoleLabel(profile.openToTypes)}</span>
@@ -91,7 +91,7 @@ export function TalentCard({ profile }: TalentCardProps) {
       {topLanguages.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
           {topLanguages.map((lang) => {
-            const color = LANGUAGE_COLORS[lang] ?? "#6B6560";
+            const color = LANGUAGE_COLORS[lang] ?? "#6B7280";
             return (
               <span
                 key={lang}
@@ -114,11 +114,11 @@ export function TalentCard({ profile }: TalentCardProps) {
       </div>
 
       {/* Footer */}
-      <div className="pt-3 border-t border-[#E2DDD8]">
+      <div className="pt-3 border-t border-[#E0E0E0]">
         {profile.githubUsername ? (
           <a
             href={`/profile/${profile.githubUsername}`}
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-text-primary border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-text-primary border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-1.5 hover:border-accent hover:text-accent transition-all duration-150"
           >
             View Profile
             <ArrowRight size={11} />

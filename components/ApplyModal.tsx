@@ -201,9 +201,9 @@ export function ApplyModal({ open, onClose, job }: ApplyModalProps) {
               </button>
 
               <div className="flex items-center gap-3 mb-5">
-                <div className="flex-1 h-px bg-[#E2DDD8]" />
+                <div className="flex-1 h-px bg-[#E0E0E0]" />
                 <span className="font-mono text-xs text-text-muted">or</span>
-                <div className="flex-1 h-px bg-[#E2DDD8]" />
+                <div className="flex-1 h-px bg-[#E0E0E0]" />
               </div>
 
               <p className="text-center">

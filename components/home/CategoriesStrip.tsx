@@ -28,14 +28,14 @@ const CATEGORIES: Category[] = [
 
 export function CategoriesStrip() {
   return (
-    <section className="bg-surface border-t border-[#E2DDD8] border-b border-b-[#E2DDD8] py-16">
+    <section className="bg-surface border-t border-[#E0E0E0] border-b border-b-[#E0E0E0] py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="flex items-center gap-3 mb-8">
           <span className="font-mono text-[11px] text-text-muted tracking-[0.12em] uppercase whitespace-nowrap">
             Browse by Category
           </span>
-          <div className="flex-1 h-px bg-[#E2DDD8]" />
+          <div className="flex-1 h-px bg-[#E0E0E0]" />
         </div>
 
         {/* Category grid */}
@@ -46,7 +46,7 @@ export function CategoriesStrip() {
               <a
                 key={cat.slug}
                 href="#"
-                className="group flex flex-col items-center gap-2.5 p-4 bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] text-center transition-all duration-150 hover:border-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)] hover:-translate-y-0.5"
+                className="group flex flex-col items-center gap-2.5 p-4 bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] text-center transition-all duration-150 hover:border-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)] hover:-translate-y-0.5"
               >
                 <Icon
                   size={18}

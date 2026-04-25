@@ -65,9 +65,9 @@ export default function HomePage() {
       <Hero />
 
       {/* ── Section 1: Why CoreStack ─────────────────────────────────────── */}
-      <section className="border-t border-[#E2DDD8] py-20">
+      <section className="border-t border-[#E0E0E0] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] text-center mb-3">
+          <p className="font-mono text-xs uppercase tracking-widest text-[#6B7280] text-center mb-3">
             WHY CORESTACK
           </p>
           <h2 className="font-display font-normal text-4xl text-[#0D0F12] text-center mb-4">
@@ -75,7 +75,7 @@ export default function HomePage() {
             <br />
             Not generic job boards.
           </h2>
-          <p className="font-sans text-[#6B6560] text-center max-w-xl mx-auto mb-12 leading-relaxed">
+          <p className="font-sans text-[#6B7280] text-center max-w-xl mx-auto mb-12 leading-relaxed">
             CoreStack is the only talent platform purpose-built for data center
             construction, operations, and AI infrastructure — where the people
             who keep the internet running come to find their next role.
@@ -84,11 +84,11 @@ export default function HomePage() {
             {WHY_CARDS.map(({ icon: Icon, title, body }) => (
               <div
                 key={title}
-                className="bg-white border border-[#E2DDD8] rounded-lg p-6 hover:border-[#3ECF8E] transition-colors duration-150"
+                className="bg-white border border-[#E0E0E0] rounded-lg p-6 hover:border-[#3ECF8E] transition-colors duration-150"
               >
                 <Icon size={20} />
                 <h3 className="font-display font-normal text-[#0D0F12] mt-3 mb-2">{title}</h3>
-                <p className="font-sans text-sm text-[#6B6560] leading-relaxed">{body}</p>
+                <p className="font-sans text-sm text-[#6B7280] leading-relaxed">{body}</p>
               </div>
             ))}
           </div>
@@ -96,7 +96,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 2: CoreStack Score ───────────────────────────────────── */}
-      <section className="border-t border-[#E2DDD8] py-20" style={{ background: "rgba(245,242,238,0.55)" }}>
+      <section className="border-t border-[#E0E0E0] py-20" style={{ background: "rgba(228,228,228,0.7)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
@@ -112,7 +112,7 @@ export default function HomePage() {
                 <br />
                 delivered to top employers.
               </h2>
-              <div className="font-sans text-[#6B6560] leading-relaxed mb-6 space-y-4">
+              <div className="font-sans text-[#6B7280] leading-relaxed mb-6 space-y-4">
                 <p>
                   Every month, CoreStack automatically generates a ranked talent
                   report and delivers it directly to our premium employer
@@ -149,11 +149,11 @@ export default function HomePage() {
             </div>
 
             {/* Right — scorecard mockup */}
-            <div className="bg-white border border-[#E2DDD8] rounded-xl p-6 shadow-sm relative overflow-hidden">
+            <div className="bg-white border border-[#E0E0E0] rounded-xl p-6 shadow-sm relative overflow-hidden">
               {/* PREVIEW watermark */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
                 <span
-                  className="font-mono text-5xl text-[#E2DDD8] font-bold opacity-40"
+                  className="font-mono text-5xl text-[#E0E0E0] font-bold opacity-40"
                   style={{ transform: "rotate(-15deg)" }}
                 >
                   PREVIEW
@@ -162,12 +162,12 @@ export default function HomePage() {
 
               <div className="flex justify-between items-center mb-1">
                 <span className="font-mono text-sm font-bold text-[#0D0F12]">CoreStack Score Report</span>
-                <span className="text-xs text-[#6B6560] font-sans">April 2026</span>
+                <span className="text-xs text-[#6B7280] font-sans">April 2026</span>
               </div>
-              <p className="text-xs font-mono text-[#6B6560] mb-4">
+              <p className="text-xs font-mono text-[#6B7280] mb-4">
                 Top 3 candidates · AI Infrastructure · Remote
               </p>
-              <div className="border-t border-[#E2DDD8] mb-4" />
+              <div className="border-t border-[#E0E0E0] mb-4" />
 
               <div className="flex flex-col gap-4">
                 {SCORE_CANDIDATES.map(({ rank, initials, name, username, score, pct, opacity }) => (
@@ -180,11 +180,11 @@ export default function HomePage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-[#0D0F12] font-mono leading-tight">{name}</p>
-                      <p className="text-xs text-[#6B6560] font-sans">{username}</p>
+                      <p className="text-xs text-[#6B7280] font-sans">{username}</p>
                     </div>
                     <div className="flex flex-col items-end gap-1 w-24 flex-shrink-0">
                       <span className="text-sm font-mono font-bold text-[#0D0F12]">{score}</span>
-                      <div className="w-full h-1.5 bg-[#E2DDD8] rounded-full">
+                      <div className="w-full h-1.5 bg-[#E0E0E0] rounded-full">
                         <div
                           className={`h-full rounded-full bg-[#3ECF8E] ${opacity}`}
                           style={{ width: pct }}
@@ -195,8 +195,8 @@ export default function HomePage() {
                 ))}
               </div>
 
-              <div className="mt-4 pt-4 border-t border-[#E2DDD8]">
-                <p className="text-xs text-[#6B6560] font-mono text-center">
+              <div className="mt-4 pt-4 border-t border-[#E0E0E0]">
+                <p className="text-xs text-[#6B7280] font-mono text-center">
                   Delivered automatically · 47 employers receiving reports
                 </p>
               </div>
@@ -207,9 +207,9 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 3: How It Works ──────────────────────────────────────── */}
-      <section className="border-t border-[#E2DDD8] py-20">
+      <section className="border-t border-[#E0E0E0] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] text-center mb-3">
+          <p className="font-mono text-xs uppercase tracking-widest text-[#6B7280] text-center mb-3">
             HOW IT WORKS
           </p>
           <h2 className="font-display font-normal text-4xl text-[#0D0F12] text-center mb-16">
@@ -221,7 +221,7 @@ export default function HomePage() {
             <div className="flex-1 text-center px-6 py-8 md:py-0">
               <p className="font-mono font-bold text-6xl leading-none mb-3 text-[#3ECF8E] opacity-20">01</p>
               <h3 className="font-display font-normal text-lg text-[#0D0F12] mb-2">Create your profile</h3>
-              <p className="font-sans text-sm text-[#6B6560] leading-relaxed max-w-xs mx-auto">
+              <p className="font-sans text-sm text-[#6B7280] leading-relaxed max-w-xs mx-auto">
                 Sign in with GitHub in one click. Your repos, stack, and
                 certifications sync automatically. Add your open-to-work
                 preferences and you&apos;re discoverable.
@@ -230,13 +230,13 @@ export default function HomePage() {
 
             <ChevronRight
               size={32}
-              className="hidden md:flex self-center flex-shrink-0 text-[#E2DDD8]"
+              className="hidden md:flex self-center flex-shrink-0 text-[#E0E0E0]"
             />
 
             <div className="flex-1 text-center px-6 py-8 md:py-0">
               <p className="font-mono font-bold text-6xl leading-none mb-3 text-[#3ECF8E] opacity-20">02</p>
               <h3 className="font-display font-normal text-lg text-[#0D0F12] mb-2">Browse curated roles</h3>
-              <p className="font-sans text-sm text-[#6B6560] leading-relaxed max-w-xs mx-auto">
+              <p className="font-sans text-sm text-[#6B7280] leading-relaxed max-w-xs mx-auto">
                 Search and filter hundreds of data center and AI infrastructure
                 roles updated daily from top employers. Save searches and get
                 instant email alerts on new matches.
@@ -245,13 +245,13 @@ export default function HomePage() {
 
             <ChevronRight
               size={32}
-              className="hidden md:flex self-center flex-shrink-0 text-[#E2DDD8]"
+              className="hidden md:flex self-center flex-shrink-0 text-[#E0E0E0]"
             />
 
             <div className="flex-1 text-center px-6 py-8 md:py-0">
               <p className="font-mono font-bold text-6xl leading-none mb-3 text-[#3ECF8E] opacity-20">03</p>
               <h3 className="font-display font-normal text-lg text-[#0D0F12] mb-2">Get found by employers</h3>
-              <p className="font-sans text-sm text-[#6B6560] leading-relaxed max-w-xs mx-auto">
+              <p className="font-sans text-sm text-[#6B7280] leading-relaxed max-w-xs mx-auto">
                 Premium employers receive monthly CoreStack Score reports
                 featuring the top-ranked candidates in their category. Your
                 GitHub signal and certifications work for you even while you
@@ -264,19 +264,19 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 4: For Candidates / For Employers ────────────────────── */}
-      <section className="border-t border-[#E2DDD8] py-20" style={{ background: "rgba(245,242,238,0.55)" }}>
+      <section className="border-t border-[#E0E0E0] py-20" style={{ background: "rgba(228,228,228,0.7)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* For Candidates */}
-            <div className="bg-white border border-[#E2DDD8] rounded-xl p-8 flex flex-col">
+            <div className="bg-white border border-[#E0E0E0] rounded-xl p-8 flex flex-col">
               <p className="text-xs font-mono uppercase tracking-widest text-[#3ECF8E] mb-3">
                 FOR CANDIDATES
               </p>
               <h3 className="font-display font-normal text-2xl text-[#0D0F12] mb-3">
                 Your GitHub is your resume.
               </h3>
-              <p className="font-sans text-sm text-[#6B6560] leading-relaxed mb-6">
+              <p className="font-sans text-sm text-[#6B7280] leading-relaxed mb-6">
                 Connect GitHub, add your certifications, and set your
                 availability. CoreStack builds your infrastructure profile
                 automatically — and shares it with the employers that matter.
@@ -338,14 +338,14 @@ export default function HomePage() {
       </section>
 
       {/* ── Section 5: Final CTA Banner ──────────────────────────────────── */}
-      <section className="border-t border-[#E2DDD8] py-20 text-center">
+      <section className="border-t border-[#E0E0E0] py-20 text-center">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-display font-normal text-4xl text-[#0D0F12] mb-4">
             Infrastructure talent.
             <br />
             Finally in one place.
           </h2>
-          <p className="font-sans text-[#6B6560] mb-8 max-w-md mx-auto">
+          <p className="font-sans text-[#6B7280] mb-8 max-w-md mx-auto">
             Join 1,200+ engineers and 300+ employers already on CoreStack.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
@@ -358,7 +358,7 @@ export default function HomePage() {
             </a>
             <a
               href="/employers"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-transparent border-[1.5px] border-[#E2DDD8] rounded-[6px] font-mono font-medium text-sm text-[#0D0F12] hover:border-[#3ECF8E] hover:text-[#3ECF8E] transition-colors duration-150"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-transparent border-[1.5px] border-[#E0E0E0] rounded-[6px] font-mono font-medium text-sm text-[#0D0F12] hover:border-[#3ECF8E] hover:text-[#3ECF8E] transition-colors duration-150"
             >
               Post a Job
             </a>
@@ -384,7 +384,7 @@ export default function HomePage() {
                 <a
                   key={href}
                   href={href}
-                  className="text-sm font-mono text-[#6B6560] hover:text-[#3ECF8E] transition-colors"
+                  className="text-sm font-mono text-[#6B7280] hover:text-[#3ECF8E] transition-colors"
                 >
                   {label}
                 </a>
@@ -392,7 +392,7 @@ export default function HomePage() {
             </nav>
           </div>
           <div className="mt-6 pt-6 border-t border-[#1E2128]">
-            <p className="text-xs text-[#6B6560] font-mono text-center">
+            <p className="text-xs text-[#6B7280] font-mono text-center">
               © 2025 CoreStack. All rights reserved.
             </p>
           </div>

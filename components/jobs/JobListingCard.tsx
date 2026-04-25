@@ -52,7 +52,7 @@ export function JobListingCard({ job, onApply }: JobListingCardProps) {
         "transition-all duration-150",
         job.featured
           ? "border-[1.5px] border-black border-l-[3px] border-l-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)] hover:-translate-y-0.5"
-          : "border-[1.5px] border-[#E2DDD8] hover:border-accent/40 hover:-translate-y-0.5 hover:shadow-sm"
+          : "border-[1.5px] border-[#E0E0E0] hover:border-accent/40 hover:-translate-y-0.5 hover:shadow-sm"
       )}
     >
       {/* Top row: badges */}
@@ -78,12 +78,12 @@ export function JobListingCard({ job, onApply }: JobListingCardProps) {
       {/* Company · location · type */}
       <p className="font-sans text-sm text-text-muted mb-4">
         <span className="font-semibold text-text-primary">{job.company}</span>
-        <span className="mx-1.5 text-[#E2DDD8]">·</span>
+        <span className="mx-1.5 text-[#E0E0E0]">·</span>
         <span className="inline-flex items-center gap-1">
           <MapPin size={11} className="inline flex-shrink-0" />
           {job.location}
         </span>
-        <span className="mx-1.5 text-[#E2DDD8]">·</span>
+        <span className="mx-1.5 text-[#E0E0E0]">·</span>
         <span className="inline-flex items-center gap-1">
           <Briefcase size={11} className="inline flex-shrink-0" />
           {job.type}
@@ -101,7 +101,7 @@ export function JobListingCard({ job, onApply }: JobListingCardProps) {
       </p>
 
       {/* Footer: time + apply button */}
-      <div className="flex items-center justify-between pt-4 border-t border-[#E2DDD8]">
+      <div className="flex items-center justify-between pt-4 border-t border-[#E0E0E0]">
         <span className="flex items-center gap-1.5 text-xs font-mono text-text-muted">
           <Clock size={11} />
           {timeAgoFromISO(job.postedAt)}

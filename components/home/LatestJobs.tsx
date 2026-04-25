@@ -11,7 +11,7 @@ export function LatestJobs({ jobs }: { jobs: ApiJob[] }) {
           <span className="font-mono text-[11px] text-text-muted tracking-[0.12em] uppercase">
             Latest Listings
           </span>
-          <div className="h-px w-10 bg-[#E2DDD8]" />
+          <div className="h-px w-10 bg-[#E0E0E0]" />
         </div>
         <Link
           href="/jobs"

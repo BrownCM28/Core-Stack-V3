@@ -8,11 +8,11 @@ export const metadata: Metadata = {
 
 export default function UnauthorizedPage() {
   return (
-    <main className="min-h-screen bg-[#F5F2EE] flex items-center justify-center px-4">
+    <main className="min-h-screen bg-[#F0F0F0] flex items-center justify-center px-4">
       <div className="text-center max-w-md w-full">
 
         {/* Status badge */}
-        <div className="inline-flex items-center gap-1.5 bg-white border border-[#e5e1dc] rounded-full px-3.5 py-1 text-xs font-semibold text-[#6B6560] uppercase tracking-widest mb-6">
+        <div className="inline-flex items-center gap-1.5 bg-white border border-[#e5e1dc] rounded-full px-3.5 py-1 text-xs font-semibold text-[#6B7280] uppercase tracking-widest mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" />
           403 Forbidden
         </div>
@@ -23,7 +23,7 @@ export default function UnauthorizedPage() {
         </h1>
 
         {/* Description */}
-        <p className="text-[#6B6560] text-sm leading-relaxed mb-8">
+        <p className="text-[#6B7280] text-sm leading-relaxed mb-8">
           You do not have the required permissions to view this page.
           If you think this is a mistake, contact your administrator.
         </p>
@@ -41,14 +41,14 @@ export default function UnauthorizedPage() {
           </Link>
           <Link
             href="/dashboard"
-            className="inline-flex items-center bg-white border border-[#e5e1dc] text-[#0D0F12] px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#F5F2EE] transition-colors"
+            className="inline-flex items-center bg-white border border-[#e5e1dc] text-[#0D0F12] px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#F0F0F0] transition-colors"
           >
             Go to dashboard
           </Link>
         </div>
 
         {/* Support link */}
-        <p className="mt-8 text-xs text-[#6B6560]">
+        <p className="mt-8 text-xs text-[#6B7280]">
           Need access?{" "}
           <a
             href="mailto:support@corestack.io"

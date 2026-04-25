@@ -59,7 +59,7 @@ function Modal({ open, onClose, title, children, className, maxWidth = "max-w-lg
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-[#E2DDD8]">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[#E0E0E0]">
             <h2 className="font-mono font-semibold text-base text-text-primary">
               {title}
             </h2>

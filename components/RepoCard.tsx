@@ -26,10 +26,10 @@ interface RepoCardProps {
 }
 
 export function RepoCard({ repo }: RepoCardProps) {
-  const langColor = repo.language ? (LANGUAGE_COLORS[repo.language] ?? "#6B6560") : "#6B6560";
+  const langColor = repo.language ? (LANGUAGE_COLORS[repo.language] ?? "#6B7280") : "#6B7280";
 
   return (
-    <div className="group bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-4 hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-150 flex flex-col">
+    <div className="group bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-4 hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-150 flex flex-col">
       {/* Repo name */}
       <a
         href={repo.url}

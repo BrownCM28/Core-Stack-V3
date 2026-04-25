@@ -27,7 +27,7 @@ const LANGUAGE_COLORS: Record<string, string> = {
   Dockerfile: "#384D54",
 };
 
-const DEFAULT_COLOR = "#6B6560";
+const DEFAULT_COLOR = "#6B7280";
 
 interface SkillGraphProps {
   skillLanguages: Record<string, number>;

@@ -67,7 +67,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
       aria-checked={checked}
       className={cn(
         "relative inline-flex h-5 w-9 items-center rounded-full border border-black transition-colors duration-200 flex-shrink-0",
-        checked ? "bg-accent" : "bg-[#E2DDD8]"
+        checked ? "bg-accent" : "bg-[#E0E0E0]"
       )}
     >
       <span
@@ -82,7 +82,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
 
 function SectionCard({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("bg-white border border-[#E2DDD8] rounded-lg p-6", className)}>
+    <div className={cn("bg-white border border-[#E0E0E0] rounded-lg p-6", className)}>
       {children}
     </div>
   );
@@ -124,7 +124,7 @@ function WireButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs border-[1.5px] border-[#E2DDD8] rounded-[6px] text-text-primary hover:border-accent hover:text-accent transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed",
+        "inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs border-[1.5px] border-[#E0E0E0] rounded-[6px] text-text-primary hover:border-accent hover:text-accent transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed",
         className
       )}
     >
@@ -195,7 +195,7 @@ function AddAlertModal({ open, onClose }: { open: boolean; onClose: () => void }
           className="relative w-full max-w-[400px] bg-surface border-[1.5px] border-black rounded-[8px] shadow-2xl pointer-events-auto animate-modal-in"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between px-6 py-5 border-b border-[#E2DDD8]">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-[#E0E0E0]">
             <h2 className="font-mono font-semibold text-base text-text-primary">Add Job Alert</h2>
             <button onClick={onClose} className="text-text-muted hover:text-accent transition-colors p-1">
               <X size={18} />
@@ -207,13 +207,13 @@ function AddAlertModal({ open, onClose }: { open: boolean; onClose: () => void }
               <input
                 type="text"
                 placeholder="e.g. AI Infra Remote"
-                className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
+                className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
               />
             </div>
             <div>
               <label className="block font-mono text-xs text-text-muted mb-1.5">Frequency</label>
               <div className="relative">
-                <select className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150 appearance-none cursor-pointer">
+                <select className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150 appearance-none cursor-pointer">
                   <option>Instant</option>
                   <option>Daily Digest</option>
                   <option>Weekly Digest</option>
@@ -224,7 +224,7 @@ function AddAlertModal({ open, onClose }: { open: boolean; onClose: () => void }
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-between px-6 py-5 border-t border-[#E2DDD8]">
+          <div className="flex items-center justify-between px-6 py-5 border-t border-[#E0E0E0]">
             <button onClick={onClose} className="font-mono text-sm text-text-muted hover:text-accent transition-colors">
               Cancel
             </button>
@@ -293,7 +293,7 @@ function ApplicationsTab() {
           </a>
         </div>
       ) : (
-        <div className="flex flex-col divide-y divide-[#E2DDD8]">
+        <div className="flex flex-col divide-y divide-[#E0E0E0]">
           {apps.map((app) => (
             <div
               key={app.id}
@@ -413,7 +413,7 @@ function AlertsTab() {
             {alerts.map((alert) => (
               <div
                 key={alert.id}
-                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 border-[1.5px] border-[#E2DDD8] rounded-[8px] hover:border-accent/30 transition-colors duration-150"
+                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 border-[1.5px] border-[#E0E0E0] rounded-[8px] hover:border-accent/30 transition-colors duration-150"
               >
                 <div className="flex-1 min-w-0">
                   <p className="font-mono font-semibold text-sm text-text-primary mb-0.5">
@@ -519,7 +519,7 @@ function CertificationsTab() {
                 <button
                   onClick={() => handleDelete(cert.id)}
                   disabled={deleting === cert.id}
-                  className="absolute top-2 right-2 p-1.5 rounded-[4px] bg-surface border border-[#E2DDD8] text-text-muted hover:text-red-500 hover:border-red-300 transition-all duration-150 opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                  className="absolute top-2 right-2 p-1.5 rounded-[4px] bg-surface border border-[#E0E0E0] text-text-muted hover:text-red-500 hover:border-red-300 transition-all duration-150 opacity-0 group-hover:opacity-100 disabled:opacity-50"
                   aria-label="Delete certification"
                 >
                   {deleting === cert.id
@@ -598,7 +598,7 @@ function OpenToWorkTab() {
   return (
     <SectionCard>
       {/* Big OTW toggle */}
-      <div className="flex items-start gap-5 mb-8 pb-8 border-b border-[#E2DDD8]">
+      <div className="flex items-start gap-5 mb-8 pb-8 border-b border-[#E0E0E0]">
         <div className="flex-1">
           <h2 className="font-mono font-bold text-xl text-text-primary mb-1">Open to Work</h2>
           <p className="font-sans text-sm text-text-muted">
@@ -626,7 +626,7 @@ function OpenToWorkTab() {
                     "px-4 py-2 font-mono text-xs rounded-[6px] border-[1.5px] transition-all duration-150",
                     desiredRole === type
                       ? "bg-accent border-black text-[#0D0F12] font-semibold"
-                      : "bg-surface border-[#E2DDD8] text-text-muted hover:border-accent hover:text-accent"
+                      : "bg-surface border-[#E0E0E0] text-text-muted hover:border-accent hover:text-accent"
                   )}
                 >
                   {type}
@@ -646,7 +646,7 @@ function OpenToWorkTab() {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="e.g. Austin, TX"
-                className="flex-1 font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
+                className="flex-1 font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
               />
               <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
                 <span className="relative flex-shrink-0">
@@ -656,7 +656,7 @@ function OpenToWorkTab() {
                     checked={remoteOk}
                     onChange={() => setRemoteOk((v) => !v)}
                   />
-                  <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E2DDD8] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150" />
+                  <div className="w-4 h-4 rounded-[3px] border-[1.5px] border-[#E0E0E0] bg-surface peer-checked:bg-accent peer-checked:border-accent transition-all duration-150" />
                 </span>
                 <span className="font-sans text-xs text-text-muted">Remote OK</span>
               </label>
@@ -679,7 +679,7 @@ function OpenToWorkTab() {
             )}
           </div>
 
-          <p className="font-mono text-xs text-text-muted pt-1 border-t border-[#E2DDD8]">
+          <p className="font-mono text-xs text-text-muted pt-1 border-t border-[#E0E0E0]">
             Your profile is publicly visible at{" "}
             <a href={`/profile/${username}`} className="text-accent hover:underline">
               corestack.io/profile/{username}
@@ -747,7 +747,7 @@ function SettingsTab() {
     <div className="flex flex-col gap-5">
       {/* Account */}
       <SectionCard>
-        <h3 className="font-mono font-semibold text-sm text-text-primary mb-5 pb-3 border-b border-[#E2DDD8]">
+        <h3 className="font-mono font-semibold text-sm text-text-primary mb-5 pb-3 border-b border-[#E0E0E0]">
           Account
         </h3>
         <div className="flex flex-col gap-4 max-w-md">
@@ -757,7 +757,7 @@ function SettingsTab() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
+              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary focus:border-accent focus:outline-none transition-colors duration-150"
             />
           </div>
           <div>
@@ -766,7 +766,7 @@ function SettingsTab() {
               type="email"
               value={email}
               disabled
-              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-muted cursor-not-allowed opacity-60"
+              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-muted cursor-not-allowed opacity-60"
             />
           </div>
           <div className="flex items-center gap-3">
@@ -789,7 +789,7 @@ function SettingsTab() {
 
       {/* GitHub */}
       <SectionCard>
-        <h3 className="font-mono font-semibold text-sm text-text-primary mb-5 pb-3 border-b border-[#E2DDD8]">
+        <h3 className="font-mono font-semibold text-sm text-text-primary mb-5 pb-3 border-b border-[#E0E0E0]">
           GitHub
         </h3>
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -817,7 +817,7 @@ function SettingsTab() {
 
       {/* Password */}
       <SectionCard>
-        <h3 className="font-mono font-semibold text-sm text-text-primary mb-5 pb-3 border-b border-[#E2DDD8]">
+        <h3 className="font-mono font-semibold text-sm text-text-primary mb-5 pb-3 border-b border-[#E0E0E0]">
           Password
         </h3>
         <div className="flex flex-col gap-3 max-w-md">
@@ -831,7 +831,7 @@ function SettingsTab() {
               <input
                 type="password"
                 placeholder={placeholder}
-                className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/40 focus:border-accent focus:outline-none transition-colors duration-150"
+                className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/40 focus:border-accent focus:outline-none transition-colors duration-150"
               />
             </div>
           ))}
@@ -922,7 +922,7 @@ function ProfileSidebar({
   }
 
   return (
-    <div className="bg-white border border-[#E2DDD8] rounded-lg p-6 lg:sticky lg:top-20">
+    <div className="bg-white border border-[#E0E0E0] rounded-lg p-6 lg:sticky lg:top-20">
       {/* Avatar + identity */}
       <div className="flex flex-col items-center text-center mb-5">
         {avatarUrl ? (
@@ -963,7 +963,7 @@ function ProfileSidebar({
       </div>
 
       {/* OTW status */}
-      <div className="border-t border-[#E2DDD8] pt-4 mb-4">
+      <div className="border-t border-[#E0E0E0] pt-4 mb-4">
         <div className="flex flex-col items-center gap-1.5 mb-3">
           {isOtw ? (
             <>
@@ -986,7 +986,7 @@ function ProfileSidebar({
       </div>
 
       {/* Stats */}
-      <div className="border-t border-[#E2DDD8] pt-4 mb-4">
+      <div className="border-t border-[#E0E0E0] pt-4 mb-4">
         <div className="flex items-center justify-center gap-3 font-mono text-xs text-text-muted">
           <span>
             <span className="font-semibold text-[#0D0F12] tabular-nums">
@@ -994,7 +994,7 @@ function ProfileSidebar({
             </span>{" "}
             applications
           </span>
-          <span className="text-[#E2DDD8]">•</span>
+          <span className="text-[#E0E0E0]">•</span>
           <span>
             <span className="font-semibold text-[#0D0F12] tabular-nums">
               {certCount ?? "—"}
@@ -1005,7 +1005,7 @@ function ProfileSidebar({
       </div>
 
       {/* Links + edit */}
-      <div className="border-t border-[#E2DDD8] pt-4 flex flex-col gap-2">
+      <div className="border-t border-[#E0E0E0] pt-4 flex flex-col gap-2">
         {githubUsername && (
           <a
             href={`/profile/${githubUsername}`}
@@ -1050,7 +1050,7 @@ export function DashboardContent() {
   }, [currentUserId]);
 
   return (
-    <div className="min-h-screen bg-[#F5F2EE]">
+    <div className="min-h-screen bg-[#F0F0F0]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-6 items-start">
 
@@ -1066,7 +1066,7 @@ export function DashboardContent() {
           {/* Main content */}
           <div className="flex-1 min-w-0">
             {/* Tab bar */}
-            <div className="flex items-center gap-1 border-b border-[#E2DDD8] mb-5 overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-1 border-b border-[#E0E0E0] mb-5 overflow-x-auto scrollbar-hide">
               {TABS.map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}

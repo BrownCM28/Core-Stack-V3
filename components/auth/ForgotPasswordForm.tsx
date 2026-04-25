@@ -30,7 +30,7 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-8">
+    <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-8">
       {sent ? (
         <div className="text-center">
           <div className="flex justify-center mb-4">
@@ -66,7 +66,7 @@ export function ForgotPasswordForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
+              className="w-full font-sans text-sm bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] px-3 py-2.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
             />
 
             {error && (

@@ -24,7 +24,7 @@ export function EmployerPricingCard({
         "relative bg-surface rounded-[8px] p-7 flex flex-col",
         featured
           ? "border-[2px] border-accent shadow-[0_0_0_1px_#3ECF8E,_0_0_24px_rgba(62,207,142,0.12)]"
-          : "border-[1.5px] border-[#E2DDD8]"
+          : "border-[1.5px] border-[#E0E0E0]"
       )}
     >
       {featured && (
@@ -64,7 +64,7 @@ export function EmployerPricingCard({
           "w-full px-5 py-2.5 font-mono font-semibold text-sm rounded-[6px] border-[1.5px] transition-all duration-150",
           featured
             ? "bg-accent border-black text-[#0D0F12] hover:bg-[#34C47E] hover:shadow-[0_0_16px_rgba(62,207,142,0.25)]"
-            : "bg-surface border-[#E2DDD8] text-text-primary hover:border-accent hover:text-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)]"
+            : "bg-surface border-[#E0E0E0] text-text-primary hover:border-accent hover:text-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)]"
         )}
       >
         {ctaLabel}

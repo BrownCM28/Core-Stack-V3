@@ -27,10 +27,10 @@ const sidebarSections = [
 
 export default function WikiLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#F5F2EE]">
+    <div className="min-h-screen bg-[#F0F0F0]">
       {/* Breadcrumb top bar */}
-      <div className="w-full bg-white border-b border-[#E2DDD8] py-3 px-6">
-        <p className="font-mono text-xs text-[#6B6560]">
+      <div className="w-full bg-white border-b border-[#E0E0E0] py-3 px-6">
+        <p className="font-mono text-xs text-[#6B7280]">
           <Link href="/" className="hover:text-[#0D0F12] transition-colors">
             CoreStack
           </Link>
@@ -44,14 +44,14 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
       {/* Two-column layout */}
       <div className="max-w-7xl mx-auto flex gap-0">
         {/* Left sidebar */}
-        <div className="hidden md:block w-64 flex-shrink-0 sticky top-14 self-start bg-[#F5F2EE] border-r border-[#E2DDD8] min-h-screen pt-8 pb-16 px-6">
-          <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] mb-6">
+        <div className="hidden md:block w-64 flex-shrink-0 sticky top-14 self-start bg-[#F0F0F0] border-r border-[#E0E0E0] min-h-screen pt-8 pb-16 px-6">
+          <p className="font-mono text-xs uppercase tracking-widest text-[#6B7280] mb-6">
             WIKI
           </p>
 
           {sidebarSections.map((section) => (
             <div key={section.label}>
-              <p className="font-mono text-xs uppercase tracking-widest text-[#6B6560] mb-2 mt-6">
+              <p className="font-mono text-xs uppercase tracking-widest text-[#6B7280] mb-2 mt-6">
                 {section.label}
               </p>
               <div className="flex flex-col">
@@ -70,7 +70,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
             <div className="md:hidden mb-6">
               <Link
                 href="/wiki"
-                className="font-mono text-sm text-[#6B6560] hover:text-[#0D0F12] transition-colors"
+                className="font-mono text-sm text-[#6B7280] hover:text-[#0D0F12] transition-colors"
               >
                 ← Wiki
               </Link>

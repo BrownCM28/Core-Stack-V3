@@ -8,17 +8,17 @@ export function Hero() {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/world-map-dots.png"
+        src="/hero-datacenter.png"
         alt=""
         className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
         aria-hidden="true"
-        style={{ opacity: 0.08 }}
+        style={{ opacity: 0.12 }}
       />
 
       {/* Bottom fade into page background */}
       <div
         className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10"
-        style={{ background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.85))" }}
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(240,240,240,0.9))" }}
         aria-hidden="true"
       />
 
@@ -40,7 +40,7 @@ export function Hero() {
         </h1>
 
         {/* Subtext */}
-        <p className="font-sans text-base sm:text-lg text-[#6B6560] max-w-2xl mx-auto mb-8 leading-relaxed">
+        <p className="font-sans text-base sm:text-lg text-[#6B7280] max-w-2xl mx-auto mb-8 leading-relaxed">
           Data center construction, operations, and AI infrastructure roles
           — aggregated daily.
         </p>
@@ -59,25 +59,25 @@ export function Hero() {
           </a>
           <a
             href="/auth/signup"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent border-[1.5px] border-[#E2DDD8] text-[#0D0F12] font-mono font-medium text-sm rounded-[6px] transition-all duration-150 hover:border-accent hover:text-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent border-[1.5px] border-[#E0E0E0] text-[#0D0F12] font-mono font-medium text-sm rounded-[6px] transition-all duration-150 hover:border-accent hover:text-accent hover:shadow-[0_0_0_1px_#3ECF8E,_0_0_12px_rgba(62,207,142,0.15)]"
           >
             Create Profile
           </a>
         </div>
 
         {/* Stat bar */}
-        <div className="border-t border-[#E2DDD8] pt-8">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm font-mono text-[#6B6560]">
+        <div className="border-t border-[#E0E0E0] pt-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm font-mono text-[#6B7280]">
             <div className="flex items-center gap-2">
               <span className="text-[#0D0F12] font-semibold text-base tabular-nums">2,847</span>
               <span>active roles</span>
             </div>
-            <span className="hidden sm:block text-[#E2DDD8] select-none">•</span>
+            <span className="hidden sm:block text-[#E0E0E0] select-none">•</span>
             <div className="flex items-center gap-2">
               <span className="text-[#0D0F12] font-semibold text-base tabular-nums">312</span>
               <span>companies hiring</span>
             </div>
-            <span className="hidden sm:block text-[#E2DDD8] select-none">•</span>
+            <span className="hidden sm:block text-[#E0E0E0] select-none">•</span>
             <div className="flex items-center gap-2">
               <span className="text-[#0D0F12] font-semibold text-base tabular-nums">1,204</span>
               <span>engineers placed</span>

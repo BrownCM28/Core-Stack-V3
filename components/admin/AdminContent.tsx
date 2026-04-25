@@ -51,7 +51,7 @@ function StatCard({
   label: string; value: string; sub?: string; accent?: boolean;
 }) {
   return (
-    <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] p-5">
+    <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] p-5">
       <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-2">{label}</p>
       <p className={cn("font-mono font-bold text-3xl leading-tight", accent ? "text-accent" : "text-text-primary")}>
         {value}
@@ -72,7 +72,7 @@ function Toggle({ checked, onChange, disabled }: { checked: boolean; onChange: (
       aria-checked={checked}
       className={cn(
         "relative inline-flex h-5 w-9 items-center rounded-full border border-black transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
-        checked ? "bg-accent" : "bg-[#E2DDD8]"
+        checked ? "bg-accent" : "bg-[#E0E0E0]"
       )}
     >
       <span
@@ -243,10 +243,10 @@ export function AdminContent() {
         </div>
 
         {/* ── Jobs table ── */}
-        <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px] mb-6">
+        <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px] mb-6">
 
           {/* Table header */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4 border-b border-[#E2DDD8]">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4 border-b border-[#E0E0E0]">
             <div className="flex items-baseline gap-2 flex-1">
               <h2 className="font-mono font-semibold text-sm text-text-primary">All Listings</h2>
               <span className="font-mono text-xs text-text-muted">{jobsTotal} total</span>
@@ -259,7 +259,7 @@ export function AdminContent() {
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Search listings…"
-                  className="font-sans text-xs bg-background border-[1.5px] border-[#E2DDD8] rounded-[6px] pl-8 pr-3 py-2 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150 w-[180px]"
+                  className="font-sans text-xs bg-background border-[1.5px] border-[#E0E0E0] rounded-[6px] pl-8 pr-3 py-2 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none transition-colors duration-150 w-[180px]"
                 />
               </div>
               <button
@@ -271,7 +271,7 @@ export function AdminContent() {
               <button
                 type="button"
                 onClick={() => router.push("/employers/post")}
-                className="inline-flex items-center gap-1.5 px-3 py-2 border-[1.5px] border-[#E2DDD8] text-text-primary font-mono font-semibold text-xs rounded-[6px] hover:border-accent hover:text-accent transition-all duration-150 whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-2 border-[1.5px] border-[#E0E0E0] text-text-primary font-mono font-semibold text-xs rounded-[6px] hover:border-accent hover:text-accent transition-all duration-150 whitespace-nowrap"
               >
                 <Plus size={12} /> Add Job
               </button>
@@ -282,7 +282,7 @@ export function AdminContent() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[860px]">
               <thead>
-                <tr className="border-b border-[#E2DDD8]">
+                <tr className="border-b border-[#E0E0E0]">
                   {["Title", "Company", "Category", "Source", "Apps", "Posted", "Expires", "Status", "Actions"].map((col) => (
                     <th key={col} className="px-5 py-3 text-left font-mono text-[10px] text-text-muted tracking-[0.10em] uppercase">
                       {col}
@@ -301,7 +301,7 @@ export function AdminContent() {
                   </tr>
                 )}
                 {jobs.map((job) => (
-                  <tr key={job.id} className="border-b border-[#E2DDD8] last:border-0 hover:bg-[#FAFAF8] transition-colors duration-100">
+                  <tr key={job.id} className="border-b border-[#E0E0E0] last:border-0 hover:bg-[#FAFAF8] transition-colors duration-100">
                     <td className="px-5 py-3.5">
                       <p className="font-mono text-xs font-semibold text-text-primary leading-tight max-w-[200px] truncate">
                         {job.title}
@@ -373,11 +373,11 @@ export function AdminContent() {
 
           {/* Pagination */}
           {jobsTotalPages > 1 && (
-            <div className="flex items-center justify-center gap-1.5 px-5 py-4 border-t border-[#E2DDD8]">
+            <div className="flex items-center justify-center gap-1.5 px-5 py-4 border-t border-[#E0E0E0]">
               <button
                 disabled={page <= 1}
                 onClick={() => setPage((p) => p - 1)}
-                className="inline-flex items-center justify-center w-8 h-8 font-mono text-xs rounded-[6px] border-[1.5px] border-[#E2DDD8] text-text-muted disabled:text-[#C4BFB9] disabled:cursor-not-allowed hover:border-accent hover:text-accent transition-all"
+                className="inline-flex items-center justify-center w-8 h-8 font-mono text-xs rounded-[6px] border-[1.5px] border-[#E0E0E0] text-text-muted disabled:text-[#C4BFB9] disabled:cursor-not-allowed hover:border-accent hover:text-accent transition-all"
               >
                 <ChevronLeft size={14} />
               </button>
@@ -391,7 +391,7 @@ export function AdminContent() {
                       "inline-flex items-center justify-center w-8 h-8 font-mono text-xs rounded-[6px] border-[1.5px] transition-all duration-150",
                       page === p
                         ? "bg-accent border-black text-[#0D0F12] font-semibold"
-                        : "border-[#E2DDD8] text-text-primary hover:border-accent hover:text-accent"
+                        : "border-[#E0E0E0] text-text-primary hover:border-accent hover:text-accent"
                     )}
                   >
                     {p}
@@ -402,7 +402,7 @@ export function AdminContent() {
               <button
                 disabled={page >= jobsTotalPages}
                 onClick={() => setPage((p) => p + 1)}
-                className="inline-flex items-center justify-center w-8 h-8 font-mono text-xs rounded-[6px] border-[1.5px] border-[#E2DDD8] text-text-muted disabled:text-[#C4BFB9] disabled:cursor-not-allowed hover:border-accent hover:text-accent transition-all"
+                className="inline-flex items-center justify-center w-8 h-8 font-mono text-xs rounded-[6px] border-[1.5px] border-[#E0E0E0] text-text-muted disabled:text-[#C4BFB9] disabled:cursor-not-allowed hover:border-accent hover:text-accent transition-all"
               >
                 <ChevronRight size={14} />
               </button>
@@ -411,8 +411,8 @@ export function AdminContent() {
         </div>
 
         {/* ── Recent Applications ── */}
-        <div className="bg-surface border-[1.5px] border-[#E2DDD8] rounded-[8px]">
-          <div className="px-5 py-4 border-b border-[#E2DDD8]">
+        <div className="bg-surface border-[1.5px] border-[#E0E0E0] rounded-[8px]">
+          <div className="px-5 py-4 border-b border-[#E0E0E0]">
             <div className="flex items-baseline gap-2">
               <h2 className="font-mono font-semibold text-sm text-text-primary">Recent Applications</h2>
               <span className="font-mono text-xs text-text-muted">last 20</span>
@@ -421,7 +421,7 @@ export function AdminContent() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[600px]">
               <thead>
-                <tr className="border-b border-[#E2DDD8]">
+                <tr className="border-b border-[#E0E0E0]">
                   {["Candidate", "Applied to", "Company", "Applied at", ""].map((col, i) => (
                     <th key={i} className="px-5 py-3 text-left font-mono text-[10px] text-text-muted tracking-[0.10em] uppercase">
                       {col}
@@ -445,7 +445,7 @@ export function AdminContent() {
                     .slice(0, 2);
                   const username = app.user.profile?.username;
                   return (
-                    <tr key={app.id} className="border-b border-[#E2DDD8] last:border-0 hover:bg-[#FAFAF8] transition-colors duration-100">
+                    <tr key={app.id} className="border-b border-[#E0E0E0] last:border-0 hover:bg-[#FAFAF8] transition-colors duration-100">
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-2.5">
                           <div className="w-7 h-7 rounded-full bg-[#E8E4DF] flex items-center justify-center font-mono font-semibold text-xs text-text-primary flex-shrink-0">
