@@ -103,17 +103,7 @@ export default function RootLayout({
       lang="en"
       className={`${satoshi.variable} ${vercetti.variable} ${wavehaus.variable}`}
     >
-      <body
-        className="min-h-screen text-text-primary antialiased"
-        style={{
-          background: `
-            radial-gradient(ellipse 70% 55% at 0% 0%, rgba(62, 207, 142, 0.10) 0%, transparent 60%),
-            radial-gradient(ellipse 70% 55% at 100% 0%, rgba(99, 130, 245, 0.07) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 35% at 50% 18%, rgba(62, 207, 142, 0.04) 0%, transparent 50%),
-            #F0F0F0
-          `,
-        }}
-      >
+      <body className="min-h-screen text-text-primary antialiased">
         <Navbar />
         <main>{children}</main>
         <PendingApplicationHandler />

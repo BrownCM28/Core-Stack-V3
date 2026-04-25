@@ -51,34 +51,38 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop nav links — centered */}
-          <nav className="hidden md:flex items-center gap-2 flex-1 justify-center">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border font-mono text-xs transition-all duration-150 whitespace-nowrap",
-                  active(link.href)
-                    ? "border-[#0D0F12] text-[#0D0F12]"
-                    : "border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12]"
-                )}
-              >
-                <span
+          {/* Desktop right side — nav links + auth grouped together */}
+          <div className="hidden md:flex items-center gap-2 ml-auto">
+            {/* Nav links */}
+            <nav className="flex items-center gap-2">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
                   className={cn(
-                    "w-1.5 h-1.5 rounded-full flex-shrink-0 border transition-colors duration-150",
+                    "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border font-mono text-xs transition-all duration-150 whitespace-nowrap",
                     active(link.href)
-                      ? "bg-[#0D0F12] border-[#0D0F12]"
-                      : "bg-transparent border-[#BFBFBF]"
+                      ? "border-[#0D0F12] text-[#0D0F12]"
+                      : "border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12]"
                   )}
-                />
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+                >
+                  <span
+                    className={cn(
+                      "w-1.5 h-1.5 rounded-full flex-shrink-0 border transition-colors duration-150",
+                      active(link.href)
+                        ? "bg-[#0D0F12] border-[#0D0F12]"
+                        : "bg-transparent border-[#BFBFBF]"
+                    )}
+                  />
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-          {/* Desktop right side — auth / CTA */}
-          <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+            {/* Divider */}
+            <div className="w-px h-5 bg-[#E0E0E0] mx-1 flex-shrink-0" />
+
+            {/* Auth / CTA */}
             {isPending ? (
               <div className="w-8 h-8 rounded-full bg-[#E0E0E0] animate-pulse" />
             ) : session ? (
@@ -95,7 +99,7 @@ export function Navbar() {
                   <LayoutDashboard size={12} />
                   Dashboard
                 </Link>
-                <div className="flex items-center gap-2 pl-2 border-l border-[#E0E0E0]">
+                <div className="flex items-center gap-2 pl-1">
                   <div className="w-7 h-7 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                     {session.user.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -123,7 +127,7 @@ export function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className="font-mono text-xs text-[#6B7280] hover:text-[#0D0F12] transition-colors duration-150"
+                  className="font-mono text-xs text-[#6B7280] hover:text-[#0D0F12] transition-colors duration-150 px-2"
                 >
                   Login
                 </Link>
