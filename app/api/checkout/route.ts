@@ -21,6 +21,7 @@ const BodySchema = z.object({
 });
 
 export async function POST(req: Request): Promise<NextResponse> {
+  try {
   const session = await getSession();
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -80,4 +81,8 @@ export async function POST(req: Request): Promise<NextResponse> {
   });
 
   return NextResponse.json({ checkoutUrl: checkoutSession.url });
+  } catch (error) {
+    console.error("[api/checkout]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
