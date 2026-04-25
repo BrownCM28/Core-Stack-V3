@@ -40,7 +40,7 @@
   --text-muted: #6B7280;
 
   /* Font family variables */
-  --font-display: "Adversal", sans-serif;
+  --font-display: var(--font-vercetti), serif;
   --font-sans: "Archia", sans-serif;
   --font-accent: "Heming", sans-serif;
 }
@@ -67,6 +67,7 @@
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
+    font-weight: 400 !important;
   }
 
   .font-accent {

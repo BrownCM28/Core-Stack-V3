@@ -32,7 +32,7 @@ const config: Config = {
       fontFamily: {
         sans: ["Archia", "var(--font-satoshi)", "sans-serif"],
         mono: ["var(--font-wavehaus)", "monospace"],
-        display: ["Adversal", "sans-serif"],
+        display: ["var(--font-vercetti)", "serif"],
         accent: ["Heming", "sans-serif"],
       },
       borderWidth: {
