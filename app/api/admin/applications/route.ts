@@ -10,6 +10,7 @@ async function requireAdmin() {
 }
 
 export async function GET(): Promise<NextResponse> {
+  try {
   if (!(await requireAdmin())) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -34,4 +35,8 @@ export async function GET(): Promise<NextResponse> {
   });
 
   return NextResponse.json({ applications });
+  } catch (error) {
+    console.error("[api/admin/applications]", error); 
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
