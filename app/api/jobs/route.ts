@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import { checkRateLimit, standardLimit } from "@/lib/ratelimit";
 
 export async function GET(req: NextRequest) {
+  try {
   const ip = req.headers.get("x-forwarded-for") ?? "anonymous";
   const rl = await checkRateLimit(standardLimit, ip);
   if (rl) return rl;
@@ -127,4 +128,8 @@ export async function GET(req: NextRequest) {
     page,
     totalPages: Math.ceil(total / limit),
   });
+  } catch (error) {
+    console.error["api/jobs GET]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
