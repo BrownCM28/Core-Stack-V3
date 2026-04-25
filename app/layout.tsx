@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Fraunces } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { PendingApplicationHandler } from "@/components/PendingApplicationHandler";
 import "./globals.css";
@@ -41,12 +40,6 @@ const vercetti = localFont({
   src: "../Fonts/Vercetti Regular/OpenType WOFFs/Vercetti-Regular.woff2",
   variable: "--font-vercetti",
   weight: "400",
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
   display: "swap",
 });
 
@@ -108,7 +101,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${satoshi.variable} ${vercetti.variable} ${wavehaus.variable} ${fraunces.variable}`}
+      className={`${satoshi.variable} ${vercetti.variable} ${wavehaus.variable}`}
     >
       <body className="min-h-screen text-text-primary antialiased">
         <Navbar />

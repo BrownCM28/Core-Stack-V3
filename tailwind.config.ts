@@ -30,9 +30,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-satoshi)", "sans-serif"],
-        mono: ["var(--font-wavehaus)", "sans-serif"],
-        display: ["var(--font-fraunces)", "serif"],
+        sans: ["Archia", "var(--font-satoshi)", "sans-serif"],
+        mono: ["var(--font-wavehaus)", "monospace"],
+        display: ["Adversal", "sans-serif"],
+        accent: ["Heming", "sans-serif"],
       },
       borderWidth: {
         DEFAULT: "1.5px",

@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Custom font faces ─────────────────────────────────────────────── */
+@font-face {
+  font-family: "Adversal";
+  src: url("/fonts/adversal.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Archia";
+  src: url("/fonts/archia-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Heming";
+  src: url("/fonts/heming-variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #F0F0F0;
   --surface: #FFFFFF;
@@ -12,6 +37,11 @@
   --border-input: #1E2128;
   --text-primary: #0D0F12;
   --text-muted: #6B7280;
+
+  /* Font family variables */
+  --font-display: "Adversal", sans-serif;
+  --font-sans: "Archia", sans-serif;
+  --font-accent: "Heming", sans-serif;
 }
 
 @layer base {
@@ -22,20 +52,24 @@
   body {
     background-color: var(--background);
     color: var(--text-primary);
-    font-family: var(--font-satoshi), sans-serif;
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-fraunces), serif;
+    font-family: var(--font-display);
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-fraunces), serif;
+    font-family: var(--font-display);
+  }
+
+  .font-accent {
+    font-family: var(--font-accent);
   }
 
   /* Hide scrollbar while preserving scroll functionality */
@@ -51,7 +85,7 @@
 
 /* ── Wiki article content styles ──────────────────────────────────── */
 .wiki-content h2 {
-  font-family: var(--font-fraunces), serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 400;
   color: #0D0F12;
@@ -61,7 +95,7 @@
   border-bottom: 1px solid #E0E0E0;
 }
 .wiki-content h3 {
-  font-family: var(--font-fraunces), serif;
+  font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 400;
   color: #0D0F12;
