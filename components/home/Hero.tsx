@@ -25,18 +25,6 @@ export function Hero() {
         style={{ opacity: 0.1 }}
       />
 
-      {/* Subtle graph-paper grid overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none select-none"
-        aria-hidden="true"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #C4C4C4 1px, transparent 1px), linear-gradient(to bottom, #C4C4C4 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-          opacity: 0.28,
-        }}
-      />
-
       <div className="relative z-10 mx-auto max-w-4xl w-full">
 
         {/* Live badge */}
@@ -91,7 +79,7 @@ export function Hero() {
         <div className="hero-animate mb-4" style={{ animationDelay: "400ms" }}>
           <form action="/jobs" className="mx-auto w-full max-w-[560px]">
             <div
-              className="flex items-center h-[52px] bg-white border border-[#E0E0E0] rounded-xl px-4 gap-3"
+              className="flex items-center h-[52px] bg-white border border-[#E0E0E0] rounded-md px-4 gap-3"
               style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
             >
               <Search size={16} className="text-[#9CA3AF] flex-shrink-0" />
@@ -114,8 +102,8 @@ export function Hero() {
                 href={cat.href}
                 className={
                   i === 0
-                    ? "inline-flex items-center px-4 py-1.5 rounded-full font-mono text-xs whitespace-nowrap bg-[#0D0F12] text-white"
-                    : "inline-flex items-center px-4 py-1.5 rounded-full font-mono text-xs whitespace-nowrap bg-white border border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12] transition-colors duration-150"
+                    ? "inline-flex items-center px-3.5 py-1.5 rounded-[4px] font-mono text-xs whitespace-nowrap bg-[#0D0F12] text-white"
+                    : "inline-flex items-center px-3.5 py-1.5 rounded-[4px] font-mono text-xs whitespace-nowrap bg-white border border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12] transition-colors duration-150"
                 }
               >
                 {cat.label}

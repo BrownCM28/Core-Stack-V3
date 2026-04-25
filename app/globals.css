@@ -29,14 +29,13 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-vercetti), serif;
+    font-family: var(--font-fraunces), serif;
   }
 }
 
 @layer utilities {
-  /* Prevent weight synthesis on single-weight display font */
   .font-display {
-    font-weight: 400 !important;
+    font-family: var(--font-fraunces), serif;
   }
 
   /* Hide scrollbar while preserving scroll functionality */
@@ -52,7 +51,7 @@
 
 /* ── Wiki article content styles ──────────────────────────────────── */
 .wiki-content h2 {
-  font-family: var(--font-vercetti), serif;
+  font-family: var(--font-fraunces), serif;
   font-size: 1.5rem;
   font-weight: 400;
   color: #0D0F12;
@@ -62,7 +61,7 @@
   border-bottom: 1px solid #E0E0E0;
 }
 .wiki-content h3 {
-  font-family: var(--font-vercetti), serif;
+  font-family: var(--font-fraunces), serif;
   font-size: 1.125rem;
   font-weight: 400;
   color: #0D0F12;

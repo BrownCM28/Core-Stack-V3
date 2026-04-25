@@ -32,7 +32,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-satoshi)", "sans-serif"],
         mono: ["var(--font-wavehaus)", "sans-serif"],
-        display: ["var(--font-vercetti)", "serif"],
+        display: ["var(--font-fraunces)", "serif"],
       },
       borderWidth: {
         DEFAULT: "1.5px",
