@@ -12,6 +12,7 @@ async function requireAdmin() {
 const PAGE_SIZE = 20;
 
 export async function GET(req: Request): Promise<NextResponse> {
+  try {
   if (!(await requireAdmin())) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -58,4 +59,8 @@ export async function GET(req: Request): Promise<NextResponse> {
     page,
     totalPages: Math.ceil(total / PAGE_SIZE),
   });
+  } catch (error) {
+    console.error("[api/admin/jobs]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
