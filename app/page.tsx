@@ -106,16 +106,16 @@ function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-32 pb-16 flex flex-col justify-between">
+    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-32 pb-16 flex flex-col items-center justify-between">
 
       {/* Datacenter background image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/hero-datacenter.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
         aria-hidden="true"
-        style={{ opacity: 0.12 }}
+        style={{ opacity: 0.28 }}
       />
 
       {/* Massive editorial headline */}
@@ -123,19 +123,19 @@ function Hero() {
         initial={{ opacity: 0, y: 48 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10"
+        className="relative z-10 flex flex-col items-center text-center w-full"
       >
         <h1
-          className="font-display font-normal uppercase tracking-tight text-black leading-none"
+          className="font-display font-normal uppercase tracking-tight text-black leading-none text-center w-full"
           aria-label="Infrastructure jobs for the people who keep the world running."
         >
-          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE
           </span>
-          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             JOBS FOR THE
           </span>
-          <span className="flex items-baseline gap-3 text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+          <span className="flex items-baseline justify-center gap-3 text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             <span>PEOPLE WHO</span>
             <motion.span
               className="text-[#3ECF8E] inline-block"
@@ -146,13 +146,16 @@ function Hero() {
               ✦
             </motion.span>
           </span>
-          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             KEEP THE WORLD
           </span>
-          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             RUNNING.
           </span>
         </h1>
+        <p className="text-center font-sans text-base text-gray-500 leading-relaxed max-w-xl mx-auto mt-6">
+          CoreStack aggregates data center and AI infrastructure roles from top employers — updated daily. Your GitHub profile is your resume.
+        </p>
       </motion.div>
 
       {/* Search + bottom bar */}
