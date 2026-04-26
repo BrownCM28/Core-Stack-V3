@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   Search, MapPin, Server, Zap, BadgeCheck, Briefcase,
-  ArrowRight, MessageCircle, ChevronDown, User,
+  ArrowRight, MessageCircle, ChevronDown, ChevronRight, User,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────
@@ -94,65 +94,64 @@ function HomeNav() {
 // ─────────────────────────────────────────────────────────────
 
 function Hero() {
-  const [keyword, setKeyword] = useState("");
-  const [location, setLocation] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locationQuery, setLocationQuery] = useState("");
   const router = useRouter();
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
+  function handleSearch() {
     const params = new URLSearchParams();
-    if (keyword.trim()) params.set("search", keyword.trim());
-    if (location.trim()) params.set("location", location.trim());
+    if (searchQuery.trim()) params.set("search", searchQuery.trim());
+    if (locationQuery.trim()) params.set("location", locationQuery.trim());
     router.push(`/jobs${params.toString() ? `?${params.toString()}` : ""}`);
   }
 
   return (
     <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-32 pb-16 flex flex-col justify-between">
+
+      {/* Datacenter background image */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/hero-datacenter.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+        aria-hidden="true"
+        style={{ opacity: 0.12 }}
+      />
+
       {/* Massive editorial headline */}
       <motion.div
         initial={{ opacity: 0, y: 48 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10"
       >
-        <h1 className="font-display font-normal uppercase tracking-tight text-black leading-none" aria-label="Infrastructure jobs, built for builders.">
-
-          {/* Line 1 — with inline decorative elements */}
-          <span className="flex items-center flex-wrap gap-4 mb-1" aria-hidden="true">
-            <span className="text-[clamp(2.5rem,11vw,10rem)]">INFRASTRUCTURE</span>
-            {/* Featured role card */}
-            <span className="hidden md:flex flex-col justify-center w-40 h-20 rounded-xl border border-gray-200 bg-[#0D0F12] px-3 py-2 flex-shrink-0 self-center">
-              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mb-1 block">FEATURED ROLE</span>
-              <span className="font-sans text-[11px] text-white font-medium leading-tight mb-1.5 block">Sr. Data Center Engineer</span>
-              <span className="inline-block w-fit px-2 py-0.5 rounded-full text-[9px] font-mono bg-[#3ECF8E]/20 text-[#3ECF8E]">AI Infrastructure</span>
-            </span>
-            {/* Code badge */}
-            <span className="hidden md:flex w-14 h-14 rounded-xl bg-black items-center justify-center flex-shrink-0 self-center">
-              <span className="font-mono text-base text-white leading-none">{"{ }"}</span>
-            </span>
+        <h1
+          className="font-display font-normal uppercase tracking-tight text-black leading-none"
+          aria-label="Infrastructure jobs for the people who keep the world running."
+        >
+          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+            INFRASTRUCTURE
           </span>
-
-          {/* Line 2 — with spinning star */}
-          <span className="flex items-baseline gap-2 mb-1 flex-wrap" aria-hidden="true">
-            <span className="text-[clamp(2.5rem,11vw,10rem)]">JOBS,&nbsp;</span>
+          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+            JOBS FOR THE
+          </span>
+          <span className="flex items-baseline gap-3 text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+            <span>PEOPLE WHO</span>
             <motion.span
-              className="text-[#3ECF8E] inline-block text-[clamp(2.5rem,11vw,10rem)]"
+              className="text-[#3ECF8E] inline-block"
               animate={{ rotate: 360 }}
               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               aria-hidden="true"
             >
               ✦
             </motion.span>
-            <span className="text-[clamp(2.5rem,11vw,10rem)]">&nbsp;BUILT</span>
           </span>
-
-          {/* Line 3 — with inline description */}
-          <span className="flex items-end flex-wrap gap-8" aria-hidden="true">
-            <span className="text-[clamp(2.5rem,11vw,10rem)]">FOR BUILDERS.</span>
-            <p className="hidden xl:block max-w-xs font-sans text-sm font-normal not-uppercase text-gray-400 leading-relaxed normal-case tracking-normal pb-2 flex-shrink-0" style={{ textTransform: "none", letterSpacing: "normal" }}>
-              CoreStack aggregates data center and AI infrastructure roles from top employers — updated daily. Your GitHub profile is your resume.
-            </p>
+          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+            KEEP THE WORLD
           </span>
-
+          <span className="block text-[13vw] md:text-[7.5vw] leading-none font-normal uppercase tracking-tight text-black">
+            RUNNING.
+          </span>
         </h1>
       </motion.div>
 
@@ -161,48 +160,79 @@ function Hero() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="mt-14"
+        className="relative z-10 mt-12 max-w-3xl w-full"
       >
-        {/* Search bar */}
-        <form onSubmit={handleSearch} className="max-w-3xl" role="search">
-          <div className="flex items-center h-14 bg-white border-2 border-black rounded-full px-2">
-            {/* Keyword */}
-            <label htmlFor="hero-keyword" className="sr-only">Job title or keyword</label>
-            <div className="flex items-center gap-2 flex-1 px-4 min-w-0">
-              <Search size={16} className="text-gray-400 flex-shrink-0" aria-hidden="true" />
-              <input
-                id="hero-keyword"
-                type="search"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder="Search roles, companies, or keywords..."
-                className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-black placeholder:text-gray-400"
-              />
-            </div>
-            {/* Divider */}
-            <div className="w-px h-6 bg-[#E5E5E5] flex-shrink-0" aria-hidden="true" />
-            {/* Location */}
-            <label htmlFor="hero-location" className="sr-only">Location</label>
-            <div className="flex items-center gap-2 flex-1 px-4 min-w-0">
-              <MapPin size={16} className="text-gray-400 flex-shrink-0" aria-hidden="true" />
-              <input
-                id="hero-location"
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="Location"
-                className="flex-1 min-w-0 bg-transparent border-none outline-none font-sans text-sm text-black placeholder:text-gray-400"
-              />
-            </div>
-            {/* Submit */}
-            <button
-              type="submit"
-              className="flex-shrink-0 bg-black text-white rounded-full h-10 px-6 font-mono text-sm font-medium mr-1 hover:bg-gray-900 transition-colors duration-150"
-            >
-              Search
-            </button>
+        {/* Squared search bar */}
+        <div className="flex items-stretch border-2 border-black bg-white w-full">
+          {/* Keyword */}
+          <label htmlFor="hero-keyword" className="sr-only">Job title or keyword</label>
+          <div className="flex items-center flex-1 px-4 py-3 border-r-2 border-black">
+            <Search size={16} className="text-black flex-shrink-0 mr-3" aria-hidden="true" />
+            <input
+              id="hero-keyword"
+              type="text"
+              placeholder="Job title or keyword..."
+              className="flex-1 font-mono text-sm text-black bg-transparent border-none outline-none placeholder:text-gray-400"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
           </div>
-        </form>
+          {/* Location */}
+          <label htmlFor="hero-location" className="sr-only">Location</label>
+          <div className="flex items-center w-48 px-4 py-3 border-r-2 border-black">
+            <MapPin size={16} className="text-black flex-shrink-0 mr-3" aria-hidden="true" />
+            <input
+              id="hero-location"
+              type="text"
+              placeholder="Location"
+              className="flex-1 font-mono text-sm text-black bg-transparent border-none outline-none placeholder:text-gray-400"
+              value={locationQuery}
+              onChange={(e) => setLocationQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+          </div>
+          {/* Submit */}
+          <button
+            onClick={handleSearch}
+            className="bg-black text-white font-mono text-sm font-medium px-8 py-3 hover:bg-gray-900 transition-colors flex-shrink-0 cursor-pointer"
+          >
+            Search
+          </button>
+        </div>
+
+        {/* Category filter row — squared */}
+        <div className="flex items-center gap-0 mt-3 overflow-x-auto scrollbar-hide">
+          <button
+            className="flex-shrink-0 bg-black text-white font-mono text-xs px-4 py-2 border-2 border-black hover:bg-gray-900 transition-colors cursor-pointer"
+            onClick={() => router.push("/jobs")}
+          >
+            All
+          </button>
+          {[
+            "Data Center Ops",
+            "AI Infrastructure",
+            "Electrical",
+            "Cooling / HVAC",
+            "Construction",
+            "Networking",
+          ].map((cat) => (
+            <button
+              key={cat}
+              className="flex-shrink-0 bg-white text-black font-mono text-xs px-4 py-2 border-2 border-l-0 border-black hover:bg-black hover:text-white transition-colors cursor-pointer whitespace-nowrap"
+              onClick={() => router.push(`/jobs?category=${encodeURIComponent(cat)}`)}
+            >
+              {cat}
+            </button>
+          ))}
+          <button
+            className="flex-shrink-0 bg-white text-black font-mono text-xs px-3 py-2 border-2 border-l-0 border-black hover:bg-black hover:text-white transition-colors cursor-pointer"
+            onClick={() => router.push("/jobs")}
+            aria-label="More categories"
+          >
+            <ChevronRight size={14} />
+          </button>
+        </div>
 
         {/* Bottom bar */}
         <div className="border-t border-[#E5E5E5] mt-8 pt-6 flex items-center justify-between flex-wrap gap-4">
@@ -213,7 +243,6 @@ function Hero() {
             <MessageCircle size={14} aria-hidden="true" />
             Contact us
           </a>
-
           <div className="flex items-center gap-4 font-mono text-sm text-gray-400" aria-label="Featured employers">
             <span>Equinix</span>
             <span className="h-4 w-px bg-gray-200" aria-hidden="true" />
@@ -221,7 +250,6 @@ function Hero() {
             <span className="h-4 w-px bg-gray-200" aria-hidden="true" />
             <span>Digital Realty</span>
           </div>
-
           <div className="flex items-center gap-2 font-mono text-sm text-black">
             <span>Scroll down</span>
             <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center" aria-hidden="true">
@@ -230,6 +258,140 @@ function Hero() {
           </div>
         </div>
       </motion.div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// LATEST ROLES SECTION
+// ─────────────────────────────────────────────────────────────
+
+const LATEST_JOBS = [
+  {
+    title: "Data Center Facilities Engineer",
+    company: "Equinix",
+    location: "Dallas, TX",
+    type: "Full-time",
+    category: "Data Center Ops",
+    salary: "$95k – $120k",
+    badge: "NEW" as const,
+    featured: true,
+  },
+  {
+    title: "GPU Cluster Infrastructure Engineer",
+    company: "CoreWeave",
+    location: "Remote",
+    type: "Full-time",
+    category: "AI Infrastructure",
+    salary: "$160k – $220k",
+    badge: "NEW" as const,
+    featured: false,
+  },
+  {
+    title: "Critical Power Systems Technician",
+    company: "Digital Realty",
+    location: "Phoenix, AZ",
+    type: "Full-time",
+    category: "Electrical",
+    salary: "$80k – $100k",
+    badge: null,
+    featured: false,
+  },
+  {
+    title: "Data Center Construction Manager",
+    company: "Turner Construction",
+    location: "Chicago, IL",
+    type: "Contract",
+    category: "Construction",
+    salary: "$130k – $160k",
+    badge: null,
+    featured: false,
+  },
+  {
+    title: "Mechanical Cooling Engineer",
+    company: "Vertiv",
+    location: "Columbus, OH",
+    type: "Full-time",
+    category: "Cooling / HVAC",
+    salary: "$100k – $130k",
+    badge: null,
+    featured: false,
+  },
+];
+
+function LatestRolesSection() {
+  return (
+    <section className="px-8 md:px-16 py-16 bg-white border-t-2 border-black">
+      {/* Section header */}
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="font-display text-3xl md:text-4xl font-normal uppercase text-black">
+          Latest Roles
+        </h2>
+        <a
+          href="/jobs"
+          className="font-mono text-sm text-black underline hover:text-[#3ECF8E] transition-colors duration-150"
+        >
+          View all roles →
+        </a>
+      </div>
+
+      {/* Job rows */}
+      <div className="flex flex-col divide-y-2 divide-black border-y-2 border-black">
+        {LATEST_JOBS.map((job, index) => (
+          <a
+            key={index}
+            href="/jobs"
+            className="flex items-center justify-between py-5 hover:bg-[#F5F5F5] transition-colors group cursor-pointer"
+          >
+            {/* Left: title + meta */}
+            <div className="flex items-start gap-4 flex-1 min-w-0">
+              <span className="font-mono text-xs text-gray-300 w-6 flex-shrink-0 mt-1">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="min-w-0">
+                {/* Title row */}
+                <div className="flex items-center gap-3 mb-1 flex-wrap">
+                  <span className="font-display text-lg md:text-xl font-normal text-black group-hover:text-[#3ECF8E] transition-colors duration-150">
+                    {job.title}
+                  </span>
+                  {job.badge && (
+                    <span className="font-mono text-xs bg-[#3ECF8E] text-black px-2 py-0.5 flex-shrink-0">
+                      {job.badge}
+                    </span>
+                  )}
+                  {job.featured && (
+                    <span className="font-mono text-xs border-2 border-black text-black px-2 py-0.5 flex-shrink-0">
+                      FEATURED
+                    </span>
+                  )}
+                </div>
+                {/* Meta row */}
+                <div className="flex items-center gap-3 flex-wrap">
+                  <span className="font-mono text-xs text-gray-500">{job.company}</span>
+                  <span className="font-mono text-xs text-gray-300" aria-hidden="true">·</span>
+                  <span className="font-mono text-xs text-gray-500">{job.location}</span>
+                  <span className="font-mono text-xs text-gray-300" aria-hidden="true">·</span>
+                  <span className="font-mono text-xs border border-gray-300 text-gray-500 px-2 py-0.5">
+                    {job.type}
+                  </span>
+                  <span className="font-mono text-xs border border-gray-300 text-gray-500 px-2 py-0.5">
+                    {job.category}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* Right: salary + apply */}
+            <div className="flex items-center gap-6 flex-shrink-0 ml-4">
+              <span className="font-mono text-sm font-medium text-black hidden md:block">
+                {job.salary}
+              </span>
+              <span className="font-mono text-xs text-black border-2 border-black px-3 py-2 group-hover:bg-black group-hover:text-white transition-colors flex-shrink-0">
+                Apply →
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
     </section>
   );
 }
@@ -611,6 +773,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
       <HomeNav />
       <Hero />
+      <LatestRolesSection />
       <ResourcesSection />
       <AccordionSection />
       <CoveredSection />

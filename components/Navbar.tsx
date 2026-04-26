@@ -48,8 +48,9 @@ export function Navbar() {
             aria-label="CoreStack home"
           >
             <Zap size={15} className="text-accent" aria-hidden="true" />
-            <span className="font-mono font-bold text-sm uppercase tracking-widest text-[#0D0F12]">
-              CoreStack
+            <span className="font-display text-xl leading-none">
+              <span className="text-[#0D0F12]">Core</span>
+              <span className="text-[#3ECF8E]">Stack</span>
             </span>
           </Link>
 
@@ -62,7 +63,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border font-mono text-xs transition-all duration-150 whitespace-nowrap",
+                    "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border font-display text-sm transition-all duration-150 whitespace-nowrap",
                     active(link.href)
                       ? "border-[#0D0F12] text-[#0D0F12]"
                       : "border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12]"
@@ -164,7 +165,7 @@ export function Navbar() {
               href={link.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "inline-flex items-center gap-2 px-4 py-2 rounded-full border font-mono text-xs transition-all duration-150",
+                "inline-flex items-center gap-2 px-4 py-2 rounded-full border font-display text-sm transition-all duration-150",
                 active(link.href)
                   ? "border-[#0D0F12] text-[#0D0F12]"
                   : "border-[#E0E0E0] text-[#6B7280]"
