@@ -109,13 +109,16 @@ function Hero() {
     <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-32 pb-16 flex flex-col items-center justify-between">
 
       {/* Datacenter background image */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/hero-datacenter.png"
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
+      <div
+        className="absolute inset-0 pointer-events-none select-none"
         aria-hidden="true"
-        style={{ opacity: 0.28 }}
+        style={{
+          backgroundImage: "url(/hero-datacenter.png)",
+          backgroundSize: "contain",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.28,
+        }}
       />
 
       {/* Massive editorial headline */}
