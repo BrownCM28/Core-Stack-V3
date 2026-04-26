@@ -89,6 +89,9 @@ model User {
   savedSearches   SavedSearch[]
   activityEvents  ActivityEvent[]
   postedJobs      Job[]           @relation("EmployerJobs")
+
+  @@index([role])
+  @@index([openToWork])
 }
 
 model Session {
@@ -102,6 +105,8 @@ model Session {
 
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Account {
@@ -121,6 +126,7 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@unique([providerId, accountId])
+  @@index([userId])
 }
 
 model Verification {
@@ -137,35 +143,42 @@ model Verification {
 // ─── Job / Application models ─────────────────────────────────────────────────
 
 model Job {
-  id              String          @id @default(cuid())
-  title           String
-  company         String
-  companyLogo     String?
-  location        String
-  remote          Boolean         @default(false)
-  type            JobType
-  level           ExperienceLevel
-  salary          String?
-  salaryMin       Int?
-  salaryMax       Int?
-  description     String
+  id               String          @id @default(cuid())
+  title            String
+  company          String
+  companyLogo      String?
+  location         String
+  remote           Boolean         @default(false)
+  type             JobType
+  level            ExperienceLevel
+  salary           String?
+  salaryMin        Int?
+  salaryMax        Int?
+  description      String
   responsibilities String[]
-  requirements    String[]
-  tags            String[]
-  category        String
-  applyUrl        String?
-  paymentStatus   String          @default("free")
-  source          String          @default("direct")
-  isActive        Boolean         @default(true)
-  featured        Boolean         @default(false)
-  postedAt        DateTime        @default(now())
-  expiresAt       DateTime?
-  updatedAt       DateTime        @updatedAt
+  requirements     String[]
+  tags             String[]
+  category         String
+  applyUrl         String?
+  paymentStatus    String          @default("free")
+  source           String          @default("direct")
+  isActive         Boolean         @default(true)
+  featured         Boolean         @default(false)
+  postedAt         DateTime        @default(now())
+  expiresAt        DateTime?
+  updatedAt        DateTime        @updatedAt
 
-  employerId      String?
-  employer        User?           @relation("EmployerJobs", fields: [employerId], references: [id])
+  employerId       String?
+  employer         User?           @relation("EmployerJobs", fields: [employerId], references: [id])
 
-  applications    Application[]
+  applications     Application[]
+
+  @@index([category])
+  @@index([type])
+  @@index([isActive, expiresAt])
+  @@index([isActive, featured, postedAt(sort: Desc)])
+  @@index([company])
+  @@index([postedAt(sort: Desc)])
 }
 
 model Application {
@@ -183,6 +196,9 @@ model Application {
   job         Job               @relation(fields: [jobId], references: [id])
 
   @@unique([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
+  @@index([appliedAt(sort: Desc)])
 }
 
 model GitHubProfile {
@@ -202,6 +218,8 @@ model GitHubProfile {
   user         User     @relation(fields: [userId], references: [id])
 
   repos        GitHubRepo[]
+
+  // username and userId are already @unique (implicit indexes)
 }
 
 model GitHubRepo {
@@ -217,6 +235,9 @@ model GitHubRepo {
 
   profileId   String
   profile     GitHubProfile @relation(fields: [profileId], references: [id])
+
+  @@index([profileId])
+  @@index([stars(sort: Desc)])
 }
 
 model Certification {
@@ -231,6 +252,8 @@ model Certification {
 
   userId        String
   user          User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model SavedSearch {
@@ -246,6 +269,9 @@ model SavedSearch {
 
   userId      String
   user        User      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([enabled])
 }
 
 model ActivityEvent {
@@ -256,4 +282,7 @@ model ActivityEvent {
 
   userId      String
   user        User              @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
 }
