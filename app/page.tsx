@@ -120,6 +120,18 @@ function Hero() {
           opacity: 0.28,
         }}
       />
+      {/* Top fade */}
+      <div
+        className="absolute inset-x-0 top-0 h-40 pointer-events-none"
+        aria-hidden="true"
+        style={{ background: "linear-gradient(to bottom, #ffffff 0%, transparent 100%)" }}
+      />
+      {/* Bottom fade */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-40 pointer-events-none"
+        aria-hidden="true"
+        style={{ background: "linear-gradient(to top, #ffffff 0%, transparent 100%)" }}
+      />
 
       {/* Massive editorial headline */}
       <motion.div
