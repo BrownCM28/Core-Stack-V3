@@ -118,19 +118,9 @@ function Hero() {
           backgroundPosition: "center center",
           backgroundRepeat: "no-repeat",
           opacity: 0.28,
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
         }}
-      />
-      {/* Top fade */}
-      <div
-        className="absolute inset-x-0 top-0 h-40 pointer-events-none"
-        aria-hidden="true"
-        style={{ background: "linear-gradient(to bottom, #ffffff 0%, transparent 100%)" }}
-      />
-      {/* Bottom fade */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-40 pointer-events-none"
-        aria-hidden="true"
-        style={{ background: "linear-gradient(to top, #ffffff 0%, transparent 100%)" }}
       />
 
       {/* Massive editorial headline */}
@@ -144,13 +134,13 @@ function Hero() {
           className="font-display font-normal uppercase tracking-tight text-black leading-none text-center w-full"
           aria-label="Infrastructure jobs for the people who keep the world running."
         >
-          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE
           </span>
-          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             JOBS FOR THE
           </span>
-          <span className="flex items-baseline justify-center gap-3 text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="flex items-baseline justify-center gap-3 text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             <span>PEOPLE WHO</span>
             <motion.span
               className="text-[#3ECF8E] inline-block"
@@ -161,10 +151,10 @@ function Hero() {
               ✦
             </motion.span>
           </span>
-          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             KEEP THE WORLD
           </span>
-          <span className="block text-center text-[13vw] md:text-[7.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             RUNNING.
           </span>
         </h1>
