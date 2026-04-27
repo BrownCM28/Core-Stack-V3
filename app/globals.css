@@ -4,6 +4,14 @@
 
 /* ── Custom font faces ─────────────────────────────────────────────── */
 @font-face {
+  font-family: "Alliance";
+  src: url("/fonts/alliance-no2-regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Adversal";
   src: url("/fonts/adversal.otf") format("opentype");
   font-weight: 400;
@@ -40,7 +48,7 @@
   --text-muted: #6B7280;
 
   /* Font family variables */
-  --font-display: var(--font-vercetti), serif;
+  --font-display: "Alliance", sans-serif;
   --font-sans: "Archia", sans-serif;
   --font-accent: "Heming", sans-serif;
 }
@@ -66,7 +74,7 @@
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-display);
+    font-family: "Alliance", sans-serif;
     font-weight: 400 !important;
   }
 

@@ -93,7 +93,7 @@ export function Navbar() {
                 <Link
                   href="/dashboard"
                   className={cn(
-                    "inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border font-mono text-xs transition-all duration-150",
+                    "inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border font-display text-sm transition-all duration-150",
                     active("/dashboard")
                       ? "border-[#0D0F12] text-[#0D0F12]"
                       : "border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12]"
@@ -130,13 +130,13 @@ export function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className="font-mono text-xs text-[#6B7280] hover:text-[#0D0F12] transition-colors duration-150 px-2"
+                  className="font-display text-sm text-[#6B7280] hover:text-[#0D0F12] transition-colors duration-150 px-2"
                 >
                   Login
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="inline-flex items-center px-5 py-2 rounded-full bg-[#0D0F12] text-white font-mono font-bold text-xs uppercase tracking-widest hover:bg-[#1E2128] transition-colors duration-150"
+                  className="inline-flex items-center px-5 py-2 rounded-full bg-[#0D0F12] text-white font-display text-sm hover:bg-[#1E2128] transition-colors duration-150"
                 >
                   Sign Up
                 </Link>
@@ -189,7 +189,7 @@ export function Navbar() {
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#E0E0E0] font-mono text-xs text-[#6B7280]"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#E0E0E0] font-display text-sm text-[#6B7280]"
                 >
                   <LayoutDashboard size={12} />
                   Dashboard
@@ -199,7 +199,7 @@ export function Navbar() {
                     setMobileOpen(false);
                     handleSignOut();
                   }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#E0E0E0] font-mono text-xs text-red-500"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#E0E0E0] font-display text-sm text-red-500"
                 >
                   <LogOut size={12} />
                   Sign out
@@ -210,14 +210,14 @@ export function Navbar() {
                 <Link
                   href="/auth/login"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-[#E0E0E0] font-mono text-xs text-[#6B7280]"
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-[#E0E0E0] font-display text-sm text-[#6B7280]"
                 >
                   Login
                 </Link>
                 <Link
                   href="/auth/signup"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#0D0F12] font-mono font-bold text-xs text-white uppercase tracking-widest"
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#0D0F12] font-display text-sm text-white"
                 >
                   Sign Up
                 </Link>

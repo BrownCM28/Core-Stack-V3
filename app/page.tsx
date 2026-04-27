@@ -46,7 +46,7 @@ function HomeNav() {
             <Link
               key={href}
               href={href}
-              className="font-mono text-sm text-black hover:text-[#3ECF8E] transition-colors duration-150"
+              className="font-display text-sm text-black hover:text-[#3ECF8E] transition-colors duration-150"
             >
               {label}
             </Link>
@@ -56,7 +56,7 @@ function HomeNav() {
         {/* CTA */}
         <Link
           href="/jobs"
-          className="bg-black text-white rounded-full px-5 py-2 font-mono text-sm hover:bg-gray-900 transition-colors duration-150"
+          className="bg-black text-white rounded-full px-5 py-2 font-display text-sm hover:bg-gray-900 transition-colors duration-150"
         >
           Browse Jobs
         </Link>
