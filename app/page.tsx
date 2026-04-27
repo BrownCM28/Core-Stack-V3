@@ -62,30 +62,58 @@ function HomeNav() {
         </Link>
       </div>
 
-      {/* Rule + animated SVG trace */}
-      <div className="relative h-px bg-[#E5E5E5]">
-        <div className="absolute inset-x-0 -top-2 h-6 pointer-events-none overflow-hidden">
-          <svg
-            className="w-full h-full"
-            viewBox="0 0 1440 24"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <circle cx="32" cy="8" r="4" fill="black" />
-            <circle cx="1408" cy="8" r="4" fill="black" />
-            <motion.path
-              d="M 32 8 C 240 8 480 22 720 22 C 960 22 1200 8 1408 8"
-              stroke="black"
-              strokeWidth="1.5"
-              fill="none"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.5, ease: "easeInOut", delay: 0.3 }}
-            />
-          </svg>
+    </header>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// NEWS TICKER
+// ─────────────────────────────────────────────────────────────
+
+const TICKER_ITEMS = [
+  "Microsoft announces $3.3B data center expansion in Wisconsin — 2,000 construction jobs",
+  "Equinix hiring 400+ critical facilities engineers across North America in Q2 2026",
+  "Google breaks ground on 11th Virginia data center campus — $2B investment",
+  "AWS opens applications for Data Center Technician roles in 14 cities",
+  "Meta's hyperscale AI data center in Louisiana creates 500 permanent operations jobs",
+  "CoreWeave raises $1.5B to build 5 new GPU cluster facilities — infrastructure hiring surge",
+  "Digital Realty expanding Phoenix campus — seeking 100 cooling and electrical engineers",
+  "NTT Data Centers breaks ground in Dallas — largest single-campus build in Texas history",
+  "Nvidia partners with 3 colocation providers for dedicated AI infrastructure campuses",
+  "QTS Realty hiring NOC engineers and facilities managers across Southeast US",
+  "Iron Mountain data center division expanding — seeking BICSI-certified project managers",
+  "US data center construction spending hits record $28B in Q1 2026 — talent demand at all-time high",
+];
+
+function NewsTicker() {
+  return (
+    <div
+      className="fixed top-16 left-0 right-0 z-40 w-full bg-black overflow-hidden border-b border-[#3ECF8E]/20 py-2.5 flex items-center"
+      role="marquee"
+      aria-label="Live infrastructure news"
+    >
+      {/* Fixed LIVE label */}
+      <div className="flex items-center flex-shrink-0">
+        <span className="bg-[#3ECF8E] text-black font-mono text-xs font-bold px-3 py-0.5 uppercase tracking-widest ml-4 mr-4">
+          LIVE
+        </span>
+        <div className="w-px h-4 bg-white/20 mr-4" aria-hidden="true" />
+      </div>
+      {/* Scrolling track */}
+      <div className="flex-1 overflow-hidden">
+        <div className="ticker-track">
+          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center font-mono text-xs text-gray-300 whitespace-nowrap"
+            >
+              {item}
+              <span className="text-[#3ECF8E] mx-8 text-xs" aria-hidden="true">✦</span>
+            </span>
+          ))}
         </div>
       </div>
-    </header>
+    </div>
   );
 }
 
@@ -106,7 +134,7 @@ function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-32 pb-16 flex flex-col items-center justify-between">
+    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-28 pb-16 flex flex-col items-center justify-between">
 
       {/* Datacenter background image */}
       <div
@@ -780,6 +808,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       <HomeNav />
+      <NewsTicker />
       <Hero />
       <LatestRolesSection />
       <ResourcesSection />
