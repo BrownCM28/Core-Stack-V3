@@ -36,9 +36,9 @@ const satoshi = localFont({
   display: "swap",
 });
 
-const vercetti = localFont({
-  src: "../Fonts/Vercetti Regular/OpenType WOFFs/Vercetti-Regular.woff2",
-  variable: "--font-vercetti",
+const alliance = localFont({
+  src: "../Fonts/Alliance_No_2_Regular.otf",
+  variable: "--font-alliance",
   weight: "400",
   display: "swap",
 });
@@ -101,7 +101,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${satoshi.variable} ${vercetti.variable} ${wavehaus.variable}`}
+      className={`${satoshi.variable} ${alliance.variable} ${wavehaus.variable}`}
     >
       <body className="min-h-screen text-text-primary antialiased">
         <Navbar />
