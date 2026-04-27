@@ -79,13 +79,10 @@ export async function POST(req: Request) {
     }
 
     const { name, filters, frequency } = parsed.data;
-    // Sanitize the alert name before storing
-    const safeName = sanitizeText(name);
-
 
     const alert = await prisma.savedSearch.create({
       data: {
-        safeName,
+        name: sanitizeText(name),
         filters: filters as Prisma.InputJsonValue,
         alertFreq: frequency,
         enabled: true,
@@ -96,7 +93,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         id: alert.id,
-        safeName: alert.name,
+        name: alert.name,
         filterSummary: filterSummaryFromFilters(filters),
         frequency: capitalize(frequency),
         active: alert.enabled,

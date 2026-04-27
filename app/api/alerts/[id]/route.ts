@@ -32,12 +32,11 @@ export async function PATCH(
   }
 
   const { name, frequency, active } = parsed.data;
-  ...(name !== undefined && { name: sanitizeText(name) }),
 
   const updated = await prisma.savedSearch.update({
     where: { id: params.id },
     data: {
-      ...(name !== undefined && { name }),
+      ...(name !== undefined && { name: sanitizeText(name) }),
       ...(frequency !== undefined && { alertFreq: frequency }),
       ...(active !== undefined && { enabled: active }),
     },
