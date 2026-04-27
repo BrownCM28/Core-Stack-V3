@@ -60,93 +60,94 @@ export function Navbar() {
       {/* Fixed header — transparent outer shell */}
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
 
-        {/* Floating rounded nav bar */}
+        {/* Floating rounded nav bar — nav row + ticker row */}
         <div
-          className="pointer-events-auto mx-4 md:mx-6 mt-3 rounded-xl h-[52px] flex items-center justify-between px-4 md:px-5 border border-black/8"
+          className="pointer-events-auto mx-4 md:mx-6 mt-3 rounded-xl flex flex-col overflow-hidden border border-black/8"
           style={{
             background: 'rgba(255, 255, 255, 0.72)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
           }}
         >
-          {/* Left — circle emblem + wordmark */}
-          <Link
-            href="/"
-            className="flex items-center gap-2 flex-shrink-0"
-            onClick={() => setMenuOpen(false)}
-          >
-            <div className="w-6 h-6 rounded-full border border-black/30 flex items-center justify-center flex-shrink-0">
-              <span className="font-mono text-[10px] text-black leading-none">C</span>
-            </div>
-            <span className="font-display text-sm font-normal tracking-tight ml-1">
-              <span className="text-black">Core</span>
-              <span className="text-[#3ECF8E]">Stack</span>
-            </span>
-          </Link>
+          {/* Top row — logo + buttons */}
+          <div className="flex items-center justify-between px-4 md:px-5 h-[52px]">
 
-          {/* Right — nav buttons + Post a Job + Sign In + hamburger */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            {/* Connected nav + Post a Job group (desktop only) */}
-            <nav className="hidden md:flex items-center">
-              {[...CENTER_NAV, { label: 'Post a Job', href: '/employers' }].map(({ label, href }, i) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`bg-white text-black font-mono text-xs px-4 py-1.5 border-2 border-black hover:bg-black hover:text-white transition-colors whitespace-nowrap ${i > 0 ? 'border-l-0' : ''}`}
-                >
-                  {label}
-                </Link>
-              ))}
-            </nav>
-
+            {/* Left — circle emblem + wordmark */}
             <Link
-              href="/auth/login"
-              className="hidden md:flex items-center bg-[#3ECF8E] text-black font-mono text-xs px-4 py-1.5 border-2 border-[#3ECF8E] hover:bg-black hover:text-white hover:border-black transition-colors whitespace-nowrap"
+              href="/"
+              className="flex items-center gap-2 flex-shrink-0"
+              onClick={() => setMenuOpen(false)}
             >
-              Sign In
+              <div className="w-6 h-6 rounded-full border border-black/30 flex items-center justify-center flex-shrink-0">
+                <span className="font-mono text-[10px] text-black leading-none">C</span>
+              </div>
+              <span className="font-display text-base font-normal tracking-tight ml-1">
+                <span className="text-black">Core</span>
+                <span className="text-[#3ECF8E]">Stack</span>
+              </span>
             </Link>
 
-            {/* Hamburger */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="w-[32px] h-[32px] border border-black/20 flex items-center justify-center hover:bg-black/8 transition-colors cursor-pointer"
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={menuOpen}
-            >
-              <div className="flex flex-col gap-[4px] items-center justify-center">
-                <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
-                <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? 'opacity-0' : ''}`} />
-                <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
-              </div>
-            </button>
-          </div>
-        </div>
+            {/* Right — nav buttons + Post a Job + Sign In + hamburger */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <nav className="hidden md:flex items-center">
+                {[...CENTER_NAV, { label: 'Post a Job', href: '/employers' }].map(({ label, href }, i) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`bg-white text-black font-mono text-xs px-4 py-1.5 border-2 border-black hover:bg-black hover:text-white transition-colors whitespace-nowrap ${i > 0 ? 'border-l-0' : ''}`}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
 
-        {/* Ticker strip — full width below floating nav */}
-        <div
-          className="pointer-events-auto mt-1 w-full overflow-hidden flex items-center py-[7px] border-t border-black/5"
-          style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
-          role="marquee"
-          aria-label="Live infrastructure news"
-        >
-          <div className="flex items-center flex-shrink-0">
-            <span className="bg-black text-white font-mono text-[10px] font-bold px-2 py-0.5 uppercase tracking-widest ml-4 mr-3">
-              LIVE
-            </span>
-            <div className="w-px h-3 bg-black/15 mr-3 flex-shrink-0" aria-hidden="true" />
+              <Link
+                href="/auth/login"
+                className="hidden md:flex items-center bg-[#3ECF8E] text-black font-mono text-xs px-4 py-1.5 border-2 border-[#3ECF8E] hover:bg-black hover:text-white hover:border-black transition-colors whitespace-nowrap"
+              >
+                Sign In
+              </Link>
+
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="w-[32px] h-[32px] border border-black/20 flex items-center justify-center hover:bg-black/8 transition-colors cursor-pointer"
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
+              >
+                <div className="flex flex-col gap-[4px] items-center justify-center">
+                  <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
+                  <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? 'opacity-0' : ''}`} />
+                  <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
+                </div>
+              </button>
+            </div>
           </div>
-          <div className="flex-1 overflow-hidden">
-            <div className="ticker-track">
-              {doubled.map((item, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center font-mono text-[10px] text-black/50 whitespace-nowrap"
-                >
-                  {item}
-                  <span className="text-[#3ECF8E] mx-8" aria-hidden="true">✦</span>
-                </span>
-              ))}
+
+          {/* Bottom row — ticker inside the rounded container */}
+          <div
+            className="overflow-hidden flex items-center py-1.5 border-t border-black/8"
+            role="marquee"
+            aria-label="Live infrastructure news"
+          >
+            <div className="flex items-center flex-shrink-0">
+              <span className="bg-black text-white font-mono text-[10px] font-bold px-2 py-0.5 uppercase tracking-widest ml-4 mr-3">
+                LIVE
+              </span>
+              <div className="w-px h-3 bg-black/15 mr-3 flex-shrink-0" aria-hidden="true" />
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <div className="ticker-track">
+                {doubled.map((item, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center font-mono text-[10px] text-black/50 whitespace-nowrap"
+                  >
+                    {item}
+                    <span className="text-[#3ECF8E] mx-8" aria-hidden="true">✦</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
