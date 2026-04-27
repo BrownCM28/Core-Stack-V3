@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   Search,
+  MapPin,
   ChevronDown,
   ChevronRight,
   X,
@@ -84,6 +85,7 @@ export function JobsPageContent() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "newest");
   const [searchInput, setSearchInput] = useState(searchParams.get("search") ?? "");
+  const [locationInput, setLocationInput] = useState(searchParams.get("location") ?? "");
 
   // Sidebar filter state
   const [sidebarCategory, setSidebarCategory] = useState(searchParams.get("category") ?? "");
@@ -119,7 +121,10 @@ export function JobsPageContent() {
   }
 
   function handleSearch() {
-    pushParams({ search: searchInput.trim() || null });
+    pushParams({
+      search: searchInput.trim() || null,
+      location: locationInput.trim() || null,
+    });
   }
 
   function handleCategoryPill(cat: string) {
@@ -146,6 +151,7 @@ export function JobsPageContent() {
     setJobTypes([]);
     setSalaryInput("");
     setSearchInput("");
+    setLocationInput("");
     setSortBy("newest");
     router.push(pathname);
   }
@@ -287,40 +293,68 @@ export function JobsPageContent() {
               Search, filter and apply to your next role
             </p>
 
-            {/* Search bar */}
-            <div className="flex items-center border-2 border-black bg-white h-12 px-4 w-full max-w-xl">
-              <Search size={16} className="text-gray-400 flex-shrink-0 mr-3" aria-hidden="true" />
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                placeholder="Search roles, companies, or keywords..."
-                className="flex-1 font-mono text-sm text-black bg-transparent border-none outline-none placeholder:text-gray-400"
-              />
+            {/* Two-field search bar */}
+            <div className="flex items-stretch border-2 border-black bg-white w-full max-w-2xl">
+              <label htmlFor="jobs-keyword" className="sr-only">Job title or keyword</label>
+              <div className="flex items-center flex-1 px-4 py-3 border-r-2 border-black">
+                <Search size={16} className="text-black flex-shrink-0 mr-3" aria-hidden="true" />
+                <input
+                  id="jobs-keyword"
+                  type="text"
+                  placeholder="Job title or keyword..."
+                  className="flex-1 font-mono text-sm text-black bg-transparent border-none outline-none placeholder:text-gray-400"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+              <label htmlFor="jobs-location" className="sr-only">Location</label>
+              <div className="flex items-center w-44 px-4 py-3 border-r-2 border-black">
+                <MapPin size={16} className="text-black flex-shrink-0 mr-3" aria-hidden="true" />
+                <input
+                  id="jobs-location"
+                  type="text"
+                  placeholder="Location"
+                  className="flex-1 font-mono text-sm text-black bg-transparent border-none outline-none placeholder:text-gray-400"
+                  value={locationInput}
+                  onChange={(e) => setLocationInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                className="bg-black text-white font-mono text-sm font-medium px-8 py-3 hover:bg-gray-900 transition-colors flex-shrink-0 cursor-pointer"
+              >
+                Search
+              </button>
             </div>
 
-            {/* Category pills */}
-            <div className="flex items-center gap-2 mt-4 overflow-x-auto scrollbar-hide flex-wrap justify-center max-w-2xl">
-              {CATEGORIES.map((cat) => {
+            {/* Connected category buttons */}
+            <div className="flex items-center gap-0 mt-4 overflow-x-auto scrollbar-hide max-w-2xl w-full">
+              {CATEGORIES.map((cat, i) => {
                 const isActive = cat === "All" ? activeCategory === "" : activeCategory === cat;
                 return (
                   <button
                     key={cat}
                     onClick={() => handleCategoryPill(cat)}
                     className={cn(
-                      "font-mono text-xs px-3 py-1.5 cursor-pointer transition-colors border rounded-full whitespace-nowrap flex-shrink-0",
+                      "flex-shrink-0 font-mono text-xs px-4 py-2 border-2 border-black cursor-pointer transition-colors whitespace-nowrap",
+                      i > 0 && "border-l-0",
                       isActive
-                        ? "bg-black text-white border-black"
-                        : "bg-white text-gray-600 border-[#E5E5E5] hover:bg-gray-50"
+                        ? "bg-black text-white"
+                        : "bg-white text-black hover:bg-black hover:text-white"
                     )}
                   >
                     {cat}
                   </button>
                 );
               })}
-              <button className="flex-shrink-0 border border-[#E5E5E5] rounded-full w-7 h-7 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors">
-                <ChevronRight size={13} />
+              <button
+                className="flex-shrink-0 bg-white text-black font-mono text-xs px-3 py-2 border-2 border-l-0 border-black hover:bg-black hover:text-white transition-colors cursor-pointer"
+                onClick={() => router.push("/jobs")}
+                aria-label="More categories"
+              >
+                <ChevronRight size={14} />
               </button>
             </div>
           </div>
