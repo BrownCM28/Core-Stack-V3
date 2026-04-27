@@ -84,7 +84,7 @@ export function Navbar() {
                 alt="CoreStack"
                 width={140}
                 height={36}
-                className="h-8 w-auto object-contain"
+                className="h-11 w-auto object-contain"
                 priority
               />
             </Link>
