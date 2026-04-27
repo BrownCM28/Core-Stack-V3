@@ -4,6 +4,7 @@ import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { checkRateLimit, standardLimit } from "@/lib/ratelimit";
+import { sanitizeText } from "@/lib/sanitize";
 
 const CreateAlertSchema = z.object({
   name: z.string().min(1).max(100),
@@ -78,10 +79,13 @@ export async function POST(req: Request) {
     }
 
     const { name, filters, frequency } = parsed.data;
+    // Sanitize the alert name before storing
+    const safeName = sanitizeText(name);
+
 
     const alert = await prisma.savedSearch.create({
       data: {
-        name,
+        safeName,
         filters: filters as Prisma.InputJsonValue,
         alertFreq: frequency,
         enabled: true,
@@ -92,7 +96,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         id: alert.id,
-        name: alert.name,
+        safeName: alert.name,
         filterSummary: filterSummaryFromFilters(filters),
         frequency: capitalize(frequency),
         active: alert.enabled,
