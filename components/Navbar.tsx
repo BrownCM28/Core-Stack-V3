@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const TICKER_ITEMS = [
@@ -72,19 +73,20 @@ export function Navbar() {
           {/* Top row — logo + buttons */}
           <div className="flex items-center justify-between px-4 md:px-5 h-[52px]">
 
-            {/* Left — circle emblem + wordmark */}
+            {/* Left — logo */}
             <Link
               href="/"
-              className="flex items-center gap-2 flex-shrink-0"
+              className="flex items-center flex-shrink-0"
               onClick={() => setMenuOpen(false)}
             >
-              <div className="w-6 h-6 rounded-full border border-black/30 flex items-center justify-center flex-shrink-0">
-                <span className="font-mono text-[10px] text-black leading-none">C</span>
-              </div>
-              <span className="font-display text-base font-normal tracking-tight ml-1">
-                <span className="text-black">Core</span>
-                <span className="text-[#3ECF8E]">Stack</span>
-              </span>
+              <Image
+                src="/Untitled (57).png"
+                alt="CoreStack"
+                width={140}
+                height={36}
+                className="h-8 w-auto object-contain"
+                priority
+              />
             </Link>
 
             {/* Right — nav buttons + Post a Job + Sign In + hamburger */}
