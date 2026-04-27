@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { sanitizeText } from "@/lib/sanitize";
 
 const PatchAlertSchema = z.object({
   name: z.string().min(1).max(100).optional(),
@@ -31,6 +32,7 @@ export async function PATCH(
   }
 
   const { name, frequency, active } = parsed.data;
+  ...(name !== undefined && { name: sanitizeText(name) }),
 
   const updated = await prisma.savedSearch.update({
     where: { id: params.id },
