@@ -9,6 +9,7 @@ import {
   ChevronRight,
   X,
   Search,
+  MapPin,
 } from "lucide-react";
 import { JobFilters } from "@/components/JobFilters";
 import { JobListingCard } from "@/components/jobs/JobListingCard";
@@ -30,6 +31,7 @@ export function JobsPageContent() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "newest");
   const [searchInput, setSearchInput] = useState(searchParams.get("search") ?? "");
+  const [locationInput, setLocationInput] = useState(searchParams.get("location") ?? "");
 
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
 
@@ -65,10 +67,19 @@ export function JobsPageContent() {
   function handleSearch() {
     const params = new URLSearchParams(searchParams.toString());
     const q = searchInput.trim();
-    if (q) {
-      params.set("search", q);
+    const loc = locationInput.trim();
+    if (q) { params.set("search", q); } else { params.delete("search"); }
+    if (loc) { params.set("location", loc); } else { params.delete("location"); }
+    params.delete("page");
+    router.replace(`${pathname}?${params.toString()}`);
+  }
+
+  function handleCategory(cat: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (cat === "All") {
+      params.delete("category");
     } else {
-      params.delete("search");
+      params.set("category", cat);
     }
     params.delete("page");
     router.replace(`${pathname}?${params.toString()}`);
@@ -77,6 +88,65 @@ export function JobsPageContent() {
   return (
     <>
       <div className="min-h-screen bg-background">
+
+        {/* ── Hero-style search + categories ── */}
+        <div className="w-full px-6 md:px-12 py-8 border-b border-[#E0E0E0]">
+          <div className="max-w-3xl">
+            {/* Search bar */}
+            <div className="flex items-stretch border-2 border-black bg-white w-full">
+              <label htmlFor="jobs-keyword" className="sr-only">Job title or keyword</label>
+              <div className="flex items-center flex-1 px-4 py-3 border-r-2 border-black">
+                <Search size={16} className="text-black flex-shrink-0 mr-3" aria-hidden="true" />
+                <input
+                  id="jobs-keyword"
+                  type="text"
+                  placeholder="Job title or keyword..."
+                  className="flex-1 font-mono text-sm text-black bg-transparent border-none outline-none placeholder:text-gray-400"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+              <label htmlFor="jobs-location" className="sr-only">Location</label>
+              <div className="flex items-center w-44 px-4 py-3 border-r-2 border-black">
+                <MapPin size={16} className="text-black flex-shrink-0 mr-3" aria-hidden="true" />
+                <input
+                  id="jobs-location"
+                  type="text"
+                  placeholder="Location"
+                  className="flex-1 font-mono text-sm text-black bg-transparent border-none outline-none placeholder:text-gray-400"
+                  value={locationInput}
+                  onChange={(e) => setLocationInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                className="bg-black text-white font-mono text-sm font-medium px-8 py-3 hover:bg-gray-900 transition-colors flex-shrink-0 cursor-pointer"
+              >
+                Search
+              </button>
+            </div>
+            {/* Category filter row */}
+            <div className="flex items-center gap-0 mt-3 overflow-x-auto scrollbar-hide">
+              <button
+                className="flex-shrink-0 bg-black text-white font-mono text-xs px-4 py-2 border-2 border-black hover:bg-gray-900 transition-colors cursor-pointer"
+                onClick={() => handleCategory("All")}
+              >
+                All
+              </button>
+              {["Data Center Ops", "AI Infrastructure", "Electrical", "Cooling / HVAC", "Construction", "Networking"].map((cat) => (
+                <button
+                  key={cat}
+                  className="flex-shrink-0 bg-white text-black font-mono text-xs px-4 py-2 border-2 border-l-0 border-black hover:bg-black hover:text-white transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => handleCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* ── Mobile filter toggle bar ── */}
         <div className="lg:hidden sticky top-14 z-30 bg-background border-b border-[#E0E0E0] px-4 py-3 flex items-center justify-between">

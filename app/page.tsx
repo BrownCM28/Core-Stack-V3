@@ -42,7 +42,7 @@ function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-28 pb-16 flex flex-col items-center justify-between">
+    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-4 pb-16 flex flex-col items-center justify-between">
 
       {/* Datacenter background image */}
       <div
@@ -53,9 +53,7 @@ function Hero() {
           backgroundSize: "contain",
           backgroundPosition: "center center",
           backgroundRepeat: "no-repeat",
-          opacity: 0.28,
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+          opacity: 0.65,
         }}
       />
 
@@ -70,27 +68,19 @@ function Hero() {
           className="font-display font-normal uppercase tracking-tight text-black leading-none text-center w-full"
           aria-label="Infrastructure jobs for the people who keep the world running."
         >
-          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[8vw] md:text-[4.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE
           </span>
-          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[8vw] md:text-[4.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             JOBS FOR THE
           </span>
-          <span className="flex items-baseline justify-center gap-3 text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
-            <span>PEOPLE WHO</span>
-            <motion.span
-              className="text-[#3ECF8E] inline-block"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              aria-hidden="true"
-            >
-              ✦
-            </motion.span>
+          <span className="block text-center text-[8vw] md:text-[4.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+            PEOPLE WHO
           </span>
-          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[8vw] md:text-[4.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             KEEP THE WORLD
           </span>
-          <span className="block text-center text-[10vw] md:text-[6vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[8vw] md:text-[4.5vw] leading-[1.05] font-normal uppercase tracking-tight text-black w-full">
             RUNNING.
           </span>
         </h1>
