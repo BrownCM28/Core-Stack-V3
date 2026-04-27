@@ -25,98 +25,6 @@ function GithubIcon({ size = 20 }: { size?: number }) {
 // NAVBAR
 // ─────────────────────────────────────────────────────────────
 
-function HomeNav() {
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white">
-      <div className="flex items-center justify-between px-8 md:px-16 h-16">
-        {/* Wordmark */}
-        <Link href="/" className="font-display text-xl leading-none">
-          <span className="text-black">Core</span>
-          <span className="text-[#3ECF8E]">Stack</span>
-        </Link>
-
-        {/* Nav links */}
-        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-8">
-          {[
-            { label: "Browse Jobs", href: "/jobs" },
-            { label: "Wiki", href: "/wiki" },
-            { label: "Talent", href: "/talent" },
-            { label: "Post a Job", href: "/employers" },
-          ].map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              className="font-display text-sm text-black hover:text-[#3ECF8E] transition-colors duration-150"
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* CTA */}
-        <Link
-          href="/jobs"
-          className="bg-black text-white rounded-full px-5 py-2 font-display text-sm hover:bg-gray-900 transition-colors duration-150"
-        >
-          Browse Jobs
-        </Link>
-      </div>
-
-    </header>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// NEWS TICKER
-// ─────────────────────────────────────────────────────────────
-
-const TICKER_ITEMS = [
-  "Microsoft announces $3.3B data center expansion in Wisconsin — 2,000 construction jobs",
-  "Equinix hiring 400+ critical facilities engineers across North America in Q2 2026",
-  "Google breaks ground on 11th Virginia data center campus — $2B investment",
-  "AWS opens applications for Data Center Technician roles in 14 cities",
-  "Meta's hyperscale AI data center in Louisiana creates 500 permanent operations jobs",
-  "CoreWeave raises $1.5B to build 5 new GPU cluster facilities — infrastructure hiring surge",
-  "Digital Realty expanding Phoenix campus — seeking 100 cooling and electrical engineers",
-  "NTT Data Centers breaks ground in Dallas — largest single-campus build in Texas history",
-  "Nvidia partners with 3 colocation providers for dedicated AI infrastructure campuses",
-  "QTS Realty hiring NOC engineers and facilities managers across Southeast US",
-  "Iron Mountain data center division expanding — seeking BICSI-certified project managers",
-  "US data center construction spending hits record $28B in Q1 2026 — talent demand at all-time high",
-];
-
-function NewsTicker() {
-  return (
-    <div
-      className="fixed top-16 left-0 right-0 z-40 w-full bg-white overflow-hidden border-b border-black py-2.5 flex items-center"
-      role="marquee"
-      aria-label="Live infrastructure news"
-    >
-      {/* Fixed LIVE label */}
-      <div className="flex items-center flex-shrink-0">
-        <span className="bg-black text-white font-mono text-xs font-bold px-3 py-0.5 uppercase tracking-widest ml-4 mr-4">
-          LIVE
-        </span>
-        <div className="w-px h-4 bg-black/20 mr-4" aria-hidden="true" />
-      </div>
-      {/* Scrolling track */}
-      <div className="flex-1 overflow-hidden">
-        <div className="ticker-track">
-          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center font-mono text-xs text-black whitespace-nowrap"
-            >
-              {item}
-              <span className="text-[#3ECF8E] mx-8 text-xs" aria-hidden="true">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─────────────────────────────────────────────────────────────
 // HERO
 // ─────────────────────────────────────────────────────────────
@@ -807,8 +715,6 @@ export const dynamic = "force-dynamic";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
-      <HomeNav />
-      <NewsTicker />
       <Hero />
       <LatestRolesSection />
       <ResourcesSection />

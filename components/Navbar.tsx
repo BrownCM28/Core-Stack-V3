@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Search } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -38,7 +38,6 @@ const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS]
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const router = useRouter()
-  const pathname = usePathname()
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
@@ -52,9 +51,6 @@ export function Navbar() {
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [])
-
-  // Let page.tsx's HomeNav handle the homepage
-  if (pathname === '/') return null
 
   function handleSearch() {
     if (window.location.pathname === '/') {
