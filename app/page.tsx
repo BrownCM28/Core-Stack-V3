@@ -88,16 +88,16 @@ const TICKER_ITEMS = [
 function NewsTicker() {
   return (
     <div
-      className="fixed top-16 left-0 right-0 z-40 w-full bg-black overflow-hidden border-b border-[#3ECF8E]/20 py-2.5 flex items-center"
+      className="fixed top-16 left-0 right-0 z-40 w-full bg-white overflow-hidden border-b border-black py-2.5 flex items-center"
       role="marquee"
       aria-label="Live infrastructure news"
     >
       {/* Fixed LIVE label */}
       <div className="flex items-center flex-shrink-0">
-        <span className="bg-[#3ECF8E] text-black font-mono text-xs font-bold px-3 py-0.5 uppercase tracking-widest ml-4 mr-4">
+        <span className="bg-black text-white font-mono text-xs font-bold px-3 py-0.5 uppercase tracking-widest ml-4 mr-4">
           LIVE
         </span>
-        <div className="w-px h-4 bg-white/20 mr-4" aria-hidden="true" />
+        <div className="w-px h-4 bg-black/20 mr-4" aria-hidden="true" />
       </div>
       {/* Scrolling track */}
       <div className="flex-1 overflow-hidden">
@@ -105,7 +105,7 @@ function NewsTicker() {
           {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
             <span
               key={i}
-              className="inline-flex items-center font-mono text-xs text-gray-300 whitespace-nowrap"
+              className="inline-flex items-center font-mono text-xs text-black whitespace-nowrap"
             >
               {item}
               <span className="text-[#3ECF8E] mx-8 text-xs" aria-hidden="true">✦</span>
