@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { Search } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const TICKER_ITEMS = [
@@ -19,6 +17,12 @@ const TICKER_ITEMS = [
   'QTS Realty hiring NOC engineers and facilities managers across Southeast US',
   'Iron Mountain data center division expanding — seeking BICSI-certified project managers',
   'US data center construction spending hits record $28B in Q1 2026 — talent demand at all-time high',
+]
+
+const CENTER_NAV = [
+  { label: 'Browse Jobs', href: '/jobs' },
+  { label: 'Wiki', href: '/wiki' },
+  { label: 'Docs', href: '/docs' },
 ]
 
 const NAV_LINKS = [
@@ -37,7 +41,6 @@ const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS]
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
@@ -52,30 +55,20 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', handleKey)
   }, [])
 
-  function handleSearch() {
-    if (window.location.pathname === '/') {
-      document.querySelector('input[type="text"]')?.scrollIntoView({ behavior: 'smooth' })
-      setTimeout(() => {
-        (document.querySelector('input[type="text"]') as HTMLInputElement)?.focus()
-      }, 500)
-    } else {
-      router.push('/jobs')
-    }
-  }
-
   return (
     <>
-      <header
-        className="fixed top-0 left-0 right-0 z-50 flex flex-col"
-        style={{
-          background: 'rgba(0, 0, 0, 0.82)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-        }}
-      >
-        {/* Main nav row — 52px */}
-        <div className="relative flex items-center justify-between px-6 md:px-8 h-[52px]">
+      {/* Fixed header — transparent outer shell */}
+      <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
 
+        {/* Floating rounded nav bar */}
+        <div
+          className="pointer-events-auto mx-4 md:mx-6 mt-3 rounded-xl h-[52px] flex items-center justify-between px-4 md:px-5 border border-white/10"
+          style={{
+            background: 'rgba(8, 8, 8, 0.45)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+          }}
+        >
           {/* Left — circle emblem + wordmark */}
           <Link
             href="/"
@@ -91,53 +84,55 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Center — single nav link, absolutely centered */}
-          <Link
-            href="/jobs"
-            className="absolute left-1/2 -translate-x-1/2 hidden md:block font-mono text-sm text-white/60 hover:text-white transition-colors duration-200"
-            onClick={() => setMenuOpen(false)}
-          >
-            Browse Jobs
-          </Link>
+          {/* Center — connected category-style nav buttons (desktop only) */}
+          <nav className="hidden md:flex items-center absolute left-1/2 -translate-x-1/2">
+            {CENTER_NAV.map(({ label, href }, i) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className={`bg-white text-black font-mono text-xs px-4 py-1.5 border-2 border-black hover:bg-black hover:text-white transition-colors whitespace-nowrap ${i > 0 ? 'border-l-0' : ''}`}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
 
-          {/* Right — three modular buttons */}
+          {/* Right — Post a Job, Sign In, hamburger */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            {/* Button 1: text CTA */}
             <Link
-              href="/jobs"
-              className="border border-white/25 text-white font-mono text-xs px-5 h-[32px] flex items-center hover:bg-white/10 transition-colors duration-200 whitespace-nowrap"
+              href="/employers"
+              className="hidden md:flex items-center bg-white text-black font-mono text-xs px-4 py-1.5 border-2 border-black hover:bg-black hover:text-white transition-colors whitespace-nowrap"
             >
-              Browse Jobs
+              Post a Job
+            </Link>
+            <Link
+              href="/auth/login"
+              className="hidden md:flex items-center bg-[#3ECF8E] text-black font-mono text-xs px-4 py-1.5 border-2 border-[#3ECF8E] hover:bg-white hover:border-white transition-colors whitespace-nowrap"
+            >
+              Sign In
             </Link>
 
-            {/* Button 2: search */}
-            <button
-              onClick={handleSearch}
-              className="w-[32px] h-[32px] border border-white/25 flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer"
-              aria-label="Search"
-            >
-              <Search size={14} className="text-white/70" />
-            </button>
-
-            {/* Button 3: hamburger */}
+            {/* Hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="w-[32px] h-[32px] border border-white/25 flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer"
+              className="w-[32px] h-[32px] border border-white/25 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
             >
               <div className="flex flex-col gap-[4px] items-center justify-center">
-                <span className={`w-[14px] h-[1px] bg-white/70 transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
-                <span className={`w-[14px] h-[1px] bg-white/70 transition-all duration-300 block ${menuOpen ? 'opacity-0' : ''}`} />
-                <span className={`w-[14px] h-[1px] bg-white/70 transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-white/80 transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-white/80 transition-all duration-300 block ${menuOpen ? 'opacity-0' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-white/80 transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
               </div>
             </button>
           </div>
         </div>
 
-        {/* Ticker row */}
+        {/* Ticker strip — full width below floating nav */}
         <div
-          className="w-full overflow-hidden border-t border-white/10 py-2 flex items-center"
+          className="pointer-events-auto mt-1 w-full overflow-hidden flex items-center py-[7px] border-t border-white/5"
+          style={{ background: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
           role="marquee"
           aria-label="Live infrastructure news"
         >
@@ -163,7 +158,7 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Full-screen overlay — paddingTop matches full header height */}
+      {/* Full-screen overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -172,9 +167,9 @@ export function Navbar() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
             className="fixed inset-0 z-40 bg-black overflow-y-auto"
-            style={{ paddingTop: '80px' }}
+            style={{ paddingTop: '90px' }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] min-h-[calc(100vh-80px)] border-t border-white/10">
+            <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] min-h-[calc(100vh-90px)] border-t border-white/10">
 
               {/* Left column — nav links */}
               <div className="bg-black border-r border-white/10 px-10 py-12">
@@ -202,14 +197,10 @@ export function Navbar() {
               {/* Right column — content panels */}
               <div className="bg-[#0A0A0A] px-10 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 content-start">
 
-                {/* Panel 1 — For Candidates */}
+                {/* For Candidates */}
                 <div>
-                  <p className="font-mono text-xs uppercase tracking-widest text-white/30 mb-4">
-                    FOR CANDIDATES
-                  </p>
-                  <h3 className="font-display text-xl text-white mb-3">
-                    Your GitHub is your resume.
-                  </h3>
+                  <p className="font-mono text-xs uppercase tracking-widest text-white/30 mb-4">FOR CANDIDATES</p>
+                  <h3 className="font-display text-xl text-white mb-3">Your GitHub is your resume.</h3>
                   <p className="font-sans text-sm text-white/50 leading-relaxed mb-6">
                     Sign in with GitHub and your entire tech stack syncs automatically. Add certifications, set your Open to Work status, and get discovered by top infrastructure employers.
                   </p>
@@ -220,23 +211,15 @@ export function Navbar() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href="/auth/signup"
-                    onClick={() => setMenuOpen(false)}
-                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
-                  >
+                  <Link href="/auth/signup" onClick={() => setMenuOpen(false)} className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all">
                     Create free profile ↗
                   </Link>
                 </div>
 
-                {/* Panel 2 — For Employers */}
+                {/* For Employers */}
                 <div>
-                  <p className="font-mono text-xs uppercase tracking-widest text-white/30 mb-4">
-                    FOR EMPLOYERS
-                  </p>
-                  <h3 className="font-display text-xl text-white mb-3">
-                    Hire before your competitors even start searching.
-                  </h3>
+                  <p className="font-mono text-xs uppercase tracking-widest text-white/30 mb-4">FOR EMPLOYERS</p>
+                  <h3 className="font-display text-xl text-white mb-3">Hire before your competitors even start searching.</h3>
                   <p className="font-sans text-sm text-white/50 leading-relaxed mb-6">
                     Post a listing or subscribe to monthly CoreStack Score reports — pre-ranked infrastructure talent delivered automatically.
                   </p>
@@ -247,18 +230,13 @@ export function Navbar() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href="/employers"
-                    onClick={() => setMenuOpen(false)}
-                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
-                  >
+                  <Link href="/employers" onClick={() => setMenuOpen(false)} className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all">
                     Post a job ↗
                   </Link>
                 </div>
               </div>
             </div>
 
-            {/* Bottom bar — desktop only */}
             <div className="hidden md:flex border-t border-white/10 px-10 py-4 items-center justify-between">
               <span className="font-mono text-xs text-white/20">© 2026 CoreStack</span>
               <span className="font-mono text-xs text-white/20">Built for the people who keep the world running.</span>
