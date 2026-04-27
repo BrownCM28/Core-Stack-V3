@@ -2,18 +2,42 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
+import { Search } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const NAV_CATEGORIES = [
+const TICKER_ITEMS = [
+  'Microsoft announces $3.3B data center expansion in Wisconsin — 2,000 construction jobs',
+  'Equinix hiring 400+ critical facilities engineers across North America in Q2 2026',
+  'Google breaks ground on 11th Virginia data center campus — $2B investment',
+  'AWS opens applications for Data Center Technician roles in 14 cities',
+  "Meta's hyperscale AI data center in Louisiana creates 500 permanent operations jobs",
+  'CoreWeave raises $1.5B to build 5 new GPU cluster facilities — infrastructure hiring surge',
+  'Digital Realty expanding Phoenix campus — seeking 100 cooling and electrical engineers',
+  'NTT Data Centers breaks ground in Dallas — largest single-campus build in Texas history',
+  'Nvidia partners with 3 colocation providers for dedicated AI infrastructure campuses',
+  'QTS Realty hiring NOC engineers and facilities managers across Southeast US',
+  'Iron Mountain data center division expanding — seeking BICSI-certified project managers',
+  'US data center construction spending hits record $28B in Q1 2026 — talent demand at all-time high',
+]
+
+const NAV_LINKS = [
   { label: 'Browse Jobs', href: '/jobs' },
+  { label: '↳ Data Center Ops', href: '/jobs?category=Data+Center+Ops', sub: true },
+  { label: '↳ AI Infrastructure', href: '/jobs?category=AI+Infrastructure', sub: true },
+  { label: '↳ Construction', href: '/jobs?category=Construction', sub: true },
+  { label: '↳ Electrical', href: '/jobs?category=Electrical', sub: true },
   { label: 'Post a Job', href: '/employers' },
   { label: 'Wiki', href: '/wiki' },
   { label: 'Docs', href: '/docs' },
+  { label: 'Sign In', href: '/auth/login' },
 ]
+
+const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS]
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
@@ -29,62 +53,121 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', handleKey)
   }, [])
 
+  // Let page.tsx's HomeNav handle the homepage
+  if (pathname === '/') return null
+
+  function handleSearch() {
+    if (window.location.pathname === '/') {
+      document.querySelector('input[type="text"]')?.scrollIntoView({ behavior: 'smooth' })
+      setTimeout(() => {
+        (document.querySelector('input[type="text"]') as HTMLInputElement)?.focus()
+      }, 500)
+    } else {
+      router.push('/jobs')
+    }
+  }
+
   return (
     <>
-      {/* Fixed top bar */}
-      <header className="fixed top-0 left-0 right-0 h-[52px] bg-black z-50 flex items-center justify-between px-6 md:px-10">
+      <header
+        className="fixed top-0 left-0 right-0 z-50 flex flex-col"
+        style={{
+          background: 'rgba(0, 0, 0, 0.82)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+        }}
+      >
+        {/* Main nav row — 52px */}
+        <div className="relative flex items-center justify-between px-6 md:px-8 h-[52px]">
 
-        {/* Left — wordmark */}
-        <Link
-          href="/"
-          className="font-display text-base font-normal tracking-tight flex-shrink-0"
-          onClick={() => setMenuOpen(false)}
-        >
-          <span className="text-white">Core</span>
-          <span className="text-[#3ECF8E]">Stack</span>
-        </Link>
-
-        {/* Center — category nav (desktop only) */}
-        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-          {NAV_CATEGORIES.map((link) => {
-            const active = pathname.startsWith(link.href)
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`font-mono text-xs tracking-wider uppercase transition-colors duration-200 ${
-                  active ? 'text-white' : 'text-white/50 hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* Right — CTA + hamburger */}
-        <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Left — circle emblem + wordmark */}
           <Link
-            href="/auth/signup"
-            className="bg-white text-black font-mono text-xs px-5 py-2 hover:bg-white/90 transition-colors duration-200 whitespace-nowrap"
+            href="/"
+            className="flex items-center gap-2 flex-shrink-0"
+            onClick={() => setMenuOpen(false)}
           >
-            Get Started
+            <div className="w-6 h-6 rounded-full border border-white/40 flex items-center justify-center flex-shrink-0">
+              <span className="font-mono text-[10px] text-white leading-none">C</span>
+            </div>
+            <span className="font-display text-sm font-normal tracking-tight ml-1">
+              <span className="text-white">Core</span>
+              <span className="text-[#3ECF8E]">Stack</span>
+            </span>
           </Link>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 cursor-pointer"
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
+          {/* Center — single nav link, absolutely centered */}
+          <Link
+            href="/jobs"
+            className="absolute left-1/2 -translate-x-1/2 hidden md:block font-mono text-sm text-white/60 hover:text-white transition-colors duration-200"
+            onClick={() => setMenuOpen(false)}
           >
-            <span className={`w-5 h-px bg-white transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[8px]' : ''}`} />
-            <span className={`w-5 h-px bg-white transition-all duration-300 block ${menuOpen ? 'opacity-0 scale-x-0' : ''}`} />
-            <span className={`w-5 h-px bg-white transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[8px]' : ''}`} />
-          </button>
+            Browse Jobs
+          </Link>
+
+          {/* Right — three modular buttons */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Button 1: text CTA */}
+            <Link
+              href="/jobs"
+              className="border border-white/25 text-white font-mono text-xs px-5 h-[32px] flex items-center hover:bg-white/10 transition-colors duration-200 whitespace-nowrap"
+            >
+              Browse Jobs
+            </Link>
+
+            {/* Button 2: search */}
+            <button
+              onClick={handleSearch}
+              className="w-[32px] h-[32px] border border-white/25 flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer"
+              aria-label="Search"
+            >
+              <Search size={14} className="text-white/70" />
+            </button>
+
+            {/* Button 3: hamburger */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="w-[32px] h-[32px] border border-white/25 flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer"
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+            >
+              <div className="flex flex-col gap-[4px] items-center justify-center">
+                <span className={`w-[14px] h-[1px] bg-white/70 transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-white/70 transition-all duration-300 block ${menuOpen ? 'opacity-0' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-white/70 transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Ticker row */}
+        <div
+          className="w-full overflow-hidden border-t border-white/10 py-2 flex items-center"
+          role="marquee"
+          aria-label="Live infrastructure news"
+        >
+          <div className="flex items-center flex-shrink-0">
+            <span className="bg-white text-black font-mono text-[10px] font-bold px-2 py-0.5 uppercase tracking-widest ml-4 mr-3">
+              LIVE
+            </span>
+            <div className="w-px h-3 bg-white/20 mr-3 flex-shrink-0" aria-hidden="true" />
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <div className="ticker-track">
+              {doubled.map((item, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center font-mono text-[10px] text-white/45 whitespace-nowrap"
+                >
+                  {item}
+                  <span className="text-[#3ECF8E] mx-8" aria-hidden="true">✦</span>
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Full-screen overlay */}
+      {/* Full-screen overlay — paddingTop matches full header height */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -93,9 +176,9 @@ export function Navbar() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
             className="fixed inset-0 z-40 bg-black overflow-y-auto"
-            style={{ paddingTop: '52px' }}
+            style={{ paddingTop: '80px' }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] min-h-[calc(100vh-52px)] border-t border-white/10">
+            <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] min-h-[calc(100vh-80px)] border-t border-white/10">
 
               {/* Left column — nav links */}
               <div className="bg-black border-r border-white/10 px-10 py-12">
@@ -103,33 +186,20 @@ export function Navbar() {
                   NAVIGATION
                 </p>
                 <nav className="flex flex-col">
-                  <Link href="/jobs" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
-                    Browse Jobs
-                  </Link>
-                  <Link href="/jobs?category=Data+Center+Ops" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
-                    ↳ Data Center Ops
-                  </Link>
-                  <Link href="/jobs?category=AI+Infrastructure" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
-                    ↳ AI Infrastructure
-                  </Link>
-                  <Link href="/jobs?category=Construction" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
-                    ↳ Construction
-                  </Link>
-                  <Link href="/jobs?category=Electrical" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
-                    ↳ Electrical
-                  </Link>
-                  <Link href="/employers" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
-                    Post a Job
-                  </Link>
-                  <Link href="/wiki" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
-                    Wiki
-                  </Link>
-                  <Link href="/docs" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
-                    Docs
-                  </Link>
-                  <Link href="/auth/login" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
-                    Sign In
-                  </Link>
+                  {NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className={
+                        link.sub
+                          ? 'font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block'
+                          : 'font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block'
+                      }
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                 </nav>
               </div>
 
@@ -154,7 +224,11 @@ export function Navbar() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/auth/signup" onClick={() => setMenuOpen(false)} className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all">
+                  <Link
+                    href="/auth/signup"
+                    onClick={() => setMenuOpen(false)}
+                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
+                  >
                     Create free profile ↗
                   </Link>
                 </div>
@@ -177,7 +251,11 @@ export function Navbar() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/employers" onClick={() => setMenuOpen(false)} className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all">
+                  <Link
+                    href="/employers"
+                    onClick={() => setMenuOpen(false)}
+                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
+                  >
                     Post a job ↗
                   </Link>
                 </div>
