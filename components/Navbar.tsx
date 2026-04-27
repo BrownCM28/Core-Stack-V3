@@ -62,9 +62,9 @@ export function Navbar() {
 
         {/* Floating rounded nav bar */}
         <div
-          className="pointer-events-auto mx-4 md:mx-6 mt-3 rounded-xl h-[52px] flex items-center justify-between px-4 md:px-5 border border-white/10"
+          className="pointer-events-auto mx-4 md:mx-6 mt-3 rounded-xl h-[52px] flex items-center justify-between px-4 md:px-5 border border-black/8"
           style={{
-            background: 'rgba(8, 8, 8, 0.45)',
+            background: 'rgba(255, 255, 255, 0.72)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
           }}
@@ -75,40 +75,34 @@ export function Navbar() {
             className="flex items-center gap-2 flex-shrink-0"
             onClick={() => setMenuOpen(false)}
           >
-            <div className="w-6 h-6 rounded-full border border-white/40 flex items-center justify-center flex-shrink-0">
-              <span className="font-mono text-[10px] text-white leading-none">C</span>
+            <div className="w-6 h-6 rounded-full border border-black/30 flex items-center justify-center flex-shrink-0">
+              <span className="font-mono text-[10px] text-black leading-none">C</span>
             </div>
             <span className="font-display text-sm font-normal tracking-tight ml-1">
-              <span className="text-white">Core</span>
+              <span className="text-black">Core</span>
               <span className="text-[#3ECF8E]">Stack</span>
             </span>
           </Link>
 
-          {/* Center — connected category-style nav buttons (desktop only) */}
-          <nav className="hidden md:flex items-center absolute left-1/2 -translate-x-1/2">
-            {CENTER_NAV.map(({ label, href }, i) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMenuOpen(false)}
-                className={`bg-white text-black font-mono text-xs px-4 py-1.5 border-2 border-black hover:bg-black hover:text-white transition-colors whitespace-nowrap ${i > 0 ? 'border-l-0' : ''}`}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Right — Post a Job, Sign In, hamburger */}
+          {/* Right — nav buttons + Post a Job + Sign In + hamburger */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <Link
-              href="/employers"
-              className="hidden md:flex items-center bg-white text-black font-mono text-xs px-4 py-1.5 border-2 border-black hover:bg-black hover:text-white transition-colors whitespace-nowrap"
-            >
-              Post a Job
-            </Link>
+            {/* Connected nav + Post a Job group (desktop only) */}
+            <nav className="hidden md:flex items-center">
+              {[...CENTER_NAV, { label: 'Post a Job', href: '/employers' }].map(({ label, href }, i) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`bg-white text-black font-mono text-xs px-4 py-1.5 border-2 border-black hover:bg-black hover:text-white transition-colors whitespace-nowrap ${i > 0 ? 'border-l-0' : ''}`}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+
             <Link
               href="/auth/login"
-              className="hidden md:flex items-center bg-[#3ECF8E] text-black font-mono text-xs px-4 py-1.5 border-2 border-[#3ECF8E] hover:bg-white hover:border-white transition-colors whitespace-nowrap"
+              className="hidden md:flex items-center bg-[#3ECF8E] text-black font-mono text-xs px-4 py-1.5 border-2 border-[#3ECF8E] hover:bg-black hover:text-white hover:border-black transition-colors whitespace-nowrap"
             >
               Sign In
             </Link>
@@ -116,14 +110,14 @@ export function Navbar() {
             {/* Hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="w-[32px] h-[32px] border border-white/25 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
+              className="w-[32px] h-[32px] border border-black/20 flex items-center justify-center hover:bg-black/8 transition-colors cursor-pointer"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
             >
               <div className="flex flex-col gap-[4px] items-center justify-center">
-                <span className={`w-[14px] h-[1px] bg-white/80 transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
-                <span className={`w-[14px] h-[1px] bg-white/80 transition-all duration-300 block ${menuOpen ? 'opacity-0' : ''}`} />
-                <span className={`w-[14px] h-[1px] bg-white/80 transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? 'opacity-0' : ''}`} />
+                <span className={`w-[14px] h-[1px] bg-black/70 transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
               </div>
             </button>
           </div>
@@ -131,23 +125,23 @@ export function Navbar() {
 
         {/* Ticker strip — full width below floating nav */}
         <div
-          className="pointer-events-auto mt-1 w-full overflow-hidden flex items-center py-[7px] border-t border-white/5"
-          style={{ background: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
+          className="pointer-events-auto mt-1 w-full overflow-hidden flex items-center py-[7px] border-t border-black/5"
+          style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
           role="marquee"
           aria-label="Live infrastructure news"
         >
           <div className="flex items-center flex-shrink-0">
-            <span className="bg-white text-black font-mono text-[10px] font-bold px-2 py-0.5 uppercase tracking-widest ml-4 mr-3">
+            <span className="bg-black text-white font-mono text-[10px] font-bold px-2 py-0.5 uppercase tracking-widest ml-4 mr-3">
               LIVE
             </span>
-            <div className="w-px h-3 bg-white/20 mr-3 flex-shrink-0" aria-hidden="true" />
+            <div className="w-px h-3 bg-black/15 mr-3 flex-shrink-0" aria-hidden="true" />
           </div>
           <div className="flex-1 overflow-hidden">
             <div className="ticker-track">
               {doubled.map((item, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center font-mono text-[10px] text-white/45 whitespace-nowrap"
+                  className="inline-flex items-center font-mono text-[10px] text-black/50 whitespace-nowrap"
                 >
                   {item}
                   <span className="text-[#3ECF8E] mx-8" aria-hidden="true">✦</span>
