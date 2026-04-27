@@ -1,231 +1,208 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, Zap, LogOut, LayoutDashboard } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useSession, signOut } from "@/lib/auth-client";
-
-const NAV_LINKS = [
-  { label: "Browse Jobs", href: "/jobs" },
-  { label: "Talent", href: "/talent" },
-  { label: "Wiki", href: "/wiki" },
-  { label: "Post a Job", href: "/employers" },
-];
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function Navbar() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { data: session, isPending } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false)
 
-  async function handleSignOut() {
-    await signOut();
-    router.push("/");
-    router.refresh();
-  }
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
 
-  if (pathname === "/") return null;
-
-  const userInitials = session?.user?.name
-    ? session.user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
-    : "?";
-
-  function active(href: string) {
-    return href === "/" ? pathname === "/" : pathname.startsWith(href);
-  }
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [])
 
   return (
-    <div className="sticky top-0 z-40 w-full bg-white border-b border-[#E0E0E0]">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8">
-        <div className="flex h-16 items-center justify-between gap-4">
+    <>
+      {/* Fixed top bar */}
+      <header className="fixed top-0 left-0 right-0 h-[52px] bg-black z-50 flex items-center justify-between px-6 md:px-10">
+        <Link
+          href="/"
+          className="font-display text-base font-normal tracking-tight"
+          onClick={() => setMenuOpen(false)}
+        >
+          <span className="text-white">Core</span>
+          <span className="text-[#3ECF8E]">Stack</span>
+        </Link>
 
-          {/* Wordmark */}
+        <div className="flex items-center">
           <Link
-            href="/"
-            className="flex items-center gap-2 flex-shrink-0"
-            aria-label="CoreStack home"
+            href="/jobs"
+            className="flex items-center gap-2 border border-white/30 text-white font-mono text-xs px-4 py-1.5 hover:bg-white hover:text-black transition-all duration-200"
           >
-            <Zap size={15} className="text-accent" aria-hidden="true" />
-            <span className="font-display text-xl leading-none">
-              <span className="text-[#0D0F12]">Core</span>
-              <span className="text-[#3ECF8E]">Stack</span>
-            </span>
+            <span aria-hidden="true" className="text-[#3ECF8E] text-sm">↖</span>
+            Browse Jobs
           </Link>
 
-          {/* Desktop right side — nav links + auth grouped together */}
-          <div className="hidden md:flex items-center gap-2 ml-auto">
-            {/* Nav links */}
-            <nav className="flex items-center gap-2">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border font-display text-sm transition-all duration-150 whitespace-nowrap",
-                    active(link.href)
-                      ? "border-[#0D0F12] text-[#0D0F12]"
-                      : "border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12]"
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "w-1.5 h-1.5 rounded-full flex-shrink-0 border transition-colors duration-150",
-                      active(link.href)
-                        ? "bg-[#0D0F12] border-[#0D0F12]"
-                        : "bg-transparent border-[#BFBFBF]"
-                    )}
-                  />
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Divider */}
-            <div className="w-px h-5 bg-[#E0E0E0] mx-1 flex-shrink-0" />
-
-            {/* Auth / CTA */}
-            {isPending ? (
-              <div className="w-8 h-8 rounded-full bg-[#E0E0E0] animate-pulse" />
-            ) : session ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className={cn(
-                    "inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border font-display text-sm transition-all duration-150",
-                    active("/dashboard")
-                      ? "border-[#0D0F12] text-[#0D0F12]"
-                      : "border-[#E0E0E0] text-[#6B7280] hover:border-[#0D0F12] hover:text-[#0D0F12]"
-                  )}
-                >
-                  <LayoutDashboard size={12} />
-                  Dashboard
-                </Link>
-                <div className="flex items-center gap-2 pl-1">
-                  <div className="w-7 h-7 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {session.user.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={session.user.image}
-                        alt={session.user.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="font-mono text-[10px] font-bold text-accent">
-                        {userInitials}
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    onClick={handleSignOut}
-                    className="text-[#6B7280] hover:text-red-500 transition-colors duration-150 p-1"
-                    title="Sign out"
-                  >
-                    <LogOut size={13} />
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="font-display text-sm text-[#6B7280] hover:text-[#0D0F12] transition-colors duration-150 px-2"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/auth/signup"
-                  className="inline-flex items-center px-5 py-2 rounded-full bg-[#0D0F12] text-white font-display text-sm hover:bg-[#1E2128] transition-colors duration-150"
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile hamburger */}
           <button
-            className="md:hidden text-[#0D0F12] hover:text-accent transition-colors duration-150 p-1.5"
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 ml-4 cursor-pointer"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            <span
+              className={`w-5 h-px bg-white transition-all duration-300 block ${
+                menuOpen ? 'rotate-45 translate-y-[8px]' : ''
+              }`}
+            />
+            <span
+              className={`w-5 h-px bg-white transition-all duration-300 block ${
+                menuOpen ? 'opacity-0 scale-x-0' : ''
+              }`}
+            />
+            <span
+              className={`w-5 h-px bg-white transition-all duration-300 block ${
+                menuOpen ? '-rotate-45 -translate-y-[8px]' : ''
+              }`}
+            />
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-[#E0E0E0] bg-white px-6 py-4 flex flex-col gap-2">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                "inline-flex items-center gap-2 px-4 py-2 rounded-full border font-display text-sm transition-all duration-150",
-                active(link.href)
-                  ? "border-[#0D0F12] text-[#0D0F12]"
-                  : "border-[#E0E0E0] text-[#6B7280]"
-              )}
-            >
-              <span
-                className={cn(
-                  "w-1.5 h-1.5 rounded-full flex-shrink-0 border",
-                  active(link.href)
-                    ? "bg-[#0D0F12] border-[#0D0F12]"
-                    : "bg-transparent border-[#BFBFBF]"
-                )}
-              />
-              {link.label}
-            </Link>
-          ))}
+      {/* Full-screen overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="fixed inset-0 z-40 bg-black overflow-y-auto"
+            style={{ paddingTop: '52px' }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] min-h-[calc(100vh-52px)] border-t border-white/10">
 
-          <div className="flex flex-col gap-2 pt-3 mt-1 border-t border-[#E0E0E0]">
-            {session ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#E0E0E0] font-display text-sm text-[#6B7280]"
-                >
-                  <LayoutDashboard size={12} />
-                  Dashboard
-                </Link>
-                <button
-                  onClick={() => {
-                    setMobileOpen(false);
-                    handleSignOut();
-                  }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#E0E0E0] font-display text-sm text-red-500"
-                >
-                  <LogOut size={12} />
-                  Sign out
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-[#E0E0E0] font-display text-sm text-[#6B7280]"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/auth/signup"
-                  onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#0D0F12] font-display text-sm text-white"
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+              {/* Left column — nav links */}
+              <div className="bg-black border-r border-white/10 px-10 py-12">
+                <p className="font-mono text-xs uppercase tracking-widest text-white/30 mb-6">
+                  NAVIGATION
+                </p>
+                <nav className="flex flex-col">
+                  <Link href="/jobs" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
+                    Browse Jobs
+                  </Link>
+                  <Link href="/jobs?category=Data+Center+Ops" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
+                    ↳ Data Center Ops
+                  </Link>
+                  <Link href="/jobs?category=AI+Infrastructure" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
+                    ↳ AI Infrastructure
+                  </Link>
+                  <Link href="/jobs?category=Construction" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
+                    ↳ Construction
+                  </Link>
+                  <Link href="/jobs?category=Electrical" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
+                    ↳ Electrical
+                  </Link>
+                  <Link href="/talent" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
+                    Open to Work
+                  </Link>
+                  <Link href="/employers" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
+                    Post a Job
+                  </Link>
+                  <Link href="/wiki" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
+                    Wiki
+                  </Link>
+                  <Link href="/docs" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
+                    Docs
+                  </Link>
+                  <Link href="/auth/login" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
+                    Sign In
+                  </Link>
+                </nav>
+              </div>
+
+              {/* Right column — content panels */}
+              <div className="bg-[#0A0A0A] px-10 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 content-start">
+
+                {/* Panel 1 — For Candidates */}
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-widest text-white/30 mb-4">
+                    FOR CANDIDATES
+                  </p>
+                  <h3 className="font-display text-xl text-white mb-3">
+                    Your GitHub is your resume.
+                  </h3>
+                  <p className="font-sans text-sm text-white/50 leading-relaxed mb-6">
+                    Sign in with GitHub and your entire tech stack syncs automatically. Add certifications, set your Open to Work status, and get discovered by top infrastructure employers.
+                  </p>
+                  <ul className="flex flex-col gap-1.5 mb-6">
+                    {[
+                      'GitHub OAuth sign-in',
+                      'Auto-synced repos and skill graph',
+                      'Certification badges',
+                      'Open to Work discovery',
+                    ].map((item) => (
+                      <li key={item} className="font-mono text-xs text-white/40 flex items-center gap-2">
+                        <span className="text-[#3ECF8E]">·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/auth/signup"
+                    onClick={() => setMenuOpen(false)}
+                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
+                  >
+                    Create free profile ↗
+                  </Link>
+                </div>
+
+                {/* Panel 2 — For Employers */}
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-widest text-white/30 mb-4">
+                    FOR EMPLOYERS
+                  </p>
+                  <h3 className="font-display text-xl text-white mb-3">
+                    Hire before your competitors even start searching.
+                  </h3>
+                  <p className="font-sans text-sm text-white/50 leading-relaxed mb-6">
+                    Post a listing or subscribe to monthly CoreStack Score reports — pre-ranked infrastructure talent delivered automatically.
+                  </p>
+                  <ul className="flex flex-col gap-1.5 mb-6">
+                    {[
+                      'Standard and Featured listings',
+                      'GitHub signal on every applicant',
+                      'Monthly CoreStack Score reports (Premium)',
+                    ].map((item) => (
+                      <li key={item} className="font-mono text-xs text-white/40 flex items-center gap-2">
+                        <span className="text-[#3ECF8E]">·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/employers"
+                    onClick={() => setMenuOpen(false)}
+                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
+                  >
+                    Post a job ↗
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom bar — desktop only */}
+            <div className="hidden md:flex border-t border-white/10 px-10 py-4 items-center justify-between">
+              <span className="font-mono text-xs text-white/20">© 2026 CoreStack</span>
+              <span className="font-mono text-xs text-white/20">Built for the people who keep the world running.</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
 }

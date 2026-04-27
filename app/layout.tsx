@@ -105,7 +105,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen text-text-primary antialiased">
         <Navbar />
-        <main>{children}</main>
+        <main className="pt-[52px]">{children}</main>
         <PendingApplicationHandler />
       </body>
     </html>
