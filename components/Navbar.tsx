@@ -2,20 +2,23 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
+
+const NAV_CATEGORIES = [
+  { label: 'Browse Jobs', href: '/jobs' },
+  { label: 'Post a Job', href: '/employers' },
+  { label: 'Wiki', href: '/wiki' },
+  { label: 'Docs', href: '/docs' },
+]
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
   useEffect(() => {
@@ -30,45 +33,53 @@ export function Navbar() {
     <>
       {/* Fixed top bar */}
       <header className="fixed top-0 left-0 right-0 h-[52px] bg-black z-50 flex items-center justify-between px-6 md:px-10">
+
+        {/* Left — wordmark */}
         <Link
           href="/"
-          className="font-display text-base font-normal tracking-tight"
+          className="font-display text-base font-normal tracking-tight flex-shrink-0"
           onClick={() => setMenuOpen(false)}
         >
           <span className="text-white">Core</span>
           <span className="text-[#3ECF8E]">Stack</span>
         </Link>
 
-        <div className="flex items-center">
+        {/* Center — category nav (desktop only) */}
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          {NAV_CATEGORIES.map((link) => {
+            const active = pathname.startsWith(link.href)
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`font-mono text-xs tracking-wider uppercase transition-colors duration-200 ${
+                  active ? 'text-white' : 'text-white/50 hover:text-white'
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Right — CTA + hamburger */}
+        <div className="flex items-center gap-3 flex-shrink-0">
           <Link
-            href="/jobs"
-            className="flex items-center gap-2 border border-white/30 text-white font-mono text-xs px-4 py-1.5 hover:bg-white hover:text-black transition-all duration-200"
+            href="/auth/signup"
+            className="bg-white text-black font-mono text-xs px-5 py-2 hover:bg-white/90 transition-colors duration-200 whitespace-nowrap"
           >
-            <span aria-hidden="true" className="text-[#3ECF8E] text-sm">↖</span>
-            Browse Jobs
+            Get Started
           </Link>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 ml-4 cursor-pointer"
+            className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 cursor-pointer"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
           >
-            <span
-              className={`w-5 h-px bg-white transition-all duration-300 block ${
-                menuOpen ? 'rotate-45 translate-y-[8px]' : ''
-              }`}
-            />
-            <span
-              className={`w-5 h-px bg-white transition-all duration-300 block ${
-                menuOpen ? 'opacity-0 scale-x-0' : ''
-              }`}
-            />
-            <span
-              className={`w-5 h-px bg-white transition-all duration-300 block ${
-                menuOpen ? '-rotate-45 -translate-y-[8px]' : ''
-              }`}
-            />
+            <span className={`w-5 h-px bg-white transition-all duration-300 block ${menuOpen ? 'rotate-45 translate-y-[8px]' : ''}`} />
+            <span className={`w-5 h-px bg-white transition-all duration-300 block ${menuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`w-5 h-px bg-white transition-all duration-300 block ${menuOpen ? '-rotate-45 -translate-y-[8px]' : ''}`} />
           </button>
         </div>
       </header>
@@ -107,9 +118,6 @@ export function Navbar() {
                   <Link href="/jobs?category=Electrical" onClick={() => setMenuOpen(false)} className="font-display text-lg text-white/40 hover:text-white/80 transition-colors duration-200 pl-4 py-1 block">
                     ↳ Electrical
                   </Link>
-                  <Link href="/talent" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
-                    Open to Work
-                  </Link>
                   <Link href="/employers" onClick={() => setMenuOpen(false)} className="font-display text-2xl md:text-3xl font-normal text-white/60 hover:text-white transition-colors duration-200 py-2 block">
                     Post a Job
                   </Link>
@@ -140,23 +148,13 @@ export function Navbar() {
                     Sign in with GitHub and your entire tech stack syncs automatically. Add certifications, set your Open to Work status, and get discovered by top infrastructure employers.
                   </p>
                   <ul className="flex flex-col gap-1.5 mb-6">
-                    {[
-                      'GitHub OAuth sign-in',
-                      'Auto-synced repos and skill graph',
-                      'Certification badges',
-                      'Open to Work discovery',
-                    ].map((item) => (
+                    {['GitHub OAuth sign-in', 'Auto-synced repos and skill graph', 'Certification badges', 'Open to Work discovery'].map((item) => (
                       <li key={item} className="font-mono text-xs text-white/40 flex items-center gap-2">
-                        <span className="text-[#3ECF8E]">·</span>
-                        {item}
+                        <span className="text-[#3ECF8E]">·</span>{item}
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href="/auth/signup"
-                    onClick={() => setMenuOpen(false)}
-                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
-                  >
+                  <Link href="/auth/signup" onClick={() => setMenuOpen(false)} className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all">
                     Create free profile ↗
                   </Link>
                 </div>
@@ -173,22 +171,13 @@ export function Navbar() {
                     Post a listing or subscribe to monthly CoreStack Score reports — pre-ranked infrastructure talent delivered automatically.
                   </p>
                   <ul className="flex flex-col gap-1.5 mb-6">
-                    {[
-                      'Standard and Featured listings',
-                      'GitHub signal on every applicant',
-                      'Monthly CoreStack Score reports (Premium)',
-                    ].map((item) => (
+                    {['Standard and Featured listings', 'GitHub signal on every applicant', 'Monthly CoreStack Score reports (Premium)'].map((item) => (
                       <li key={item} className="font-mono text-xs text-white/40 flex items-center gap-2">
-                        <span className="text-[#3ECF8E]">·</span>
-                        {item}
+                        <span className="text-[#3ECF8E]">·</span>{item}
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href="/employers"
-                    onClick={() => setMenuOpen(false)}
-                    className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all"
-                  >
+                  <Link href="/employers" onClick={() => setMenuOpen(false)} className="font-mono text-xs text-[#3ECF8E] inline-flex items-center gap-2 hover:gap-3 transition-all">
                     Post a job ↗
                   </Link>
                 </div>
