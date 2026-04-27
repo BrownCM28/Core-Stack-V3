@@ -71,7 +71,7 @@ export function Navbar() {
           }}
         >
           {/* Top row — logo + buttons */}
-          <div className="flex items-center justify-between px-4 md:px-5 py-3">
+          <div className="flex items-center justify-between px-4 md:px-5 h-[52px]">
 
             {/* Left — logo */}
             <Link
@@ -80,11 +80,11 @@ export function Navbar() {
               onClick={() => setMenuOpen(false)}
             >
               <Image
-                src="/Untitled (57).png"
+                src="/Untitled (58).png"
                 alt="CoreStack"
-                width={420}
-                height={108}
-                className="h-[132px] w-auto object-contain"
+                width={180}
+                height={46}
+                className="h-9 w-auto object-contain"
                 priority
               />
             </Link>
