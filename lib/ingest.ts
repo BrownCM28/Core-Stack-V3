@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { JobType, ExperienceLevel } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
+import { sanitizeText, sanitizeHtml } from "@/lib/sanitize";
 
 // ─── Validation schema ────────────────────────────────────────────────────────
 
@@ -73,25 +74,25 @@ export function normalizeLevel(title: string, raw?: string | null): ExperienceLe
 }
 
 // ─── Main mapper ──────────────────────────────────────────────────────────────
-
 export function mapIncomingJob(
   raw: IncomingJobInput
 ): Prisma.JobUncheckedCreateInput {
   const postedAt = raw.postedAt ? new Date(raw.postedAt) : new Date();
   const expiresAt = new Date(postedAt);
   expiresAt.setDate(expiresAt.getDate() + 30);
-
+  // ── Sanitize user-supplied text ───────────────────────────────────────────
+  const title       = sanitizeText(raw.title);
+  const company     = sanitizeText(raw.company);
+  const location    = sanitizeText(raw.location);
+  const description = sanitizeHtml(raw.description);  // preserve formatting
+  // ─────────────────────────────────────────────────────────────────────────
   const category =
     (raw.category && raw.category.trim()) ||
-    inferCategory(raw.title, raw.description);
-
-  // Detect remote from location string if not explicitly set
+    inferCategory(title, description);
   const remote =
     raw.remote != null
       ? raw.remote
-      : /\bremote\b/i.test(raw.location);
-
-  // Infer tags from description keywords if not provided
+      : /\bremote\b/i.test(location);
   const TAG_KEYWORDS = [
     "terraform", "kubernetes", "k8s", "ansible", "aws", "gcp", "azure",
     "python", "go", "typescript", "rust", "grafana", "prometheus",
@@ -99,27 +100,26 @@ export function mapIncomingJob(
     "nvidia", "cuda", "gpu", "mlops",
   ];
   const autoTags = raw.tags?.length
-    ? raw.tags
+    ? raw.tags.map((t) => sanitizeText(t))
     : TAG_KEYWORDS.filter((kw) =>
-        raw.description.toLowerCase().includes(kw)
+        description.toLowerCase().includes(kw)
       ).slice(0, 8);
-
   return {
-    title: raw.title.trim(),
-    company: raw.company.trim(),
-    location: raw.location.trim(),
-    description: raw.description.trim(),
+    title,
+    company,
+    location,
+    description,
     applyUrl: raw.applyUrl ?? null,
     type: normalizeJobType(raw.jobType),
-    level: normalizeLevel(raw.title, raw.level),
+    level: normalizeLevel(title, raw.level),
     category,
     remote,
-    salary: raw.salary ?? null,
+    salary: raw.salary ? sanitizeText(raw.salary) : null,
     salaryMin: raw.salaryMin ?? null,
     salaryMax: raw.salaryMax ?? null,
     tags: autoTags,
-    responsibilities: raw.responsibilities ?? [],
-    requirements: raw.requirements ?? [],
+    responsibilities: (raw.responsibilities ?? []).map(sanitizeText),
+    requirements: (raw.requirements ?? []).map(sanitizeText),
     source: raw.source ?? "webhook",
     isActive: true,
     featured: false,
