@@ -51,14 +51,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const user = await getProfileData(params.username);
     if (!user) return { title: "Profile Not Found" };
+
+    const displayName = user.displayName ?? user.name;
+    const bio = user.bio ?? user.profile?.bio ?? `Infrastructure engineer on CoreStack.`;
+
     return {
-      title: `${user.displayName ?? user.name} — CoreStack`,
-      description: user.bio ?? `${user.name}'s CoreStack profile.`,
+      title: `${displayName} — CoreStack`,
+      description: bio.slice(0, 160),
+      openGraph: {
+        title: `${displayName} — CoreStack`,
+        description: bio.slice(0, 160),
+        type: "profile",
+        url: `https://corestack.io/profile/${params.username}`,
+      },
     };
   } catch {
     return { title: "Profile Not Found" };
   }
 }
+
 
 export default async function ProfilePage({ params }: Props) {
   // ── Wrapped in try-catch so DB errors never produce a 500 ──
