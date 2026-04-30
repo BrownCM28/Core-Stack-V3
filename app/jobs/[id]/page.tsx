@@ -43,11 +43,21 @@ async function getJob(id: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const job = await getJob(params.id);
   if (!job) return { title: "Job Not Found" };
+
+  const description = `${job.title} role at ${job.company} in ${job.location}. ${job.description.slice(0, 120).replace(/<[^>]*>/g, "")}`;
+
   return {
     title: `${job.title} at ${job.company}`,
-    description: `${job.title} role at ${job.company} in ${job.location}.`,
+    description: description.slice(0, 160),
+    openGraph: {
+      title: `${job.title} at ${job.company} — CoreStack`,
+      description: description.slice(0, 160),
+      type: "website",
+      url: `https://corestack.io/jobs/${job.id}`,
+    },
   };
 }
+
 
 export default async function JobDetailPage({ params }: Props) {
   const [job, similarRaw] = await Promise.all([
