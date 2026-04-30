@@ -3,9 +3,16 @@ import { Suspense } from "react";
 import { TalentPageContent } from "@/components/talent/TalentPageContent";
 
 export const metadata: Metadata = {
-  title: "Browse Talent | CoreStack",
+  title: "Browse Engineering Talent",
   description:
-    "Engineers and infrastructure specialists actively looking for their next role.",
+    "Discover data center and AI infrastructure engineers open to new opportunities. Filter by stack, certifications, and location.",
+  openGraph: {
+    title: "Browse Engineering Talent — CoreStack",
+    description:
+      "Find infrastructure engineers open to work. Filter by stack, certifications, and location.",
+    type: "website",
+    url: "https://corestack.io/talent",
+  },
 };
 
 export default function TalentPage() {
