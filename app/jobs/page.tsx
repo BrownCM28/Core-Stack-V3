@@ -6,8 +6,16 @@ import { SkeletonJobListingCard } from "@/components/ui/SkeletonCard";
 export const metadata: Metadata = {
   title: "Browse Jobs",
   description:
-    "Browse data center construction, operations, and AI infrastructure jobs.",
+    "Search and filter data center and AI infrastructure roles by category, location, salary, and job type. Updated daily from top employers.",
+  openGraph: {
+    title: "Browse Infrastructure Jobs — CoreStack",
+    description:
+      "Data center ops, AI infrastructure, electrical, cooling, networking and more. Filter by location, salary, and job type.",
+    type: "website",
+    url: "https://corestack.io/jobs",
+  },
 };
+
 
 function JobsLoading() {
   return (
