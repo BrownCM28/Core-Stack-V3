@@ -42,20 +42,38 @@ function Hero() {
   }
 
   return (
-    <section className="relative min-h-[88vh] bg-white overflow-hidden px-8 md:px-16 pt-14 pb-10 flex flex-col items-center justify-between mx-4 md:mx-6 rounded-3xl">
+    <section
+      className="relative overflow-hidden flex flex-col items-center justify-between text-center px-4 pt-24 pb-20 min-h-[90vh]"
+      style={{ background: '#FFFFFF' }}
+    >
 
-      {/* Datacenter background image */}
-      <div className="absolute inset-4 overflow-hidden rounded-[24px] pointer-events-none">
+      {/* Datacenter background image — centered rounded card */}
+      <div
+        className="absolute pointer-events-none select-none"
+        style={{
+          top: '5%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '80%',
+          maxWidth: '1000px',
+          height: '90%',
+          borderRadius: '32px',
+          overflow: 'hidden',
+          zIndex: 0,
+        }}
+        aria-hidden="true"
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/hero-datacenter.png"
           alt=""
-          aria-hidden="true"
-          className="w-full h-full object-contain select-none"
           style={{
-            opacity: 0.22,
-            transform: 'scale(0.85)',
-            transformOrigin: 'center center',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            opacity: 0.45,
+            display: 'block',
           }}
         />
       </div>
@@ -70,6 +88,7 @@ function Hero() {
         <h1
           className="font-display font-normal uppercase tracking-tight text-black leading-none text-center w-full"
           aria-label="Infrastructure jobs for the people who keep the world running."
+          style={{ textShadow: '0 2px 20px rgba(255,255,255,0.8)' }}
         >
           <span className="block text-center text-[5.5vw] md:text-[3.2vw] leading-[1.1] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE JOBS
