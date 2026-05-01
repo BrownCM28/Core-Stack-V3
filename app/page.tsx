@@ -45,17 +45,20 @@ function Hero() {
     <section className="relative min-h-[88vh] bg-white overflow-hidden px-8 md:px-16 pt-14 pb-10 flex flex-col items-center justify-between mx-4 md:mx-6 rounded-3xl">
 
       {/* Datacenter background image */}
-      <div
-        className="absolute inset-0 pointer-events-none select-none"
-        aria-hidden="true"
-        style={{
-          backgroundImage: "url(/hero-datacenter.png)",
-          backgroundSize: "contain",
-          backgroundPosition: "center center",
-          backgroundRepeat: "no-repeat",
-          opacity: 0.65,
-        }}
-      />
+      <div className="absolute inset-4 overflow-hidden rounded-[24px] pointer-events-none">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/hero-datacenter.png"
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-contain select-none"
+          style={{
+            opacity: 0.22,
+            transform: 'scale(0.85)',
+            transformOrigin: 'center center',
+          }}
+        />
+      </div>
 
       {/* Massive editorial headline */}
       <motion.div
