@@ -51,12 +51,12 @@ function Hero() {
       <div
         className="absolute pointer-events-none select-none"
         style={{
-          top: '5%',
+          top: '2%',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '80%',
-          maxWidth: '1000px',
-          height: '90%',
+          width: '100%',
+          maxWidth: '1300px',
+          height: '95%',
           borderRadius: '32px',
           overflow: 'hidden',
           zIndex: 0,
