@@ -42,7 +42,7 @@ function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen bg-white overflow-hidden px-8 md:px-16 pt-4 pb-16 flex flex-col items-center justify-between mx-4 md:mx-6 rounded-3xl">
+    <section className="relative min-h-[88vh] bg-white overflow-hidden px-8 md:px-16 pt-14 pb-10 flex flex-col items-center justify-between mx-4 md:mx-6 rounded-3xl">
 
       {/* Datacenter background image */}
       <div
@@ -68,13 +68,13 @@ function Hero() {
           className="font-display font-normal uppercase tracking-tight text-black leading-none text-center w-full"
           aria-label="Infrastructure jobs for the people who keep the world running."
         >
-          <span className="block text-center text-[7vw] md:text-[5vw] leading-[1.08] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[5.5vw] md:text-[3.2vw] leading-[1.1] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE JOBS
           </span>
-          <span className="block text-center text-[7vw] md:text-[5vw] leading-[1.08] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[5.5vw] md:text-[3.2vw] leading-[1.1] font-normal uppercase tracking-tight text-black w-full">
             FOR THE PEOPLE WHO
           </span>
-          <span className="block text-center text-[7vw] md:text-[5vw] leading-[1.08] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[5.5vw] md:text-[3.2vw] leading-[1.1] font-normal uppercase tracking-tight text-black w-full">
             KEEP THE WORLD RUNNING.
           </span>
         </h1>
