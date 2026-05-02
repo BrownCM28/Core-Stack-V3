@@ -16,6 +16,11 @@ export default function Error({
       <p className="text-[#6B6560] mb-8 max-w-sm">
         An error occurred while loading this page. Please try again.
       </p>
+      {error.digest && (
+        <p className="font-mono text-xs text-gray-300 mb-8">
+          Error ID: {error.digest}
+        </p>
+      )}
       <button
         onClick={reset}
         className="btn-primary px-4 py-2 text-sm font-mono rounded-md"
