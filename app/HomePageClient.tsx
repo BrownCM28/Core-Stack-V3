@@ -44,39 +44,18 @@ function Hero() {
   return (
     <section
       className="relative overflow-hidden flex flex-col items-center justify-between text-center px-4 pt-24 pb-20 min-h-[90vh]"
-      style={{ background: '#FFFFFF' }}
+      style={{ background: '#EFEFEF' }}
     >
 
-      {/* Datacenter background image — centered rounded card */}
-      <div
-        className="absolute pointer-events-none select-none"
-        style={{
-          top: '8%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100%',
-          maxWidth: '1300px',
-          height: '95%',
-          borderRadius: '32px',
-          overflow: 'hidden',
-          zIndex: 0,
-        }}
+      {/* World map dots background */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/world-map-dots.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
         aria-hidden="true"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/hero-datacenter.png"
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center',
-            opacity: 0.45,
-            display: 'block',
-          }}
-        />
-      </div>
+        style={{ opacity: 0.18 }}
+      />
 
       {/* Massive editorial headline */}
       <motion.div
@@ -271,7 +250,7 @@ const LATEST_JOBS = [
 
 function LatestRolesSection() {
   return (
-    <section className="px-8 md:px-16 py-16 bg-white border-t-2 border-black">
+    <section className="px-8 md:px-16 py-16 bg-[#EFEFEF] border-t-2 border-black">
       {/* Section header */}
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-display text-3xl md:text-4xl font-normal uppercase text-black">
@@ -370,7 +349,7 @@ const RESOURCE_CARDS = [
 
 function ResourcesSection() {
   return (
-    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+    <section className="bg-[#EFEFEF] px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
       <Link href="/wiki" className="block mb-16 group">
         <h2 className="font-display font-normal text-[clamp(2rem,7vw,6rem)] uppercase text-black leading-tight group-hover:text-[#3ECF8E] transition-colors duration-150">
           INFRASTRUCTURE<br />RESOURCES ↗
@@ -426,7 +405,7 @@ function AccordionSection() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+    <section className="bg-[#EFEFEF] px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
       <h2 className="font-display font-normal text-[clamp(2rem,6vw,5.5rem)] uppercase text-black mb-16 leading-tight">
         INTRODUCING<br />CORESTACK
       </h2>
@@ -530,7 +509,7 @@ function OrbitDiagram() {
 
 function CoveredSection() {
   return (
-    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+    <section className="bg-[#EFEFEF] px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
       <h2 className="font-display font-normal text-[clamp(2rem,5vw,4.5rem)] uppercase text-black mb-12 leading-tight">
         CORESTACK HAS<br />GOT YOU COVERED
       </h2>
@@ -635,7 +614,7 @@ const TESTIMONIALS = [
 
 function TestimonialsSection() {
   return (
-    <section className="bg-white px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
+    <section className="bg-[#EFEFEF] px-8 md:px-16 py-24 border-t border-[#E5E5E5]">
       <h2 className="font-display font-normal text-[clamp(2rem,5vw,4.5rem)] uppercase text-black mb-12 leading-tight">
         WHAT ENGINEERS<br />ARE SAYING
       </h2>
@@ -718,7 +697,7 @@ function PageFooter() {
 
 export default function HomePageClient() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#EFEFEF]">
       <Hero />
       <LatestRolesSection />
       <ResourcesSection />
