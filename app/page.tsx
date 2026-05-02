@@ -51,7 +51,7 @@ function Hero() {
       <div
         className="absolute pointer-events-none select-none"
         style={{
-          top: '2%',
+          top: '8%',
           left: '50%',
           transform: 'translateX(-50%)',
           width: '100%',
@@ -90,13 +90,13 @@ function Hero() {
           aria-label="Infrastructure jobs for the people who keep the world running."
           style={{ textShadow: '0 2px 20px rgba(255,255,255,0.8)' }}
         >
-          <span className="block text-center text-[5.5vw] md:text-[3.2vw] leading-[1.1] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE JOBS
           </span>
-          <span className="block text-center text-[5.5vw] md:text-[3.2vw] leading-[1.1] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
             FOR THE PEOPLE WHO
           </span>
-          <span className="block text-center text-[5.5vw] md:text-[3.2vw] leading-[1.1] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
             KEEP THE WORLD RUNNING.
           </span>
         </h1>
@@ -110,10 +110,10 @@ function Hero() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 mt-12 max-w-3xl w-full"
+        className="relative z-10 w-full flex flex-col items-center px-4 mt-10"
       >
         {/* Squared search bar */}
-        <div className="flex items-stretch border-2 border-black bg-white w-full">
+        <div className="flex items-stretch border-2 border-black bg-white w-full max-w-[780px]">
           {/* Keyword */}
           <label htmlFor="hero-keyword" className="sr-only">Job title or keyword</label>
           <div className="flex items-center flex-1 px-4 py-3 border-r-2 border-black">
@@ -152,7 +152,7 @@ function Hero() {
         </div>
 
         {/* Category filter row — squared */}
-        <div className="flex items-center gap-0 mt-3 overflow-x-auto scrollbar-hide">
+        <div className="w-full max-w-[780px] flex items-center gap-0 mt-0 overflow-x-auto scrollbar-hide">
           <button
             className="flex-shrink-0 bg-black text-white font-mono text-xs px-4 py-2 border-2 border-black hover:bg-gray-900 transition-colors cursor-pointer"
             onClick={() => router.push("/jobs")}
