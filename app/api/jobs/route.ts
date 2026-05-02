@@ -5,6 +5,8 @@ import type { ApiJob } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import { checkRateLimit, standardLimit } from "@/lib/ratelimit";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
   const ip = req.headers.get("x-forwarded-for") ?? "anonymous";
