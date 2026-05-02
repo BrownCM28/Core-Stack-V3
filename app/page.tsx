@@ -47,36 +47,15 @@ function Hero() {
       style={{ background: '#FFFFFF' }}
     >
 
-      {/* Datacenter background image — centered rounded card */}
-      <div
-        className="absolute pointer-events-none select-none"
-        style={{
-          top: '8%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100%',
-          maxWidth: '1300px',
-          height: '95%',
-          borderRadius: '32px',
-          overflow: 'hidden',
-          zIndex: 0,
-        }}
+      {/* World map dots background */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/world-map-dots.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
         aria-hidden="true"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/hero-datacenter.png"
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center',
-            opacity: 0.45,
-            display: 'block',
-          }}
-        />
-      </div>
+        style={{ opacity: 0.09 }}
+      />
 
       {/* Massive editorial headline */}
       <motion.div
@@ -90,13 +69,13 @@ function Hero() {
           aria-label="Infrastructure jobs for the people who keep the world running."
           style={{ textShadow: '0 2px 20px rgba(255,255,255,0.8)' }}
         >
-          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[9vw] md:text-[6vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE JOBS
           </span>
-          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[9vw] md:text-[6vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
             FOR THE PEOPLE WHO
           </span>
-          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[9vw] md:text-[6vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
             KEEP THE WORLD RUNNING.
           </span>
         </h1>
@@ -272,6 +251,20 @@ const LATEST_JOBS = [
 function LatestRolesSection() {
   return (
     <section className="px-8 md:px-16 py-16 bg-white border-t-2 border-black">
+      {/* Data center photo banner */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/hero-datacenter.png"
+        alt="Data center infrastructure"
+        className="w-full object-cover mb-8"
+        style={{
+          height: '220px',
+          objectPosition: 'center',
+          borderRadius: '12px',
+          opacity: 1,
+        }}
+      />
+
       {/* Section header */}
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-display text-3xl md:text-4xl font-normal uppercase text-black">
