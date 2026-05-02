@@ -186,7 +186,7 @@ function Hero() {
 
         {/* Bottom bar */}
         <div className="border-t border-[#E5E5E5] mt-8 pt-6 flex items-center justify-between flex-wrap gap-4">
-          
+          <a
             href="mailto:hello@corestack.io"
             className="flex items-center gap-2 font-mono text-sm text-black underline underline-offset-2 hover:text-[#3ECF8E] transition-colors duration-150"
           >
@@ -277,7 +277,7 @@ function LatestRolesSection() {
         <h2 className="font-display text-3xl md:text-4xl font-normal uppercase text-black">
           Latest Roles
         </h2>
-        
+        <a
           href="/jobs"
           className="font-mono text-sm text-black underline hover:text-[#3ECF8E] transition-colors duration-150"
         >
@@ -288,7 +288,7 @@ function LatestRolesSection() {
       {/* Job rows */}
       <div className="flex flex-col divide-y-2 divide-black border-y-2 border-black">
         {LATEST_JOBS.map((job, index) => (
-          
+          <a
             key={index}
             href="/jobs"
             className="flex items-center justify-between py-5 hover:bg-[#F5F5F5] transition-colors group cursor-pointer"
