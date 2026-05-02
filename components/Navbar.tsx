@@ -65,7 +65,7 @@ export function Navbar() {
         <div
           className="pointer-events-auto mx-4 md:mx-6 mt-3 rounded-xl flex flex-col overflow-hidden border border-black/8"
           style={{
-            background: 'rgba(255, 255, 255, 0.72)',
+            background: 'rgba(239, 239, 239, 0.85)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
           }}

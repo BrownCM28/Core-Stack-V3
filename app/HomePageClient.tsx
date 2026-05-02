@@ -54,7 +54,7 @@ function Hero() {
         alt=""
         className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
         aria-hidden="true"
-        style={{ opacity: 0.18 }}
+        style={{ opacity: 0.15 }}
       />
 
       {/* Massive editorial headline */}
@@ -69,13 +69,13 @@ function Hero() {
           aria-label="Infrastructure jobs for the people who keep the world running."
           style={{ textShadow: '0 2px 20px rgba(255,255,255,0.8)' }}
         >
-          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[7vw] md:text-[4.2vw] leading-[1.0] font-normal uppercase tracking-tight text-black w-full">
             INFRASTRUCTURE JOBS
           </span>
-          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[7vw] md:text-[4.2vw] leading-[1.0] font-normal uppercase tracking-tight text-black w-full">
             FOR THE PEOPLE WHO
           </span>
-          <span className="block text-center text-[12vw] md:text-[8vw] leading-[0.95] font-normal uppercase tracking-tight text-black w-full">
+          <span className="block text-center text-[7vw] md:text-[4.2vw] leading-[1.0] font-normal uppercase tracking-tight text-black w-full">
             KEEP THE WORLD RUNNING.
           </span>
         </h1>

@@ -103,7 +103,7 @@ export default function RootLayout({
       lang="en"
       className={`${satoshi.variable} ${alliance.variable} ${wavehaus.variable}`}
     >
-      <body className="min-h-screen text-text-primary antialiased">
+      <body className="min-h-screen text-text-primary antialiased" style={{ backgroundColor: '#EFEFEF' }}>
         <Navbar />
         <main className="pt-[90px]">{children}</main>
         <PendingApplicationHandler />
