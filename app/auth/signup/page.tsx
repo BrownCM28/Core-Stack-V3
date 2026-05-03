@@ -156,15 +156,14 @@ function SignupInner() {
       {/* Left panel */}
       <div className="w-full md:w-[480px] flex-shrink-0 bg-white flex flex-col px-12 py-10 overflow-y-auto">
         {/* Logo */}
-        <div className="flex items-center gap-2 mb-12">
-          <div className="w-8 h-8 border-2 border-black bg-black flex items-center justify-center">
-            <span className="font-mono text-xs text-white font-bold">CS</span>
-          </div>
-          <span className="font-display text-base font-normal">
-            <span className="text-black">Core</span>
-            <span className="text-[#3ECF8E]">Stack</span>
-          </span>
-        </div>
+        <Link href="/" className="flex items-start mb-12">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/Untitled (58).png"
+            alt="CoreStack"
+            className="h-8 w-auto object-contain"
+          />
+        </Link>
 
         {/* Form */}
         <div className="flex-1 flex flex-col justify-center max-w-[340px] w-full mx-auto">
