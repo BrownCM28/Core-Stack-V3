@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const TICKER_ITEMS = [
@@ -41,6 +42,7 @@ const NAV_LINKS = [
 const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS]
 
 export function Navbar() {
+  const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -55,6 +57,8 @@ export function Navbar() {
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [])
+
+  if (pathname?.startsWith('/auth')) return null
 
   return (
     <>
