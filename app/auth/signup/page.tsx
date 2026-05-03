@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Github, Mail, Search, MoreHorizontal, Loader2, CheckCircle, Circle } from 'lucide-react'
+import { Github, Mail, Loader2, CheckCircle, Circle } from 'lucide-react'
 import { signIn, signUp } from '@/lib/auth-client'
 
 function GithubIcon() {
@@ -25,84 +25,16 @@ function GoogleIcon() {
   )
 }
 
-const MOCK_CANDIDATES = [
-  { name: 'Alex Chen', email: 'alexchen@email.com' },
-  { name: 'Mia Kumar', email: 'mkumar@email.com' },
-  { name: 'James Liu', email: 'jliu@email.com' },
-  { name: 'Sarah Park', email: 'sarah@email.com' },
-  { name: 'Marcus T.', email: 'marcus@email.com' },
-]
-
 function RightPanel() {
   return (
-    <div className="hidden md:flex flex-1 relative overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/hero-datacenter.png"
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover object-center"
-      />
-      <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.52)' }} />
-
-      <div className="relative z-10 flex flex-col justify-center items-center h-full px-12 text-center">
-        <h2 className="font-display text-4xl font-normal text-white leading-tight mb-4 max-w-sm">
-          Built for the people who keep the world running.
-        </h2>
-        <p className="font-sans text-sm text-white/70 max-w-xs leading-relaxed mb-12">
-          Data center and AI infrastructure jobs aggregated daily. Your GitHub profile is your resume.
-        </p>
-
-        <div className="bg-white border-2 border-black w-[300px] shadow-2xl text-left">
-          <div className="border-b-2 border-black px-4 py-3 flex items-center justify-between">
-            <span className="font-mono text-xs font-bold text-black">Recent Applications</span>
-            <MoreHorizontal size={14} className="text-gray-400" />
-          </div>
-          <div className="border-b border-gray-200 px-4 py-2 flex items-center gap-2">
-            <Search size={12} className="text-gray-400 flex-shrink-0" />
-            <span className="font-mono text-xs text-gray-400">Search by name or role...</span>
-          </div>
-          <div className="px-4 pt-3 pb-1">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-gray-400">Recently applied</span>
-          </div>
-          {MOCK_CANDIDATES.slice(0, 3).map(({ name, email }) => (
-            <div key={name} className="px-4 py-2 flex items-center gap-3 border-b border-gray-100">
-              <div className="w-7 h-7 rounded-full bg-[#EFEFEF] border border-gray-300 flex items-center justify-center flex-shrink-0">
-                <span className="font-mono text-[10px] font-bold text-black">
-                  {name.split(' ').map(n => n[0]).join('')}
-                </span>
-              </div>
-              <div className="min-w-0">
-                <p className="font-mono text-xs font-medium text-black truncate">{name}</p>
-                <p className="font-mono text-[10px] text-gray-400 truncate">{email}</p>
-              </div>
-            </div>
-          ))}
-          <div className="px-4 pt-3 pb-1">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-gray-400">All candidates</span>
-          </div>
-          {MOCK_CANDIDATES.slice(3).map(({ name, email }) => (
-            <div key={name} className="px-4 py-2 flex items-center gap-3 border-b border-gray-100">
-              <div className="w-7 h-7 rounded-full bg-[#EFEFEF] border border-gray-300 flex items-center justify-center flex-shrink-0">
-                <span className="font-mono text-[10px] font-bold text-black">
-                  {name.split(' ').map(n => n[0]).join('')}
-                </span>
-              </div>
-              <div className="min-w-0">
-                <p className="font-mono text-xs font-medium text-black truncate">{name}</p>
-                <p className="font-mono text-[10px] text-gray-400 truncate">{email}</p>
-              </div>
-            </div>
-          ))}
-          <div className="px-4 py-2 border-t-2 border-black bg-[#EFEFEF] flex items-center gap-2">
-            <span className="font-mono text-[10px] text-gray-500"># tags</span>
-            <span className="font-mono text-[10px] text-gray-300">·</span>
-            <span className="font-mono text-[10px] text-gray-500">+ navigate</span>
-            <span className="font-mono text-[10px] text-gray-300">·</span>
-            <span className="font-mono text-[10px] text-gray-500">open</span>
-            <span className="font-mono text-[10px] text-gray-300">·</span>
-            <span className="font-mono text-[10px] text-gray-500">close</span>
-          </div>
-        </div>
+    <div className="hidden md:flex flex-1 bg-[#EFEFEF] items-center justify-center p-8">
+      <div className="w-full h-full rounded-3xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/hero-datacenter.png"
+          alt=""
+          className="w-full h-full object-cover object-center"
+        />
       </div>
     </div>
   )
@@ -154,7 +86,7 @@ function SignupInner() {
   return (
     <div className="fixed inset-0 z-[60] flex">
       {/* Left panel */}
-      <div className="w-full md:w-[480px] flex-shrink-0 bg-white flex flex-col px-12 py-10 overflow-y-auto">
+      <div className="w-full md:w-[540px] flex-shrink-0 bg-white flex flex-col px-14 py-10 overflow-y-auto">
         {/* Logo */}
         <Link href="/" className="flex items-start mb-12">
           {/* eslint-disable-next-line @next/next/no-img-element */}
