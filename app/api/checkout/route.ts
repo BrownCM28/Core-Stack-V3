@@ -59,6 +59,13 @@ export async function POST(req: Request): Promise<NextResponse> {
   const baseUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
   const stripe = getStripe();
 
+  // STRIPE MODE: Currently using TEST keys.
+  // To go live: replace STRIPE_SECRET_KEY with sk_live_...
+  // and NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY with pk_live_...
+  // in Vercel environment variables.
+  // Also update the Stripe webhook endpoint in the Stripe
+  // dashboard to point to https://corestack.io/api/webhooks/stripe
+  // and generate a new STRIPE_WEBHOOK_SECRET.
   const checkoutSession = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: [
