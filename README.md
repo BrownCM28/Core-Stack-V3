@@ -168,3 +168,17 @@ npm run build    # Production build
 npm run start    # Start production server
 npm run lint     # Run ESLint
 ```
+
+## Production Deployment
+
+### 1. Set environment variables in Vercel
+Add all values from `.env.production.example` to your Vercel project under **Settings → Environment Variables**. Scope them to **Production** only.
+
+### 2. Run database migrations
+```bash
+npx prisma migrate deploy
+```
+Run this after each deploy that includes schema changes. Vercel does not run this automatically.
+
+### 3. Update GitHub OAuth app
+In [github.com/settings/developers](https://github.com/settings/developers), update the callback URL to:
