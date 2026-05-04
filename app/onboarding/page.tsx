@@ -100,31 +100,26 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center px-4 py-8">
 
-      {/* Homepage screenshot background */}
+      {/* Homepage screenshot — fixed so it covers full viewport ignoring layout padding */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/homepage-bg.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none select-none"
+        className="fixed inset-0 w-full h-full object-cover object-top pointer-events-none select-none"
         aria-hidden="true"
-        style={{ opacity: 1 }}
       />
 
-      {/* Heavy translucent overlay */}
+      {/* Light translucent overlay — just enough to make card readable */}
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'rgba(239, 239, 239, 0.88)',
-          backdropFilter: 'blur(2px)',
-          WebkitBackdropFilter: 'blur(2px)',
-        }}
+        className="fixed inset-0 pointer-events-none"
+        style={{ background: 'rgba(255, 255, 255, 0.28)' }}
       />
 
       {/* Onboarding card */}
       <div
-        className="bg-white w-full max-w-[740px] border-2 border-black relative z-10"
+        className="bg-white w-full max-w-[880px] border-2 border-black relative z-10"
         style={{ borderRadius: '16px', overflow: 'hidden' }}
       >
         {/* Card header */}
