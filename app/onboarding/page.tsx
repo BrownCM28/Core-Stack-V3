@@ -35,12 +35,8 @@ function StepDots({ current }: { current: number }) {
     <div className="flex items-center gap-2">
       {Array.from({ length: TOTAL_STEPS }, (_, i) => {
         const stepNum = i + 1
-        if (stepNum < current) {
-          return <span key={i} className="w-2 h-2 rounded-full bg-black" />
-        }
-        if (stepNum === current) {
-          return <span key={i} className="w-2.5 h-2.5 rounded-full bg-[#3ECF8E]" />
-        }
+        if (stepNum < current) return <span key={i} className="w-2 h-2 rounded-full bg-black" />
+        if (stepNum === current) return <span key={i} className="w-2.5 h-2.5 rounded-full bg-[#3ECF8E]" />
         return <span key={i} className="w-2 h-2 rounded-full bg-gray-200" />
       })}
     </div>
@@ -56,7 +52,6 @@ export default function OnboardingPage() {
   const [availability, setAvailability] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  // Resume saved progress
   useEffect(() => {
     fetch('/api/user/profile')
       .then(r => r.json())
@@ -79,11 +74,7 @@ export default function OnboardingPage() {
   async function handleUserType(type: string) {
     setUserType(type)
     await saveStep({ userType: type, onboardingStep: type === 'employer' ? 4 : 2 })
-    if (type === 'employer') {
-      router.push('/employers/post')
-    } else {
-      setStep(2)
-    }
+    if (type === 'employer') { router.push('/employers/post') } else { setStep(2) }
   }
 
   async function handleStep2Continue() {
@@ -96,11 +87,7 @@ export default function OnboardingPage() {
 
   async function handleAvailability(value: string) {
     setAvailability(value)
-    await saveStep({
-      availability: value,
-      openToWork: value !== 'not-looking',
-      onboardingStep: 4,
-    })
+    await saveStep({ availability: value, openToWork: value !== 'not-looking', onboardingStep: 4 })
     setStep(4)
   }
 
@@ -113,20 +100,38 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EFEFEF] flex items-center justify-center px-4 py-12">
+    <div className="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden">
+
+      {/* Homepage screenshot background */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/homepage-bg.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none select-none"
+        aria-hidden="true"
+        style={{ opacity: 1 }}
+      />
+
+      {/* Heavy translucent overlay */}
       <div
-        className="bg-white w-full max-w-[600px] border-2 border-black overflow-hidden"
-        style={{ borderRadius: '16px' }}
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'rgba(239, 239, 239, 0.88)',
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)',
+        }}
+      />
+
+      {/* Onboarding card */}
+      <div
+        className="bg-white w-full max-w-[740px] border-2 border-black relative z-10"
+        style={{ borderRadius: '16px', overflow: 'hidden' }}
       >
         {/* Card header */}
         <div className="border-b-2 border-black px-8 py-5 flex items-center justify-between">
           <Link href="/">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/Untitled (58).png"
-              alt="CoreStack"
-              className="h-7 w-auto object-contain"
-            />
+            <img src="/Untitled (58).png" alt="CoreStack" className="h-7 w-auto object-contain" />
           </Link>
           <StepDots current={step} />
         </div>
@@ -143,7 +148,7 @@ export default function OnboardingPage() {
 
             {/* ── STEP 1 — Who are you? ── */}
             {step === 1 && (
-              <div className="px-8 py-10">
+              <div className="px-12 py-12">
                 <h1 className="font-display text-2xl font-normal text-black mb-2 text-center">
                   What brings you to CoreStack?
                 </h1>
@@ -155,13 +160,13 @@ export default function OnboardingPage() {
                   {[
                     {
                       type: 'candidate',
-                      icon: <Search size={18} className="text-black" />,
+                      icon: <Search size={24} className="text-black" />,
                       title: "I'm looking for a role",
                       sub: 'Browse and apply to data center and AI infrastructure jobs',
                     },
                     {
                       type: 'employer',
-                      icon: <Building2 size={18} className="text-black" />,
+                      icon: <Building2 size={24} className="text-black" />,
                       title: "I'm hiring",
                       sub: 'Post a listing or find infrastructure talent for my team',
                     },
@@ -169,7 +174,7 @@ export default function OnboardingPage() {
                     <button
                       key={type}
                       onClick={() => handleUserType(type)}
-                      className="border-2 border-black bg-white p-6 cursor-pointer flex flex-col items-start gap-3 transition-all duration-150 text-left hover:bg-[#FAFAFA]"
+                      className="border-2 border-black bg-white p-8 cursor-pointer flex flex-col items-start gap-3 transition-all duration-150 text-left hover:bg-[#FAFAFA] min-h-[200px]"
                       style={{
                         borderRadius: '12px',
                         ...(userType === type && {
@@ -179,14 +184,14 @@ export default function OnboardingPage() {
                       }}
                     >
                       <div
-                        className="w-10 h-10 border-2 border-black flex items-center justify-center"
+                        className="w-14 h-14 border-2 border-black flex items-center justify-center"
                         style={{ borderRadius: '8px' }}
                       >
                         {icon}
                       </div>
                       <div>
-                        <p className="font-display text-lg font-normal text-black">{title}</p>
-                        <p className="font-sans text-xs text-gray-500 leading-relaxed mt-1">{sub}</p>
+                        <p className="font-display text-xl font-normal text-black">{title}</p>
+                        <p className="font-sans text-sm text-gray-500 leading-relaxed mt-2">{sub}</p>
                       </div>
                     </button>
                   ))}
@@ -196,19 +201,18 @@ export default function OnboardingPage() {
 
             {/* ── STEP 2 — Role preferences ── */}
             {step === 2 && (
-              <div className="px-8 py-8">
+              <div className="px-12 py-12">
                 <h1 className="font-display text-2xl font-normal text-black mb-1">
                   What type of work are you looking for?
                 </h1>
                 <p className="font-sans text-sm text-gray-500 mb-6">Select all that apply</p>
 
-                {/* Category pills */}
                 <div className="flex flex-wrap gap-2 mb-8">
                   {CATEGORIES.map(cat => (
                     <button
                       key={cat}
                       onClick={() => toggleCategory(cat)}
-                      className={`border-2 border-black font-mono text-xs px-4 py-2 cursor-pointer transition-all duration-150 ${
+                      className={`border-2 border-black font-mono text-sm px-5 py-2.5 cursor-pointer transition-all duration-150 ${
                         selectedCategories.includes(cat)
                           ? 'bg-black text-white'
                           : 'bg-white text-black hover:bg-[#FAFAFA]'
@@ -219,7 +223,6 @@ export default function OnboardingPage() {
                   ))}
                 </div>
 
-                {/* Work preference */}
                 <p className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-3">
                   WORK PREFERENCE
                 </p>
@@ -232,7 +235,7 @@ export default function OnboardingPage() {
                     <button
                       key={value}
                       onClick={() => setWorkPreference(value)}
-                      className={`flex-1 border-2 border-black font-mono text-xs py-2.5 text-center cursor-pointer transition-all duration-150 ${
+                      className={`flex-1 border-2 border-black font-mono text-sm py-3.5 text-center cursor-pointer transition-all duration-150 ${
                         workPreference === value
                           ? 'bg-black text-white'
                           : 'bg-white text-black hover:bg-[#FAFAFA]'
@@ -246,7 +249,7 @@ export default function OnboardingPage() {
                 <button
                   onClick={handleStep2Continue}
                   disabled={selectedCategories.length === 0 || loading}
-                  className="w-full bg-black text-white font-mono text-sm py-3 border-2 border-black hover:bg-gray-900 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full bg-black text-white font-mono text-base py-4 border-2 border-black hover:bg-gray-900 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Continue
                 </button>
@@ -255,7 +258,7 @@ export default function OnboardingPage() {
 
             {/* ── STEP 3 — Availability ── */}
             {step === 3 && (
-              <div className="px-8 py-10">
+              <div className="px-12 py-12">
                 <h1 className="font-display text-2xl font-normal text-black mb-2 text-center">
                   When are you available?
                 </h1>
@@ -267,19 +270,19 @@ export default function OnboardingPage() {
                   {[
                     {
                       value: 'active',
-                      icon: <Zap size={16} />,
+                      icon: <Zap size={20} />,
                       title: 'Actively looking',
                       sub: 'Ready to start — show me everything',
                     },
                     {
                       value: 'open',
-                      icon: <Eye size={16} />,
+                      icon: <Eye size={20} />,
                       title: 'Open to the right opportunity',
                       sub: 'Employed but open — be selective',
                     },
                     {
                       value: 'not-looking',
-                      icon: <Coffee size={16} />,
+                      icon: <Coffee size={20} />,
                       title: 'Not looking right now',
                       sub: 'Just exploring for now',
                     },
@@ -289,7 +292,7 @@ export default function OnboardingPage() {
                       <button
                         key={value}
                         onClick={() => handleAvailability(value)}
-                        className="w-full border-2 border-black bg-white px-6 py-5 cursor-pointer flex items-center gap-4 transition-all duration-150 text-left hover:bg-[#FAFAFA]"
+                        className="w-full border-2 border-black bg-white px-8 py-6 cursor-pointer flex items-center gap-4 transition-all duration-150 text-left hover:bg-[#FAFAFA] min-h-[88px]"
                         style={{
                           borderRadius: '10px',
                           ...(selected && {
@@ -299,17 +302,15 @@ export default function OnboardingPage() {
                         }}
                       >
                         <div
-                          className={`w-10 h-10 border-2 flex items-center justify-center flex-shrink-0 rounded-full transition-colors ${
-                            selected
-                              ? 'bg-black border-black text-white'
-                              : 'border-black text-black'
+                          className={`w-12 h-12 border-2 flex items-center justify-center flex-shrink-0 rounded-full transition-colors ${
+                            selected ? 'bg-black border-black text-white' : 'border-black text-black'
                           }`}
                         >
                           {icon}
                         </div>
                         <div>
-                          <p className="font-display text-base font-normal text-black">{title}</p>
-                          <p className="font-mono text-xs text-gray-500 mt-0.5">{sub}</p>
+                          <p className="font-display text-lg font-normal text-black">{title}</p>
+                          <p className="font-mono text-xs text-gray-500 mt-1">{sub}</p>
                         </div>
                       </button>
                     )
@@ -320,12 +321,12 @@ export default function OnboardingPage() {
 
             {/* ── STEP 4 — Done ── */}
             {step === 4 && (
-              <div className="px-8 py-10 text-center">
+              <div className="px-12 py-12 text-center">
                 <div
-                  className="w-16 h-16 bg-[rgba(62,207,142,0.1)] border-2 border-[#3ECF8E] flex items-center justify-center mx-auto mb-6"
+                  className="w-20 h-20 bg-[rgba(62,207,142,0.1)] border-2 border-[#3ECF8E] flex items-center justify-center mx-auto mb-6"
                   style={{ borderRadius: '50%' }}
                 >
-                  <CheckCircle2 size={28} className="text-[#3ECF8E]" />
+                  <CheckCircle2 size={32} className="text-[#3ECF8E]" />
                 </div>
 
                 <h1 className="font-display text-2xl font-normal text-black mb-2">
@@ -335,7 +336,6 @@ export default function OnboardingPage() {
                   Your CoreStack profile is live. We have applied your preferences to the job feed.
                 </p>
 
-                {/* Completed checklist */}
                 <div className="text-left max-w-xs mx-auto mb-8 flex flex-col gap-3">
                   {[
                     'Account created',
@@ -349,7 +349,7 @@ export default function OnboardingPage() {
                     .map(item => (
                       <div key={item} className="flex items-center gap-3">
                         <Check size={14} className="text-[#3ECF8E] flex-shrink-0" />
-                        <span className="font-mono text-xs text-gray-600">{item}</span>
+                        <span className="font-mono text-sm text-gray-600">{item}</span>
                       </div>
                     ))}
                 </div>
@@ -357,7 +357,7 @@ export default function OnboardingPage() {
                 <button
                   onClick={handleFinish}
                   disabled={loading}
-                  className="w-full bg-[#3ECF8E] border-2 border-black font-mono text-sm font-medium text-black py-3 flex items-center justify-center gap-2 hover:bg-[#34C47E] transition-colors disabled:opacity-60 cursor-pointer"
+                  className="w-full bg-[#3ECF8E] border-2 border-black font-mono text-base font-medium text-black py-4 flex items-center justify-center gap-2 hover:bg-[#34C47E] transition-colors disabled:opacity-60 cursor-pointer"
                 >
                   Browse Infrastructure Jobs
                   <ArrowRight size={14} />
