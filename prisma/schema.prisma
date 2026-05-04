@@ -74,9 +74,17 @@ model User {
   openToTypes     JobType[]
   skills          String[]
   yearsExperience Int?
-  companyName     String?
-  companyWebsite  String?
-  companySize     String?
+  companyName          String?
+  companyWebsite       String?
+  companySize          String?
+
+  // Onboarding fields
+  onboardingCompleted  Boolean  @default(false)
+  onboardingStep       Int      @default(0)
+  userType             String?
+  jobCategories        String[]
+  workPreference       String?
+  availability         String?
 
   // Better Auth relations
   sessions        Session[]

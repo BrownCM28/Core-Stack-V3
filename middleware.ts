@@ -34,6 +34,21 @@ export default async function middleware(req: NextRequest) {
     return loginRedirect();
   }
 
+  // /dashboard — redirect to /onboarding if user hasn't completed it
+  if (pathname.startsWith("/dashboard") && isAuthed) {
+    try {
+      const profileRes = await fetch(`${req.nextUrl.origin}/api/user/profile`, {
+        headers: { cookie: req.headers.get("cookie") ?? "" },
+      });
+      if (profileRes.ok) {
+        const profile = await profileRes.json();
+        if (profile.onboardingCompleted === false) {
+          return NextResponse.redirect(new URL("/onboarding", req.url));
+        }
+      }
+    } catch { /* if profile fetch fails, let them through */ }
+  }
+
   // /admin/* — require auth + ADMIN role
   if (pathname.startsWith("/admin")) {
     if (!isAuthed) return loginRedirect();

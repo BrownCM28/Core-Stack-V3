@@ -58,7 +58,7 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', handleKey)
   }, [])
 
-  if (pathname?.startsWith('/auth')) return null
+  if (pathname?.startsWith('/auth') || pathname?.startsWith('/onboarding')) return null
 
   return (
     <>

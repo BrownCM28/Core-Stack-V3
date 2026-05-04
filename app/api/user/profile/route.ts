@@ -19,6 +19,12 @@ export async function GET() {
       openToWork: true,
       openToTypes: true,
       username: true,
+      onboardingCompleted: true,
+      onboardingStep: true,
+      userType: true,
+      jobCategories: true,
+      workPreference: true,
+      availability: true,
       profile: {
         select: { avatarUrl: true, bio: true },
       },
